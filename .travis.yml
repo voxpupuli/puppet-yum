@@ -33,21 +33,6 @@ matrix:
     env: PUPPET_VERSION="~> 4.0" CHECK=test
   - rvm: 2.4.0-preview1
     env: PUPPET_VERSION="~> 4.0" CHECK=test
-  - rvm: 2.3.1
-    env: PUPPET_VERSION="~> 4.0" CHECK=acceptance BEAKER_debug=true BEAKER_set=docker/centos-5 PUPPET_INSTALL_TYPE=agent PUPPET_INSTALL_VERSION=1.5.1
-    services: docker
-    sudo: required
-    bundler_args: --without development
-  - rvm: 2.3.1
-    env: PUPPET_VERSION="~> 4.0" CHECK=acceptance BEAKER_debug=true BEAKER_set=docker/centos-7 PUPPET_INSTALL_TYPE=agent PUPPET_INSTALL_VERSION=1.5.1
-    services: docker
-    sudo: required
-    bundler_args: --without development
-  - rvm: 2.3.1
-    env: PUPPET_VERSION="~> 4.0" CHECK=acceptance BEAKER_debug=true BEAKER_set=docker/centos-6 PUPPET_INSTALL_TYPE=agent PUPPET_INSTALL_VERSION=1.5.1
-    services: docker
-    sudo: required
-    bundler_args: --without development
   allow_failures:
     - rvm: 2.4.0-preview1
 notifications:
