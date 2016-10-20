@@ -26,10 +26,10 @@ define yum::config (
   $key     = $title,
   $section = 'main'
 ) {
-  validate_string($key, $section)
+  validate_legacy(String, 'validate_string', $key, $section)
 
   unless is_integer($ensure) {
-    validate_string($ensure)
+    validate_legacy(String, 'validate_string', $ensure)
   }
 
   $_changes = $ensure ? {

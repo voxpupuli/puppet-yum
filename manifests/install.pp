@@ -25,7 +25,7 @@ define yum::install (
   $ensure  = present,
   $timeout = undef,
 ) {
-  validate_string($source)
+  validate_legacy(String, 'validate_string', $source)
 
   Exec {
     path        => '/bin:/usr/bin:/sbin:/usr/sbin',
