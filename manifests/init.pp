@@ -31,15 +31,15 @@ class yum (
   $keep_kernel_devel = $yum::params::keep_kernel_devel
 ) inherits yum::params {
 
-  validate_bool($keepcache, $exactarch, $obsoletes, $gpgcheck)
-  validate_bool($keep_kernel_devel)
+  validate_legacy(Boolean, 'validate_bool', $keepcache, $exactarch, $obsoletes)
+  validate_legacy(Boolean, 'validate_bool', $gpgcheck, $keep_kernel_devel)
 
   unless is_integer($installonly_limit) {
-    validate_string($installonly_limit)
+    validate_legacy(String, 'validate_string', $installonly_limit)
   }
 
   unless is_integer($debuglevel) {
-    validate_string($debuglevel)
+    validate_legacy(String, 'validate_string', $debuglevel)
   }
 
   # configure Yum

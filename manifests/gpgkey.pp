@@ -35,8 +35,8 @@ define yum::gpgkey (
   $group   = 'root',
   $mode    = '0644'
 ) {
-  validate_absolute_path($path)
-  validate_string($owner, $group, $mode)
+  validate_legacy(Stdlib::Absolutepath, 'validate_absolute_path', $path)
+  validate_legacy(String, 'validate_string', $owner, $group, $mode)
 
   file { $path:
     ensure => $ensure,
