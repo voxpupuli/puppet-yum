@@ -23,15 +23,15 @@ matrix:
     env: PUPPET_VERSION="~> 3.0" STRICT_VARIABLES="yes" CHECK=test
   - rvm: 2.1.9
     env: PUPPET_VERSION="~> 4.0" CHECK=test
-  - rvm: 2.2.5
+  - rvm: 2.2.6
     env: PUPPET_VERSION="~> 4.0" CHECK=test
-  - rvm: 2.3.1
+  - rvm: 2.3.3
     env: PUPPET_VERSION="~> 4.0" CHECK=build DEPLOY_TO_FORGE=yes
-  - rvm: 2.3.1
+  - rvm: 2.3.3
     env: PUPPET_VERSION="~> 4.0" CHECK=rubocop
-  - rvm: 2.3.1
+  - rvm: 2.3.3
     env: PUPPET_VERSION="~> 4.0" CHECK=test
-  - rvm: 2.4.0-preview1
+  - rvm: 2.4.0
     env: PUPPET_VERSION="~> 4.0" CHECK=test
   - rvm: 2.3.1
     env: BEAKER_VERSION="~> 2.51" PUPPET_VERSION="~> 4.0" CHECK=acceptance BEAKER_debug=true BEAKER_set=docker/centos-5 PUPPET_INSTALL_TYPE=agent PUPPET_INSTALL_VERSION=1.7.1
@@ -49,13 +49,15 @@ matrix:
     sudo: required
     bundler_args: --without development
   allow_failures:
-    - rvm: 2.4.0-preview1
+    - rvm: 2.4.0
+branches:
+  only:
+  - master
+  - /^v\d/
 notifications:
   email: false
 deploy:
   provider: puppetforge
-  deploy:
-    branch: ha-bug-puppet-forge
   user: puppet
   password:
     secure: "iItNJ/PlMvdSiYjtXWJkS69mF/4XUriTRC6axFoiTgX8BzGNWA1U/anENNyzmhRKcH/Nc0erVeau+RX8vyJ0HmIJOCvYfq5Q/SQWex1fDXLe/UYJkAEWwmeIOVSF2nTEUPDvDn/d6bNEdULw5yrNn1dT8eLqIIXl6/nThdpiS917BX6CeYdojr/mISrLsvihuB5DQRdVzH+hK1bXcECihnOfNH9lQ0lZ2v2ohJiLJL0DadDg0YMMeJMlP7CnBZzRs7fhTPdLMjzCvysef9nqBYRlGBRUn+CaQ4VoQZlWB1JchJup4qCGeU9ANkb8gdKYTy1kFkBrEDuqlUUuuTTMhDpQ+2fGF32zgnXCSnVY8AIriFfO9c1ljxL6k6vaHpfnsPcMrxuQXNeOPGYpVjNGi/Hz8OjuZ3IT07c8SmZgmGaNp+ZIKErJQV0eob0NeA/1P7HheRS5aPEiN8vj/ZGuIGa+BhbTp2riJ599urrSqGDcJ0YzNeW2BvBZQoXs953X4N4yROz4xKMNqPz/jhyGM9w5SBJ/uLiIvKTu+bSsJ2VNyrOOu25eYqzH1zKc71fKiWa1ZOTHKVM24chlmoq3tZTSpSn6OxpptKLxAYZG0IUdFSMy66m8nss1AxL2djScAptugsqpfLqziMArAoN9iWXCeGiWz1qLRl+5AlMrmMY="
