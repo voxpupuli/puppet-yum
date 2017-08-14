@@ -34,7 +34,7 @@ define yum::plugin (
     default                  => "${_pkg_prefix}-${pkg_name}",
   }
 
-  package { $_pkg_name:
+  ensure_packages { $_pkg_name:
     ensure  => $ensure,
   }
 
