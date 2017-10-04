@@ -171,7 +171,7 @@ yum::repo_exclusions:
 # common
 yum::managed_repos:
     - 'base'
-    - 'updates
+    - 'updates'
     - 'extras'
 ```
 
