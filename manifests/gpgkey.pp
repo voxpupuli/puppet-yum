@@ -57,26 +57,27 @@ define yum::gpgkey (
     group  => $group,
     mode   => $mode,
   }
-
-  $rpmname = "gpg-pubkey-$(gpg ${path} | head -1 | cut -c12-20 | \
-tr '[A-Z]' '[a-z]')"
-
-  case $ensure {
-    'present', default: {
-      exec { "rpm-import-${name}":
-        path    => '/bin:/usr/bin:/sbin/:/usr/sbin',
-        command => "rpm --import ${path}",
-        unless  => "rpm -q ${rpmname}",
-        require => File[$path],
+  
+  $keys = yum::get_gpg_keys($path)
+  
+  $keys.each |String key| {
+    $rpmname = "gpg-pubkey-${key}"
+    case $ensure {
+      'present', default: {
+        exec { "rpm-import-${name}":
+          path    => '/bin:/usr/bin:/sbin/:/usr/sbin',
+          command => "rpm --import ${path}",
+          unless  => "rpm -q ${rpmname}",
+          require => File[$path],
+        }
       }
-    }
-
-    'absent': {
-      exec { "rpm-delete-${name}":
-        path    => '/bin:/usr/bin:/sbin/:/usr/sbin',
-        command => "rpm -e ${rpmname}",
-        onlyif  => ["test -f ${path}", "rpm -q ${rpmname}"],
-        before  => File[$path],
+      'absent': {
+        exec { "rpm-delete-${name}":
+          path    => '/bin:/usr/bin:/sbin/:/usr/sbin',
+          command => "rpm -e ${rpmname}",
+          onlyif  => ["test -f ${path}", "rpm -q ${rpmname}"],
+          before  => File[$path],
+        }
       }
     }
   }
