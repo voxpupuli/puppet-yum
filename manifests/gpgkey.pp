@@ -60,8 +60,8 @@ define yum::gpgkey (
 
   $keys = yum::get_gpg_keys($path)
 
-  $keys.each |$one_key| {
-    $the_rpmname = "gpg-pubkey-${one_key}"
+  $keys.each |String $key| {
+    $the_rpmname = "gpg-pubkey-${key}"
     case $ensure {
       'present', default: {
         exec { "rpm-import-${name}":
