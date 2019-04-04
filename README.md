@@ -303,12 +303,16 @@ yum::versionlock { '0:bash-4.1.2-9.el6_2.*':
 
 ### Install or remove *yum* package group
 
+Install yum [package groups](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/system_administrators_guide/sec-working_with_package_groups).  To list groups: `yum group list`. Then use that name in your puppet manifest. With support for install_options (e.g. enable repos if disabled by default).
+
 ```puppet
 yum::group { 'X Window System':
-  ensure  => present,
-  timeout => 600,
+  ensure          => present,
+  timeout         => 600,
+  install_options => ['--enablerepo=*'];
 }
 ```
+
 
 ### Install or remove packages via `yum install`
 

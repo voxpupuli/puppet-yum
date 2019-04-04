@@ -59,7 +59,6 @@ define yum::gpgkey (
   }
 
   $keys = yum::get_gpg_keys($path)
-
   $keys.each |String $key| {
     $the_rpmname = "gpg-pubkey-${key}"
     case $ensure {

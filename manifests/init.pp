@@ -137,11 +137,11 @@ class yum (
           $yumrepo: * => $attributes,
         }
         # Handle GPG Key
-        if has_key($attributes, 'gpgkey') {
+        if ('gpgkey' in $attributes) {
           $matches = $attributes['gpgkey'].match('^file://(.*)$')
           if $matches {
             $gpgkey = $matches[1]
-            if $gpgkey =~ Stdlib::AbsolutePath and has_key($gpgkeys, $gpgkey) {
+            if $gpgkey =~ Stdlib::AbsolutePath and $gpgkey in $gpgkeys {
               if !defined(Yum::Gpgkey[$gpgkey]) {
                 yum::gpgkey { $gpgkey:
                   * => $gpgkeys[$gpgkey],
@@ -155,7 +155,7 @@ class yum (
   }
 
   unless empty($config_options) {
-    if has_key($config_options, 'installonly_limit') {
+    if ('installonly_limit' in $config_options) {
       assert_type(Variant[Integer, Hash[String, Integer]], $config_options['installonly_limit']) |$expected, $actual| {
         fail("The value or ensure for `\$yum::config_options[installonly_limit]` must be an Integer, but it is not.")
       }
@@ -207,7 +207,7 @@ class yum (
     default                  => '3',
   }
 
-  $_pc_cmd = delete_undef_values([
+  $_pc_cmd = [
     '/usr/bin/package-cleanup',
     '--oldkernels',
     "--count=${_real_installonly_limit}",
@@ -216,7 +216,7 @@ class yum (
       true    => '--keepdevel',
       default => undef,
     },
-  ])
+  ].filter |$val| { $val =~ NotUndef }
 
   exec { 'package-cleanup_oldkernels':
     command     => shellquote($_pc_cmd),
