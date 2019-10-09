@@ -23,7 +23,7 @@ describe 'yum::versionlock define' do
     end
   end
   it 'must work if clean is specified' do
-    shell('yum repolist', acceptable_exit_codes: [0])
+    run_shell('yum repolist')
     pp = <<-EOS
     class{yum::plugin::versionlock:
       clean => true,
@@ -37,6 +37,6 @@ describe 'yum::versionlock define' do
     apply_manifest(pp, catch_changes:  true)
     # Check the cache is really empty.
     # all repos will have 0 packages.
-    shell('yum -C repolist -d0 | grep -v "repo id"  | awk "{print $NF}" FS=  | grep -v 0', acceptable_exit_codes: [1])
+    run_shell('yum -C repolist -d0 | grep -v "repo id"  | awk "{print $NF}" FS=  | grep -v 0', expect_failures: true)
   end
 end

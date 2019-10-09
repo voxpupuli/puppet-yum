@@ -33,10 +33,10 @@ group :test do
 end
 
 group :development do
-  gem 'travis',                   :require => false
-  gem 'travis-lint',              :require => false
-  gem 'guard-rake',               :require => false
-  gem 'overcommit', '>= 0.39.1',  :require => false
+  gem 'travis',                     :require => false
+  gem 'travis-lint',                :require => false
+  gem 'guard-rake',                 :require => false
+  gem 'overcommit', '>= 0.39.1',    :require => false
 end
 
 group :system_tests do
@@ -60,6 +60,9 @@ group :system_tests do
   gem 'rbnacl', '>= 4',                     :require => false
   gem 'rbnacl-libsodium',                   :require => false
   gem 'bcrypt_pbkdf',                       :require => false
+  if RUBY_VERSION.to_f > 2.4
+    gem 'puppet_litmus', '~> 0.11.1',         :require => false, :platforms => [:ruby, :mswin, :mingw, :x64_mingw] if ENV['PUPPET_GEM_VERSION'].nil? or ENV['PUPPET_GEM_VERSION'] !~ %r{ 5}
+  end
 end
 
 group :release do
