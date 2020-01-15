@@ -199,7 +199,12 @@ class yum (
   }
 
   # cleanup old kernels
-  ensure_packages(['yum-utils'])
+  if (($facts['os']['name'] == 'RedHat' or $facts['os']['name'] == 'CentOS') and $facts['os']['release']['major'] == '8') {
+    $clean_require = undef
+  } else {
+    ensure_packages(['yum-utils'])
+    $clean_require = Package[yum-utils]
+  }
 
   $_real_installonly_limit = $config_options['installonly_limit'] ? {
     Variant[String, Integer] => $config_options['installonly_limit'],
@@ -221,7 +226,7 @@ class yum (
   exec { 'package-cleanup_oldkernels':
     command     => shellquote($_pc_cmd),
     refreshonly => true,
-    require     => Package['yum-utils'],
+    require     => $clean_require,
     subscribe   => $_clean_old_kernels_subscribe,
   }
 }
