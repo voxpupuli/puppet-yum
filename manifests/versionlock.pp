@@ -22,9 +22,19 @@ define yum::versionlock (
 ) {
   require yum::plugin::versionlock
 
-  assert_type(Yum::VersionlockString, $name) |$_expected, $actual | {
-    fail("Package name must be formatted as %{EPOCH}:%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}, not \'${actual}\'. See Yum::Versionlock documentation for details.")
+  case $facts['package_provider'] {
+    'dnf': {
+      assert_type(Yum::VersionlockStringDNF, $name) |$_expected, $actual | {
+        fail("Package name must be formatted as %{NAME}-%{EPOCH}:%{VERSION}-%{RELEASE}.%{ARCH}, not \'${actual}\'.")
+      }
+    }
+    default: {
+      assert_type(Yum::VersionlockString, $name) |$_expected, $actual | {
+        fail("Package name must be formatted as %{EPOCH}:%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}, not \'${actual}\'.")
+      }
+    }
   }
+
 
   $line_prefix = $ensure ? {
     'exclude' => '!',
