@@ -424,4 +424,4 @@ This module was donated by CERIT Scientific Cloud, <support@cerit-sc.cz> to Vox 
 [2]: https://github.com/puppetlabs/puppetlabs-yumrepo_core
 [3]: https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/system_administrators_guide/sec-working_with_package_groups
 [4]: https://tickets.puppetlabs.com/browse/PUP-3323
-[5]: ttps://puppet.com/docs/bolt/latest/bolt.html
+[5]: https://puppet.com/docs/bolt/latest/bolt.html
