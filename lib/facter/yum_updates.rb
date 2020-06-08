@@ -25,15 +25,13 @@ end
 Facter.add('yum_security_updates') do
   confine osfamily: 'RedHat'
   setcode do
-    yum_security_updates = Hash.new()
+    yum_security_updates = {}
     if File.executable?('/usr/bin/yum')
-      yum_get_security_result = Facter::Util::Resolution.exec('/usr/bin/yum --quiet updateinfo list security installed') #TODO: --secseverity=Moderate
+      yum_get_security_result = Facter::Util::Resolution.exec('/usr/bin/yum --quiet updateinfo list security installed')
       unless yum_get_security_result.nil?
         yum_get_security_result.each_line do |line|
           _sec_code, sec_level, package, trash = line.split(%r{\s+})
-          if trash # Some repositories make yum fill with garbage
-            next
-          end
+          next if trash # Some repositories make yum fill with garbage
           sec_level.chomp!('/Sec.')
           unless yum_security_updates.key?(sec_level)
             yum_security_updates[sec_level] = []
