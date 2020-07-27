@@ -31,7 +31,6 @@ yum::repos:
     enabled: true
     gpgcheck: true
     priority: "90"
-    gpgkey:
     gpgkey: "file:///etc/pki/rpm-gpg/RPM-GPG-KEY-Virtuozzo-7"
     target: "/etc/yum.repos.d/virtuozzolinux-base.repo"
   virtuozzolinux-updates:
