@@ -125,10 +125,11 @@ class yum (
     $normalized_repos = yum::bool2num_hash_recursive($repos)
 
     $normalized_repos.each |$yumrepo, $attributes| {
+      @yumrepo { $yumrepo:
+        * => $attributes
+      }
       if member($_managed_repos_minus_exclusions, $yumrepo) {
-        yumrepo { $yumrepo:
-          * => $attributes,
-        }
+        realize(Yumrepo[$yumrepo])
         # Handle GPG Key
         if ('gpgkey' in $attributes) {
           $matches = $attributes['gpgkey'].match('^file://(.*)$')
