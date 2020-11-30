@@ -23,9 +23,9 @@ define yum::plugin (
   if $pkg_prefix {
     $_pkg_prefix = $pkg_prefix
   } else {
-    $_pkg_prefix = $facts['os']['release']['major'] ? {
-      Variant[Integer[5,5], Enum['5']] => 'yum',
-      default                          => 'yum-plugin',
+    $_pkg_prefix = $facts['package_provider'] ? {
+      'dnf' => 'python3-dnf-plugin',
+      'yum' => 'yum-plugin',
     }
   }
 
