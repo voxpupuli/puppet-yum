@@ -95,11 +95,11 @@
 #
 # @example Update:
 #   ---
-#   yum:update: true
+#   yum::update: true
 #
 # @example Upgrade:
 #   ---
-#   yum:upgrade: true
+#   yum::upgrade: true
 #
 
 class yum (
