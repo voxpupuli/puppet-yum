@@ -93,6 +93,15 @@
 #           baseurl: 'https://repos.example.com/CentOS/base/'
 #           mirrorlist: '--'
 #
+# @example Update:
+#   ---
+#   yum:update: true
+#
+# @example Upgrade:
+#   ---
+#   yum:upgrade: true
+#
+
 class yum (
   Boolean $clean_old_kernels = true,
   Boolean $keep_kernel_devel = false,
@@ -104,6 +113,8 @@ class yum (
   Array[String] $repo_exclusions = [],
   Hash[String, Hash[String, String]] $gpgkeys = {},
   String $utils_package_name = 'yum-utils',
+  Boolean $update = false,
+  Boolean $upgrade = false,
 ) {
   $module_metadata            = load_module_metadata($module_name)
   $supported_operatingsystems = $module_metadata['operatingsystem_support']
@@ -217,4 +228,17 @@ class yum (
     require     => Package[$utils_package_name],
     subscribe   => $_clean_old_kernels_subscribe,
   }
+
+  if $update {
+    exec {'yum-update':
+      command => '/usr/bin/yum -y update'
+    }
+  }
+
+  if $upgrade {
+    exec {'yum-upgrade':
+      command => '/usr/bin/yum -y upgrade'
+    }
+  }
+
 }
