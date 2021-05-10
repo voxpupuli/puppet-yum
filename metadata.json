@@ -34,6 +34,12 @@
       ]
     },
     {
+      "operatingsystem": "RockyLinux",
+      "operatingsystemrelease": [
+        "8"
+      ]
+    },
+    {
       "operatingsystem": "CentOS",
       "operatingsystemrelease": [
         "6",
