@@ -43,13 +43,17 @@ describe 'yum' do
         when 'Rocky'
           it_behaves_like 'a catalog containing repos', [
             'baseos',
-            'appstream'
+            'appstream',
+            'highavailability',
+            'powertools',
+            'resilientstorage',
+            'extras'
           ]
           case facts[:os]['release']['major']
           when '8'
-            it { is_expected.to have_yumrepo_resource_count(2) }
+            it { is_expected.to have_yumrepo_resource_count(6) }
           else
-            it { is_expected.to have_yumrepo_resource_count(2) }
+            it { is_expected.to have_yumrepo_resource_count(6) }
           end
         when 'CentOS'
           it_behaves_like 'a catalog containing repos', [
