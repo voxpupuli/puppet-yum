@@ -1,0 +1,20 @@
+---
+yum::os_default_repos:
+  - 'baseos'
+  - 'appstream'
+yum::repos:
+  baseos:
+    enabled: true
+    descr: 'Rocky Linux $releasever - BaseOS'
+    mirrorlist: 'http://mirrors.rockylinux.org/mirrorlist?arch=$basearch&repo=BaseOS-$releasever'
+    gpgcheck: true
+    gpgkey: "file:///etc/pki/rpm-gpg/RPM-GPG-KEY-rockyofficial"
+    target: '/etc/yum.repos.d/Rocky-BaseOS.repo'
+
+  appstream:
+    enabled: true
+    descr: 'Rocky Linux $releasever - AppStream'
+    mirrorlist: 'http://mirrors.rockylinux.org/mirrorlist?arch=$basearch&repo=AppStream-$releasever'
+    gpgcheck: true
+    gpgkey: "file:///etc/pki/rpm-gpg/RPM-GPG-KEY-rockyofficial"
+    target: '/etc/yum.repos.d/Rocky-AppStream.repo'
