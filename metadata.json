@@ -34,7 +34,7 @@
       ]
     },
     {
-      "operatingsystem": "RockyLinux",
+      "operatingsystem": "Rocky",
       "operatingsystemrelease": [
         "8"
       ]
