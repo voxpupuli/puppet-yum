@@ -40,7 +40,7 @@ describe 'yum' do
         let(:params) { { 'manage_os_default_repos' => true } }
 
         case facts[:os]['name']
-        when 'RockyLinux'
+        when 'Rocky'
           it_behaves_like 'a catalog containing repos', [
             'baseos',
             'appstream'
