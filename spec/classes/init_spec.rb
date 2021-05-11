@@ -40,6 +40,17 @@ describe 'yum' do
         let(:params) { { 'manage_os_default_repos' => true } }
 
         case facts[:os]['name']
+        when 'RockyLinux'
+          it_behaves_like 'a catalog containing repos', [
+            'baseos',
+            'appstream'
+          ]
+          case facts[:os]['release']['major']
+          when '8'
+            it { is_expected.to have_yumrepo_resource_count(2) }
+          else
+            it { is_expected.to have_yumrepo_resource_count(2) }
+          end
         when 'CentOS'
           it_behaves_like 'a catalog containing repos', [
             'base',
