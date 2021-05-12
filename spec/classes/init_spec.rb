@@ -44,16 +44,21 @@ describe 'yum' do
           it_behaves_like 'a catalog containing repos', [
             'baseos',
             'appstream',
-            'highavailability',
+            'extras',
+            'baseos-source',
+            'appstream-source',
+            'extras-source',
+            'plus-source',
+            'devel',
+            'ha',
             'powertools',
-            'resilientstorage',
-            'extras'
+            'resilient-storage'
           ]
           case facts[:os]['release']['major']
           when '8'
-            it { is_expected.to have_yumrepo_resource_count(6) }
+            it { is_expected.to have_yumrepo_resource_count(11) }
           else
-            it { is_expected.to have_yumrepo_resource_count(6) }
+            it { is_expected.to have_yumrepo_resource_count(0) }
           end
         when 'CentOS'
           it_behaves_like 'a catalog containing repos', [
