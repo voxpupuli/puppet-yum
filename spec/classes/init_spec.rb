@@ -165,6 +165,27 @@ describe 'yum' do
               'virtuozzolinux-vz-factory-debuginfo'
             ]
           end
+        when 'AlmaLinux'
+          case facts[:os]['release']['major']
+          when '8'
+            it { is_expected.to have_yumrepo_resource_count(12) }
+            it_behaves_like 'a catalog containing repos', [
+              'baseos',
+              'appstream',
+              'powertools',
+              'extras',
+              'baseos-source',
+              'appstream-source',
+              'powertools-source',
+              'extras-source',
+              'baseos-debuginfo',
+              'appstream-debuginfo',
+              'powertools-debuginfo',
+              'extras-debuginfo',
+            ]
+          end
+        else
+          it { is_expected.to have_yumrepo_resource_count(0) }
         end
 
         context 'and the CentOS base repo is negated' do
@@ -262,6 +283,25 @@ describe 'yum' do
                 'factory-debuginfo',
                 'virtuozzolinux-vz-factory',
                 'virtuozzolinux-vz-factory-debuginfo'
+              ]
+            end
+          when 'AlmaLinux'
+            case facts[:os]['release']['major']
+            when '8'
+              it { is_expected.to have_yumrepo_resource_count(12) } # rubocop:disable RSpec/RepeatedExample
+              it_behaves_like 'a catalog containing repos', [
+                'baseos',
+                'appstream',
+                'powertools',
+                'extras',
+                'baseos-source',
+                'appstream-source',
+                'powertools-source',
+                'extras-source',
+                'baseos-debuginfo',
+                'appstream-debuginfo',
+                'powertools-debuginfo',
+                'extras-debuginfo',
               ]
             end
           else

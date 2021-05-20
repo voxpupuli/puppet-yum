@@ -1,0 +1,125 @@
+---
+yum::os_default_repos:
+  - 'baseos'
+  - 'appstream'
+  - 'powertools'
+  - 'extras'
+  - 'baseos-source'
+  - 'appstream-source'
+  - 'powertools-source'
+  - 'extras-source'
+  - 'baseos-debuginfo'
+  - 'appstream-debuginfo'
+  - 'powertools-debuginfo'
+  - 'extras-debuginfo'
+
+yum::repos:
+  baseos:
+    enabled: true
+    descr: 'AlmaLinux-$releasever - BaseOS'
+    mirrorlist: 'https://mirrors.almalinux.org/mirrorlist/$releasever/baseos'
+    # baseurl: https://repo.almalinux.org/almalinux/$releasever/BaseOS/$basearch/os/
+    gpgcheck: true
+    gpgkey: 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-AlmaLinux'
+    target: '/etc/yum.repos.d/almalinux.repo'
+    fastestmirror: true
+
+  appstream:
+    enabled: true
+    descr: 'AlmaLinux $releasever - AppStream'
+    mirrorlist: 'https://mirrors.almalinux.org/mirrorlist/$releasever/appstream'
+    # baseurl: https://repo.almalinux.org/almalinux/$releasever/AppStream/$basearch/os/
+    gpgcheck: true
+    gpgkey: "file:///etc/pki/rpm-gpg/RPM-GPG-KEY-AlmaLinux"
+    target: '/etc/yum.repos.d/almalinux.repo'
+    fastestmirror: true
+
+  powertools:
+    descr: 'AlmaLinux $releasever - PowerTools'
+    mirrorlist: 'https://mirrors.almalinux.org/mirrorlist/$releasever/powertools'
+    # baseurl: https://repo.almalinux.org/almalinux/$releasever/PowerTools/$basearch/os/
+    enabled: true
+    gpgcheck: true
+    gpgkey: 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-AlmaLinux'
+    fastestmirror: true
+
+  extras:
+    name: 'AlmaLinux $releasever - Extras'
+    mirrorlist: 'https://mirrors.almalinux.org/mirrorlist/$releasever/extras'
+    # baseurl: https://repo.almalinux.org/almalinux/$releasever/extras/$basearch/os/
+    enabled: true
+    gpgcheck: true
+    gpgkey: 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-AlmaLinux'
+    fastestmirror: true
+
+  baseos-source:
+    name: 'AlmaLinux $releasever - BaseOS Source'
+    mirrorlist: 'https://mirrors.almalinux.org/mirrorlist/$releasever/baseos-source'
+    # baseurl: https://repo.almalinux.org/almalinux/$releasever/BaseOS/Source/
+    enabled: false
+    gpgcheck: true
+    gpgkey: 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-AlmaLinux'
+    fastestmirror: true
+
+  appstream-source:
+    name: 'AlmaLinux $releasever - AppStream Source'
+    mirrorlist: 'https://mirrors.almalinux.org/mirrorlist/$releasever/appstream-source'
+    # baseurl: https://repo.almalinux.org/almalinux/$releasever/AppStream/Source/
+    enabled: false
+    gpgcheck: true
+    gpgkey: 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-AlmaLinux'
+    fastestmirror: true
+
+  powertools-source:
+    name: 'AlmaLinux $releasever - PowerTools Source'
+    mirrorlist: 'https://mirrors.almalinux.org/mirrorlist/$releasever/powertools-source'
+    # baseurl: https://repo.almalinux.org/almalinux/$releasever/PowerTools/Source/
+    enabled: false
+    gpgcheck: true
+    gpgkey: 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-AlmaLinux'
+    fastestmirror: true
+
+  extras-source:
+    name: 'AlmaLinux $releasever - Extras Source'
+    mirrorlist: 'https://mirrors.almalinux.org/mirrorlist/$releasever/extras-source'
+    # baseurl: https://repo.almalinux.org/almalinux/$releasever/extras/Source/
+    enabled: false
+    gpgcheck: true
+    gpgkey: 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-AlmaLinux'
+    fastestmirror: true
+
+  baseos-debuginfo:
+    name: 'AlmaLinux $releasever - BaseOS debuginfo'
+    mirrorlist: 'https://mirrors.almalinux.org/mirrorlist/$releasever/baseos-debuginfo'
+    # baseurl: https://repo.almalinux.org/almalinux/$releasever/BaseOS/debug/$basearch/
+    enabled: false
+    gpgcheck: true
+    gpgkey: 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-AlmaLinux'
+    fastestmirror: true
+
+  appstream-debuginfo:
+    name: 'AlmaLinux $releasever - AppStream debuginfo'
+    mirrorlist: 'https://mirrors.almalinux.org/mirrorlist/$releasever/appstream-debuginfo'
+    # baseurl: https://repo.almalinux.org/almalinux/$releasever/AppStream/debug/$basearch/
+    enabled: false
+    gpgcheck: true
+    gpgkey: 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-AlmaLinux'
+    fastestmirror: true
+
+  powertools-debuginfo:
+    name: 'AlmaLinux $releasever - PowerTools debuginfo'
+    mirrorlist: 'https://mirrors.almalinux.org/mirrorlist/$releasever/powertools-debuginfo'
+    # baseurl: https://repo.almalinux.org/almalinux/$releasever/PowerTools/debug/$basearch/
+    enabled: false
+    gpgcheck: true
+    gpgkey: 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-AlmaLinux'
+    fastestmirror: true
+
+  extras-debuginfo:
+    name: 'AlmaLinux $releasever - Extras debuginfo'
+    mirrorlist: 'https://mirrors.almalinux.org/mirrorlist/$releasever/extras-debuginfo'
+    # baseurl: https://repo.almalinux.org/almalinux/$releasever/extras/debug/$basearch/
+    enabled: false
+    gpgcheck: true
+    gpgkey: 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-AlmaLinux'
+    fastestmirror: true
