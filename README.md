@@ -70,6 +70,20 @@ yum::config { 'debuglevel':
 }
 ```
 
+### Manage COPR repositories
+
+This module also supports managing
+COPR ([Cool Other Package Repo](https://fedoraproject.org/wiki/Category:Copr))
+repositories via the `yum::copr` resource. The resource title specifies
+the COPR repository name, and `ensure` accepts the values `enabled`, `disabled`
+or `removed`. Example usage:
+
+```puppet
+yum::copr { 'copart/restic':
+  ensure => enabled,
+}
+```
+
 ### Manage a custom repo via Hiera data
 
 Using Hiera and automatic parameter lookup (APL), this module can manage
