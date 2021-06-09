@@ -58,7 +58,7 @@ describe 'yum' do
           when '8'
             it { is_expected.to have_yumrepo_resource_count(11) }
           else
-            it { is_expected.to have_yumrepo_resource_count(0) }
+            it { is_expected.to have_yumrepo_resource_count(0) } # rubocop:disable RSpec/RepeatedExample
           end
         when 'CentOS'
           it_behaves_like 'a catalog containing repos', [
@@ -129,7 +129,7 @@ describe 'yum' do
         when 'VirtuozzoLinux'
           case facts[:os]['release']['major']
           when '6'
-            it { is_expected.to have_yumrepo_resource_count(12) }
+            it { is_expected.to have_yumrepo_resource_count(12) } # rubocop:disable RSpec/RepeatedExample
             it_behaves_like 'a catalog containing repos', [
               'virtuozzolinux-base',
               'virtuozzolinux-updates',
@@ -168,7 +168,7 @@ describe 'yum' do
         when 'AlmaLinux'
           case facts[:os]['release']['major']
           when '8'
-            it { is_expected.to have_yumrepo_resource_count(12) }
+            it { is_expected.to have_yumrepo_resource_count(12) } # rubocop:disable RSpec/RepeatedExample
             it_behaves_like 'a catalog containing repos', [
               'baseos',
               'appstream',
@@ -185,7 +185,7 @@ describe 'yum' do
             ]
           end
         else
-          it { is_expected.to have_yumrepo_resource_count(0) }
+          it { is_expected.to have_yumrepo_resource_count(0) } # rubocop:disable RSpec/RepeatedExample
         end
 
         context 'and the CentOS base repo is negated' do
@@ -249,7 +249,7 @@ describe 'yum' do
           when 'VirtuozzoLinux'
             case facts[:os]['release']['major']
             when '6'
-              it { is_expected.to have_yumrepo_resource_count(12) }
+              it { is_expected.to have_yumrepo_resource_count(12) } # rubocop:disable RSpec/RepeatedExample
               it_behaves_like 'a catalog containing repos', [
                 'virtuozzolinux-base',
                 'virtuozzolinux-updates',
