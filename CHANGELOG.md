@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not affect the functionality of the module.
 
+## [v5.1.0](https://github.com/voxpupuli/puppet-yum/tree/v5.1.0) (2021-06-10)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-yum/compare/v5.0.0...v5.1.0)
+
+**Implemented enhancements:**
+
+- Add support for AlmaLinux 8 [\#203](https://github.com/voxpupuli/puppet-yum/pull/203) ([tparkercbn](https://github.com/tparkercbn))
+
 ## [v5.0.0](https://github.com/voxpupuli/puppet-yum/tree/v5.0.0) (2021-06-09)
 
 [Full Changelog](https://github.com/voxpupuli/puppet-yum/compare/v4.3.0...v5.0.0)
