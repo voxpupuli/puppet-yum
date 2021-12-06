@@ -22,7 +22,6 @@ yum::repos:
     gpgcheck: true
     gpgkey: 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-AlmaLinux'
     target: '/etc/yum.repos.d/almalinux.repo'
-    fastestmirror: true
 
   appstream:
     enabled: true
@@ -32,7 +31,6 @@ yum::repos:
     gpgcheck: true
     gpgkey: "file:///etc/pki/rpm-gpg/RPM-GPG-KEY-AlmaLinux"
     target: '/etc/yum.repos.d/almalinux.repo'
-    fastestmirror: true
 
   powertools:
     descr: 'AlmaLinux $releasever - PowerTools'
@@ -41,7 +39,6 @@ yum::repos:
     enabled: true
     gpgcheck: true
     gpgkey: 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-AlmaLinux'
-    fastestmirror: true
 
   extras:
     name: 'AlmaLinux $releasever - Extras'
@@ -50,7 +47,6 @@ yum::repos:
     enabled: true
     gpgcheck: true
     gpgkey: 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-AlmaLinux'
-    fastestmirror: true
 
   baseos-source:
     name: 'AlmaLinux $releasever - BaseOS Source'
@@ -59,7 +55,6 @@ yum::repos:
     enabled: false
     gpgcheck: true
     gpgkey: 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-AlmaLinux'
-    fastestmirror: true
 
   appstream-source:
     name: 'AlmaLinux $releasever - AppStream Source'
@@ -68,7 +63,6 @@ yum::repos:
     enabled: false
     gpgcheck: true
     gpgkey: 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-AlmaLinux'
-    fastestmirror: true
 
   powertools-source:
     name: 'AlmaLinux $releasever - PowerTools Source'
@@ -77,7 +71,6 @@ yum::repos:
     enabled: false
     gpgcheck: true
     gpgkey: 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-AlmaLinux'
-    fastestmirror: true
 
   extras-source:
     name: 'AlmaLinux $releasever - Extras Source'
@@ -86,7 +79,6 @@ yum::repos:
     enabled: false
     gpgcheck: true
     gpgkey: 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-AlmaLinux'
-    fastestmirror: true
 
   baseos-debuginfo:
     name: 'AlmaLinux $releasever - BaseOS debuginfo'
@@ -95,7 +87,6 @@ yum::repos:
     enabled: false
     gpgcheck: true
     gpgkey: 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-AlmaLinux'
-    fastestmirror: true
 
   appstream-debuginfo:
     name: 'AlmaLinux $releasever - AppStream debuginfo'
@@ -104,7 +95,6 @@ yum::repos:
     enabled: false
     gpgcheck: true
     gpgkey: 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-AlmaLinux'
-    fastestmirror: true
 
   powertools-debuginfo:
     name: 'AlmaLinux $releasever - PowerTools debuginfo'
@@ -113,7 +103,6 @@ yum::repos:
     enabled: false
     gpgcheck: true
     gpgkey: 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-AlmaLinux'
-    fastestmirror: true
 
   extras-debuginfo:
     name: 'AlmaLinux $releasever - Extras debuginfo'
@@ -122,4 +111,3 @@ yum::repos:
     enabled: false
     gpgcheck: true
     gpgkey: 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-AlmaLinux'
-    fastestmirror: true

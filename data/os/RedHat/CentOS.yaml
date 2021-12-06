@@ -1,31 +1,11 @@
 ---
 yum::os_default_repos:
-  - 'base'
-  - 'updates'
   - 'extras'
   - 'centosplus'
-  - 'base-source'
-  - 'updates-source'
+  - 'fasttrack'
   - 'extras-source'
   - 'base-debuginfo'
-  - 'centos-media'
 yum::repos:
-  base:
-    enabled: true
-    descr: 'CentOS-$releasever - Base'
-    mirrorlist: 'http://mirrorlist.centos.org/?release=$releasever&arch=$basearch&repo=os&infra=$infra'
-    gpgcheck: true
-    gpgkey: "file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-%{facts.os.release.major}"
-    target: '/etc/yum.repos.d/CentOS-Base.repo'
-
-  updates:
-    enabled: true
-    descr: 'CentOS-$releasever - Updates'
-    mirrorlist: 'http://mirrorlist.centos.org/?release=$releasever&arch=$basearch&repo=updates&infra=$infra'
-    gpgcheck: true
-    gpgkey: "file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-%{facts.os.release.major}"
-    target: '/etc/yum.repos.d/CentOS-Base.repo'
-
   extras:
     enabled: false
     descr: 'CentOS-$releasever - Extras'
@@ -42,22 +22,6 @@ yum::repos:
     gpgkey: "file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-%{facts.os.release.major}"
     target: '/etc/yum.repos.d/CentOS-Base.repo'
 
-  contrib:
-    enabled: false
-    descr: 'CentOS-$releasever - Contrib'
-    mirrorlist: 'http://mirrorlist.centos.org/?release=$releasever&arch=$basearch&repo=contrib&infra=$infra'
-    gpgcheck: true
-    gpgkey: "file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-%{facts.os.release.major}"
-    target: '/etc/yum.repos.d/CentOS-Base.repo'
-
-  cr:
-    enabled: false
-    descr: 'CentOS-$releasever - cr'
-    baseurl: 'http://mirror.centos.org/centos/$releasever/cr/$basearch/'
-    gpgcheck: true
-    gpgkey: "file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-%{facts.os.release.major}"
-    target: '/etc/yum.repos.d/CentOS-CR.repo'
-
   fasttrack:
     enabled: false
     descr: 'CentOS-$releasever - fasttrack'
@@ -65,22 +29,6 @@ yum::repos:
     gpgcheck: true
     gpgkey: "file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-%{facts.os.release.major}"
     target: '/etc/yum.repos.d/CentOS-fasttrack.repo'
-
-  base-source:
-    enabled: false
-    descr: 'CentOS-$releasever - Base Sources'
-    baseurl: 'http://vault.centos.org/centos/$releasever/os/Source/'
-    gpgcheck: true
-    gpgkey: "file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-%{facts.os.release.major}"
-    target: '/etc/yum.repos.d/CentOS-Sources.repo'
-
-  updates-source:
-    enabled: false
-    descr: 'CentOS-$releasever - Updates Sources'
-    baseurl: 'http://vault.centos.org/centos/$releasever/updates/Source/'
-    gpgcheck: true
-    gpgkey: "file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-%{facts.os.release.major}"
-    target: '/etc/yum.repos.d/CentOS-Sources.repo'
 
   extras-source:
     enabled: false
@@ -97,11 +45,3 @@ yum::repos:
     gpgcheck: true
     gpgkey: "file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-Debug-%{facts.os.release.major}"
     target: '/etc/yum.repos.d/CentOS-Debuginfo.repo'
-
-  centos-media:
-    enabled: false
-    descr: 'CentOS-$releasever - Media'
-    baseurl: 'file:///media/CentOS/ file:///media/cdrom/ file:///media/cdrecorder/'
-    gpgcheck: true
-    gpgkey: "file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-%{facts.os.release.major}"
-    target: '/etc/yum.repos.d/CentOS-Media.repo'

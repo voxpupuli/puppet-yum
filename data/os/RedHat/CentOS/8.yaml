@@ -1,0 +1,108 @@
+yum::os_default_repos:
+  - 'AppStream'
+  - 'BaseOS'
+  - 'cr'
+  - 'Devel'
+  - 'HA'
+  - 'PowerTools'
+  - 'BaseOS-source'
+  - 'Appstream-source'
+  - 'c8-media-BaseOS'
+  - 'c8-media-AppStream'
+
+yum::repos:
+  AppStream:
+    enabled: true
+    descr: 'CentOS-$releasever - AppStream'
+    mirrorlist: 'http://mirrorlist.centos.org/?release=$releasever&arch=$basearch&repo=AppStream&infra=$infra'
+    gpgcheck: true
+    gpgkey: "file:///etc/pki/rpm-gpg/RPM-GPG-KEY-centosofficial"
+    target: '/etc/yum.repos.d/CentOS-AppStream.repo'
+
+  BaseOS:
+    enabled: true
+    descr: 'CentOS-$releasever - Base'
+    mirrorlist: 'http://mirrorlist.centos.org/?release=$releasever&arch=$basearch&repo=BaseOS&infra=$infra'
+    gpgcheck: true
+    gpgkey: "file:///etc/pki/rpm-gpg/RPM-GPG-KEY-centosofficial"
+    target: '/etc/yum.repos.d/CentOS-Base.repo'
+
+  cr:
+    enabled: false
+    descr: 'CentOS-$releasever - cr'
+    baseurl: 'http://mirror.centos.org/$contentdir/$releasever/cr/$basearch/os/'
+    gpgcheck: true
+    gpgkey: "file:///etc/pki/rpm-gpg/RPM-GPG-KEY-centosofficial"
+    target: '/etc/yum.repos.d/CentOS-CR.repo'
+
+  Devel:
+    enabled: false
+    descr: 'CentOS-$releasever - Devel WARNING! FOR BUILDROOT USE ONLY!'
+    mirrorlist: 'http://mirrorlist.centos.org/?release=$releasever&arch=$basearch&repo=Devel&infra=$infra'
+    gpgcheck: true
+    gpgkey: "file:///etc/pki/rpm-gpg/RPM-GPG-KEY-centosofficial"
+    target: '/etc/yum.repos.d/CentOS-Devel.repo'
+
+  HA:
+    enabled: false
+    descr: 'CentOS-$releasever - HA'
+    mirrorlist: 'http://mirrorlist.centos.org/?release=$releasever&arch=$basearch&repo=HighAvailability&infra=$infra'
+    gpgcheck: true
+    gpgkey: "file:///etc/pki/rpm-gpg/RPM-GPG-KEY-centosofficial"
+    target: '/etc/yum.repos.d/CentOS-HA.repo'
+
+  extras:
+    enabled: true
+    descr: 'CentOS-$releasever - Extras'
+    mirrorlist: 'http://mirrorlist.centos.org/?release=$releasever&arch=$basearch&repo=extras&infra=$infra'
+    gpgcheck: true
+    gpgkey: "file:///etc/pki/rpm-gpg/RPM-GPG-KEY-centosofficial"
+    target: '/etc/yum.repos.d/CentOS-Extras.repo'
+
+  PowerTools:
+    enabled: false
+    descr: 'CentOS-$releasever - PowerTools'
+    mirrorlist: 'http://mirrorlist.centos.org/?release=$releasever&arch=$basearch&repo=PowerTools&infra=$infra'
+    gpgcheck: true
+    gpgkey: "file:///etc/pki/rpm-gpg/RPM-GPG-KEY-centosofficial"
+    target: '/etc/yum.repos.d/CentOS-PowerTools.repo'
+
+  BaseOS-source:
+    enabled: false
+    descr: 'CentOS-$releasever - BaseOS Sources'
+    baseurl: 'http://vault.centos.org/$contentdir/$releasever/BaseOS/Source/'
+    gpgcheck: true
+    gpgkey: 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-centosofficial'
+    target: '/etc/yum.repos.d/CentOS-Sources.repo'
+
+  Appstream-source:
+    enabled: false
+    descr: 'CentOS-$releasever - Appstream Sources'
+    baseurl: 'http://vault.centos.org/$contentdir/$releasever/Appstream/Source/'
+    gpgcheck: true
+    gpgkey: 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-centosofficial'
+    target: '/etc/yum.repos.d/CentOS-Sources.repo'
+
+  centosplus-source:
+    enabled: false
+    descr: 'CentOS-$releasever - Plus Sources'
+    baseurl: 'http://vault.centos.org/$contentdir/$releasever/centosplus/Source/'
+    gpgcheck: true
+    gpgkey: 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-centosofficial'
+    target: '/etc/yum.repos.d/CentOS-Sources.repo'
+
+  c8-media-BaseOS:
+    enabled: false
+    descr: 'CentOS-BaseOS-$releasever - Media'
+    baseurl: "file:///media/CentOS/BaseOS\n        file:///media/cdrom/BaseOS\n        file:///media/cdrecorder/BaseOS"
+    gpgcheck: true
+    gpgkey: "file:///etc/pki/rpm-gpg/RPM-GPG-KEY-centosofficial"
+    target: '/etc/yum.repos.d/CentOS-Media.repo'
+
+  c8-media-AppStream:
+    enabled: false
+    descr: 'CentOS-AppStream-$releasever - Media'
+    baseurl: "file:///media/CentOS/AppStream\n        file:///media/cdrom/AppStream\n        file:///media/cdrecorder/AppStream"
+    gpgcheck: true
+    gpgkey: "file:///etc/pki/rpm-gpg/RPM-GPG-KEY-centosofficial"
+    target: '/etc/yum.repos.d/CentOS-Media.repo'

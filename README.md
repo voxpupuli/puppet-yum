@@ -359,6 +359,16 @@ yum::versionlock{'bash':
 }
 ```
 
+### Run a post transaction command
+Specify a command to run after transactions of packages.
+
+```puppet
+yum::post_transaction_action{'touch_file':
+  key     => 'openssh-*',
+  command => 'touch /tmp/openssh-package-updated',
+}
+```
+
 ### Install or remove *yum* package group
 
 Install yum [package groups][3].  To list groups: `yum group list`. Then use

@@ -4,6 +4,32 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not affect the functionality of the module.
 
+## [v5.3.0](https://github.com/voxpupuli/puppet-yum/tree/v5.3.0) (2021-10-26)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-yum/compare/v5.2.0...v5.3.0)
+
+**Implemented enhancements:**
+
+-  add CentOS 8 default repos [\#225](https://github.com/voxpupuli/puppet-yum/pull/225) ([oniGino](https://github.com/oniGino))
+
+## [v5.2.0](https://github.com/voxpupuli/puppet-yum/tree/v5.2.0) (2021-09-29)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-yum/compare/v5.1.0...v5.2.0)
+
+**Implemented enhancements:**
+
+- synchronize Rocky repositories with upstream definitions [\#217](https://github.com/voxpupuli/puppet-yum/pull/217) ([vchepkov](https://github.com/vchepkov))
+- New type yum::post\_transaction\_action [\#216](https://github.com/voxpupuli/puppet-yum/pull/216) ([traylenator](https://github.com/traylenator))
+
+**Closed issues:**
+
+- Centos 6 support broken [\#198](https://github.com/voxpupuli/puppet-yum/issues/198)
+
+**Merged pull requests:**
+
+- Allow stdlib 8.0.0 [\#221](https://github.com/voxpupuli/puppet-yum/pull/221) ([smortex](https://github.com/smortex))
+- Render post\_transaction\_action examples correctly [\#218](https://github.com/voxpupuli/puppet-yum/pull/218) ([traylenator](https://github.com/traylenator))
+
 ## [v5.1.0](https://github.com/voxpupuli/puppet-yum/tree/v5.1.0) (2021-06-10)
 
 [Full Changelog](https://github.com/voxpupuli/puppet-yum/compare/v5.0.0...v5.1.0)

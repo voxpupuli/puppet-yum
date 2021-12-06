@@ -8,6 +8,7 @@
 
 * [`yum`](#yum): A class to install and manage Yum configuration.
 * [`yum::clean`](#yumclean): A $(yum clean all) Exec to be notified if desired.
+* [`yum::plugin::post_transaction_actions`](#yumpluginpost_transaction_actions): Class to install post_transaction plugin
 * [`yum::plugin::versionlock`](#yumpluginversionlock): Class: yum::plugin::versionlock  This class installs versionlock plugin  Parameters:   [*ensure*] - specifies if versionlock should be presen
 
 ### Defined types
@@ -17,6 +18,7 @@
 * [`yum::group`](#yumgroup): Define: yum::group  This definition installs or removes yum package group.  Parameters:   [*ensure*]   - specifies if package group should be
 * [`yum::install`](#yuminstall): Define: yum::install  This definition installs or removes rpms from local file or URL via yum install command. This can be better than using 
 * [`yum::plugin`](#yumplugin): Define: yum::plugin  This definition installs Yum plugin.  Parameters:   [*ensure*]   - specifies if plugin should be present or absent  Acti
+* [`yum::post_transaction_action`](#yumpost_transaction_action): Creates post transaction configuratons for dnf or yum.
 * [`yum::versionlock`](#yumversionlock): Locks package from updates.
 
 ### Functions
@@ -27,6 +29,7 @@
 
 * [`Yum::RpmArch`](#yumrpmarch): Valid rpm architectures.
 * [`Yum::RpmName`](#yumrpmname): Valid rpm name.
+* [`Yum::RpmNameGlob`](#yumrpmnameglob): Valid rpm name with globs.
 * [`Yum::RpmRelease`](#yumrpmrelease): Valid rpm release fields.
 * [`Yum::RpmVersion`](#yumrpmversion): Valid rpm version fields.
 * [`Yum::VersionlockString`](#yumversionlockstring): This type matches strings appropriate for use with yum-versionlock. Its basic format, using the `rpm(8)` query string format, is `%{EPOCH}:%{
@@ -37,7 +40,7 @@
 
 ## Classes
 
-### `yum`
+### <a name="yum"></a>`yum`
 
 A class to install and manage Yum configuration.
 
@@ -99,9 +102,20 @@ yum::repos:
 
 #### Parameters
 
-The following parameters are available in the `yum` class.
+The following parameters are available in the `yum` class:
 
-##### `clean_old_kernels`
+* [`clean_old_kernels`](#clean_old_kernels)
+* [`keep_kernel_devel`](#keep_kernel_devel)
+* [`config_options`](#config_options)
+* [`repos`](#repos)
+* [`managed_repos`](#managed_repos)
+* [`manage_os_default_repos`](#manage_os_default_repos)
+* [`os_default_repos`](#os_default_repos)
+* [`repo_exclusions`](#repo_exclusions)
+* [`gpgkeys`](#gpgkeys)
+* [`utils_package_name`](#utils_package_name)
+
+##### <a name="clean_old_kernels"></a>`clean_old_kernels`
 
 Data type: `Boolean`
 
@@ -109,7 +123,7 @@ Whether or not to purge old kernel version beyond the `keeponly_limit`.
 
 Default value: ``true``
 
-##### `keep_kernel_devel`
+##### <a name="keep_kernel_devel"></a>`keep_kernel_devel`
 
 Data type: `Boolean`
 
@@ -117,7 +131,7 @@ Whether or not to keep kernel devel packages on old kernel purge.
 
 Default value: ``false``
 
-##### `config_options`
+##### <a name="config_options"></a>`config_options`
 
 Data type: `Hash[String, Variant[String, Integer, Boolean, Hash[String, Variant[String, Integer, Boolean]]]]`
 
@@ -127,11 +141,11 @@ are either the direct `ensure` value, or a Hash of the resource's attributes.
 @note Boolean parameter values will be converted to either a `1` or `0`; use a quoted string to
   get a literal `true` or `false`.
 
-Default value: `{ }`
+Default value: `{}`
 
-##### `repos`
+##### <a name="repos"></a>`repos`
 
-Data type: `Optional[Hash[String, Optional[Hash[String, Variant[String, Integer, Boolean]]]]]`
+Data type: `Hash[String, Optional[Hash[String, Variant[String, Integer, Boolean]]]]`
 
 A hash where keys are the names of `Yumrepo` resources and each value represents its respective
 Yumrepo's resource parameters.  This is used in conjunction with the `managed_repos` parameter
@@ -144,7 +158,7 @@ parameters may be overriden or removed via global or environment Hiera data.
 
 Default value: `{}`
 
-##### `managed_repos`
+##### <a name="managed_repos"></a>`managed_repos`
 
 Data type: `Array[String]`
 
@@ -157,7 +171,7 @@ set in the module's Hiera data.
 
 Default value: `[]`
 
-##### `manage_os_default_repos`
+##### <a name="manage_os_default_repos"></a>`manage_os_default_repos`
 
 Data type: `Boolean`
 
@@ -168,7 +182,7 @@ Whether or not to add an operating system's default repos to the `managed_repos`
 
 Default value: ``false``
 
-##### `os_default_repos`
+##### <a name="os_default_repos"></a>`os_default_repos`
 
 Data type: `Array[String]`
 
@@ -177,7 +191,7 @@ Normally this should not be modified.
 
 Default value: `[]`
 
-##### `repo_exclusions`
+##### <a name="repo_exclusions"></a>`repo_exclusions`
 
 Data type: `Array[String]`
 
@@ -187,7 +201,7 @@ instantiation.
 
 Default value: `[]`
 
-##### `gpgkeys`
+##### <a name="gpgkeys"></a>`gpgkeys`
 
 Data type: `Hash[String, Hash[String, String]]`
 
@@ -197,7 +211,7 @@ as repos.
 
 Default value: `{}`
 
-##### `utils_package_name`
+##### <a name="utils_package_name"></a>`utils_package_name`
 
 Data type: `String`
 
@@ -205,11 +219,43 @@ Name of the utils package, e.g. 'yum-utils', or 'dnf-utils'.
 
 Default value: `'yum-utils'`
 
-### `yum::clean`
+### <a name="yumclean"></a>`yum::clean`
 
 A $(yum clean all) Exec to be notified if desired.
 
-### `yum::plugin::versionlock`
+### <a name="yumpluginpost_transaction_actions"></a>`yum::plugin::post_transaction_actions`
+
+Class to install post_transaction plugin
+
+* **See also**
+  * https://dnf-plugins-core.readthedocs.io/en/latest/post-transaction-actions.html
+    * DNF Post Transaction Items
+
+#### Examples
+
+##### Enable post_transaction_action plugin
+
+```puppet
+class{'yum::plugin::post_transaction_actions':
+  ensure => present,
+}
+```
+
+#### Parameters
+
+The following parameters are available in the `yum::plugin::post_transaction_actions` class:
+
+* [`ensure`](#ensure)
+
+##### <a name="ensure"></a>`ensure`
+
+Data type: `Enum['present', 'absent']`
+
+Should the post_transaction actions plugin be installed
+
+Default value: `'present'`
+
+### <a name="yumpluginversionlock"></a>`yum::plugin::versionlock`
 
 Class: yum::plugin::versionlock
 
@@ -228,9 +274,13 @@ Sample usage:
 
 #### Parameters
 
-The following parameters are available in the `yum::plugin::versionlock` class.
+The following parameters are available in the `yum::plugin::versionlock` class:
 
-##### `ensure`
+* [`ensure`](#ensure)
+* [`path`](#path)
+* [`clean`](#clean)
+
+##### <a name="ensure"></a>`ensure`
 
 Data type: `Enum['present', 'absent']`
 
@@ -238,7 +288,7 @@ Data type: `Enum['present', 'absent']`
 
 Default value: `'present'`
 
-##### `path`
+##### <a name="path"></a>`path`
 
 Data type: `String`
 
@@ -246,7 +296,7 @@ Data type: `String`
 
 Default value: `'/etc/yum/pluginconf.d/versionlock.list'`
 
-##### `clean`
+##### <a name="clean"></a>`clean`
 
 Data type: `Boolean`
 
@@ -256,7 +306,7 @@ Default value: ``false``
 
 ## Defined types
 
-### `yum::config`
+### <a name="yumconfig"></a>`yum::config`
 
 Define: yum::config
 
@@ -283,15 +333,18 @@ Sample usage:
 
 #### Parameters
 
-The following parameters are available in the `yum::config` defined type.
+The following parameters are available in the `yum::config` defined type:
 
-##### `ensure`
+* [`ensure`](#ensure)
+* [`key`](#key)
+
+##### <a name="ensure"></a>`ensure`
 
 Data type: `Variant[Boolean, Integer, Enum['absent'], String]`
 
 
 
-##### `key`
+##### <a name="key"></a>`key`
 
 Data type: `String`
 
@@ -299,7 +352,7 @@ Data type: `String`
 
 Default value: `$title`
 
-### `yum::gpgkey`
+### <a name="yumgpgkey"></a>`yum::gpgkey`
 
 Define: yum::gpgkey
 
@@ -331,9 +384,17 @@ Sample usage:
 
 #### Parameters
 
-The following parameters are available in the `yum::gpgkey` defined type.
+The following parameters are available in the `yum::gpgkey` defined type:
 
-##### `path`
+* [`path`](#path)
+* [`ensure`](#ensure)
+* [`content`](#content)
+* [`source`](#source)
+* [`owner`](#owner)
+* [`group`](#group)
+* [`mode`](#mode)
+
+##### <a name="path"></a>`path`
 
 Data type: `String`
 
@@ -341,7 +402,7 @@ Data type: `String`
 
 Default value: `$name`
 
-##### `ensure`
+##### <a name="ensure"></a>`ensure`
 
 Data type: `Enum['present', 'absent']`
 
@@ -349,7 +410,7 @@ Data type: `Enum['present', 'absent']`
 
 Default value: `'present'`
 
-##### `content`
+##### <a name="content"></a>`content`
 
 Data type: `Optional[String]`
 
@@ -357,7 +418,7 @@ Data type: `Optional[String]`
 
 Default value: ``undef``
 
-##### `source`
+##### <a name="source"></a>`source`
 
 Data type: `Optional[String]`
 
@@ -365,7 +426,7 @@ Data type: `Optional[String]`
 
 Default value: ``undef``
 
-##### `owner`
+##### <a name="owner"></a>`owner`
 
 Data type: `String`
 
@@ -373,7 +434,7 @@ Data type: `String`
 
 Default value: `'root'`
 
-##### `group`
+##### <a name="group"></a>`group`
 
 Data type: `String`
 
@@ -381,7 +442,7 @@ Data type: `String`
 
 Default value: `'root'`
 
-##### `mode`
+##### <a name="mode"></a>`mode`
 
 Data type: `String`
 
@@ -389,7 +450,7 @@ Data type: `String`
 
 Default value: `'0644'`
 
-### `yum::group`
+### <a name="yumgroup"></a>`yum::group`
 
 Define: yum::group
 
@@ -413,9 +474,13 @@ Sample usage:
 
 #### Parameters
 
-The following parameters are available in the `yum::group` defined type.
+The following parameters are available in the `yum::group` defined type:
 
-##### `install_options`
+* [`install_options`](#install_options)
+* [`ensure`](#ensure)
+* [`timeout`](#timeout)
+
+##### <a name="install_options"></a>`install_options`
 
 Data type: `Array[String[1]]`
 
@@ -423,7 +488,7 @@ Data type: `Array[String[1]]`
 
 Default value: `[]`
 
-##### `ensure`
+##### <a name="ensure"></a>`ensure`
 
 Data type: `Enum['present', 'installed', 'latest', 'absent', 'purged']`
 
@@ -431,7 +496,7 @@ Data type: `Enum['present', 'installed', 'latest', 'absent', 'purged']`
 
 Default value: `'present'`
 
-##### `timeout`
+##### <a name="timeout"></a>`timeout`
 
 Data type: `Optional[Integer]`
 
@@ -439,7 +504,7 @@ Data type: `Optional[Integer]`
 
 Default value: ``undef``
 
-### `yum::install`
+### <a name="yuminstall"></a>`yum::install`
 
 Define: yum::install
 
@@ -465,15 +530,19 @@ Sample usage:
 
 #### Parameters
 
-The following parameters are available in the `yum::install` defined type.
+The following parameters are available in the `yum::install` defined type:
 
-##### `source`
+* [`source`](#source)
+* [`ensure`](#ensure)
+* [`timeout`](#timeout)
+
+##### <a name="source"></a>`source`
 
 Data type: `String`
 
 
 
-##### `ensure`
+##### <a name="ensure"></a>`ensure`
 
 Data type: `Enum['present', 'installed', 'absent', 'purged']`
 
@@ -481,7 +550,7 @@ Data type: `Enum['present', 'installed', 'absent', 'purged']`
 
 Default value: `'present'`
 
-##### `timeout`
+##### <a name="timeout"></a>`timeout`
 
 Data type: `Optional[Integer]`
 
@@ -489,7 +558,7 @@ Data type: `Optional[Integer]`
 
 Default value: ``undef``
 
-### `yum::plugin`
+### <a name="yumplugin"></a>`yum::plugin`
 
 Define: yum::plugin
 
@@ -510,9 +579,13 @@ Sample usage:
 
 #### Parameters
 
-The following parameters are available in the `yum::plugin` defined type.
+The following parameters are available in the `yum::plugin` defined type:
 
-##### `ensure`
+* [`ensure`](#ensure)
+* [`pkg_prefix`](#pkg_prefix)
+* [`pkg_name`](#pkg_name)
+
+##### <a name="ensure"></a>`ensure`
 
 Data type: `Enum['present', 'absent']`
 
@@ -520,7 +593,7 @@ Data type: `Enum['present', 'absent']`
 
 Default value: `'present'`
 
-##### `pkg_prefix`
+##### <a name="pkg_prefix"></a>`pkg_prefix`
 
 Data type: `Optional[String]`
 
@@ -528,7 +601,7 @@ Data type: `Optional[String]`
 
 Default value: ``undef``
 
-##### `pkg_name`
+##### <a name="pkg_name"></a>`pkg_name`
 
 Data type: `Optional[String]`
 
@@ -536,7 +609,65 @@ Data type: `Optional[String]`
 
 Default value: ``undef``
 
-### `yum::versionlock`
+### <a name="yumpost_transaction_action"></a>`yum::post_transaction_action`
+
+Creates post transaction configuratons for dnf or yum.
+
+* **See also**
+  * https://dnf-plugins-core.readthedocs.io/en/latest/post-transaction-actions.html
+    * DNF Post Transaction Items
+
+#### Examples
+
+##### Touch a file when ssh is package is updated, installed or removed.
+
+```puppet
+yum::post_transaction_action{'touch file on ssh package update':
+  key     => 'openssh-*',
+  state   => 'any',
+  command => 'touch /tmp/openssh-installed',
+}
+```
+
+#### Parameters
+
+The following parameters are available in the `yum::post_transaction_action` defined type:
+
+* [`action`](#action)
+* [`key`](#key)
+* [`state`](#state)
+* [`command`](#command)
+
+##### <a name="action"></a>`action`
+
+Data type: `String[1]`
+
+Name variable a string to label the rule
+
+Default value: `$title`
+
+##### <a name="key"></a>`key`
+
+Data type: `Variant[Enum['*'],Yum::RpmNameGlob,Stdlib::Unixpath]`
+
+Package name, glob or file name file glob.
+
+##### <a name="state"></a>`state`
+
+Data type: `Enum['install', 'update', 'remove', 'any', 'in', 'out']`
+
+Can be `install`, `update`, `remove` or `any` on YUM based systems.
+Can be `in`, `out` or `any` on DNF based systems.
+
+Default value: `'any'`
+
+##### <a name="command"></a>`command`
+
+Data type: `String[1]`
+
+The command to run
+
+### <a name="yumversionlock"></a>`yum::versionlock`
 
 Locks package from updates.
 
@@ -591,9 +722,15 @@ yum::versionlock { 'bash':
 
 #### Parameters
 
-The following parameters are available in the `yum::versionlock` defined type.
+The following parameters are available in the `yum::versionlock` defined type:
 
-##### `ensure`
+* [`ensure`](#ensure)
+* [`version`](#version)
+* [`release`](#release)
+* [`arch`](#arch)
+* [`epoch`](#epoch)
+
+##### <a name="ensure"></a>`ensure`
 
 Data type: `Enum['present', 'absent', 'exclude']`
 
@@ -601,7 +738,7 @@ Specifies if versionlock should be `present`, `absent` or `exclude`.
 
 Default value: `'present'`
 
-##### `version`
+##### <a name="version"></a>`version`
 
 Data type: `Optional[Yum::RpmVersion]`
 
@@ -610,7 +747,7 @@ If version is set then the name var is assumed to a package name and not the ful
 
 Default value: ``undef``
 
-##### `release`
+##### <a name="release"></a>`release`
 
 Data type: `Yum::RpmRelease`
 
@@ -618,7 +755,7 @@ Release of the package if CentOS 8 mechanism is used.
 
 Default value: `'*'`
 
-##### `arch`
+##### <a name="arch"></a>`arch`
 
 Data type: `Variant[Yum::RpmArch, Enum['*']]`
 
@@ -626,7 +763,7 @@ Arch of the package if CentOS 8 mechanism is used.
 
 Default value: `'*'`
 
-##### `epoch`
+##### <a name="epoch"></a>`epoch`
 
 Data type: `Integer[0]`
 
@@ -636,7 +773,7 @@ Default value: `0`
 
 ## Functions
 
-### `yum::bool2num_hash_recursive`
+### <a name="yumbool2num_hash_recursive"></a>`yum::bool2num_hash_recursive`
 
 Type: Puppet Language
 
@@ -708,24 +845,43 @@ The hash on which to operate
 
 ## Data types
 
-### `Yum::RpmArch`
+### <a name="yumrpmarch"></a>`Yum::RpmArch`
 
 Output of `rpm -q --queryformat '%{arch}\n' package`
 
 * **See also**
   * https://github.com/rpm-software-management/rpm/blob/master/rpmrc.in
 
-Alias of `Enum['noarch', 'x86_64', 'i386', 'arm', 'ppc64', 'ppc64le', 'sparc64', 'ia64', 'alpha', 'ip', 'm68k', 'mips', 'mipsel', 'mk68k', 'mint', 'ppc', 'rs6000', 's390', 's390x', 'sh', 'sparc', 'xtensa']`
+Alias of
 
-### `Yum::RpmName`
+```puppet
+Enum['noarch', 'x86_64', 'i386', 'arm', 'ppc64', 'ppc64le', 'sparc64', 'ia64', 'alpha', 'ip', 'm68k', 'mips', 'mipsel', 'mk68k', 'mint', 'ppc', 'rs6000', 's390', 's390x', 'sh', 'sparc', 'xtensa']
+```
+
+### <a name="yumrpmname"></a>`Yum::RpmName`
 
 Can be alphanumeric or contain `.` `_` `+` `%` `{` `}` `-`.
 Output of `rpm -q --queryformat '%{name}\n package`
 Examples python36-foobar, netscape
 
-Alias of `Pattern[/\A([0-9a-zA-Z\._\+%\{\}-]+)\z/]`
+Alias of
 
-### `Yum::RpmRelease`
+```puppet
+Pattern[/\A([0-9a-zA-Z\._\+%\{\}-]+)\z/]
+```
+
+### <a name="yumrpmnameglob"></a>`Yum::RpmNameGlob`
+
+Can be alphanumeric or contain `.` `_` `+` `%` `{` `}` `-` `*`.
+Examples python36-*, *netscape
+
+Alias of
+
+```puppet
+Pattern[/\A([*0-9a-zA-Z\._\+%\{\}-]+)\z/]
+```
+
+### <a name="yumrpmrelease"></a>`Yum::RpmRelease`
 
 It may not contain a dash.
 Output of `rpm -q --queryformat '%{release}\n' package`.
@@ -734,9 +890,13 @@ Examples 3.4 3.4.el6, 3.4.el6_2
 * **See also**
   * http://ftp.rpm.org/max-rpm/ch-rpm-file-format.html
 
-Alias of `Pattern[/\A([^-]+)\z/]`
+Alias of
 
-### `Yum::RpmVersion`
+```puppet
+Pattern[/\A([^-]+)\z/]
+```
+
+### <a name="yumrpmversion"></a>`Yum::RpmVersion`
 
 It may not contain a dash.
 Output of `rpm -q --queryformat '%{version}\n' package`.
@@ -745,9 +905,13 @@ Examples 3.4, 2.5.alpha6
 * **See also**
   * http://ftp.rpm.org/max-rpm/ch-rpm-file-format.html
 
-Alias of `Pattern[/\A([^-]+)\z/]`
+Alias of
 
-### `Yum::VersionlockString`
+```puppet
+Pattern[/\A([^-]+)\z/]
+```
+
+### <a name="yumversionlockstring"></a>`Yum::VersionlockString`
 
 This type matches strings appropriate for use with yum-versionlock.
 Its basic format, using the `rpm(8)` query string format, is
@@ -766,8 +930,10 @@ breaks down into five distinct parts, plus the seperators.
   RELEASE: Any valid release string. Only limitation is that it is not a dash (`-`)
   type Yum::PackageRelease = Regexp[/[^-]+/]
 
+lint:ignore:140chars
   ARCH: Matches a string such as `el7.x86_64`.  This is actuall two sub-expressions.  See below.
   type Yum::PackageArch    = Regexp[/([0-9a-zZ-Z_\*]+)(?:\.(noarch|x86_64|i386|arm|ppc64|ppc64le|sparc64|ia64|alpha|ip|m68k|mips|mipsel|mk68k|mint|ppc|rs6000|s390|s390x|sh|sparc|xtensa|\*))?/]
+lint:endignore
 
 The `%{ARCH}` sub-expression is composed of two sub-expressions
 separated by a dot (`.`), where the second part is optional.  The RPM
@@ -777,12 +943,16 @@ specification calls the first field the `DistTag`, and the second the
    DistTag: Any string consiting of only letters, numbers, or an underscore, e.g., `el6`, `sl7`, or `fc24`.
    type Yum::PackageDistTag   = Regexp[/[0-9a-zZ-Z_\*]+/]
 
+lint:ignore:140chars
    BuildArch: Any string from the list at https://github.com/rpm-software-management/rpm/blob/master/rpmrc.in.  Strings are roughly listed from most common to least common to improve performance.
    type Yum::PackageBuildArch = Regexp[/noarch|x86_64|i386|arm|ppc64|ppc64le|sparc64|ia64|alpha|ip|m68k|mips|mipsel|mk68k|mint|ppc|rs6000|s390|s390x|sh|sparc|xtensa/]
+lint:endignore
 
 wildcard characters may not span the fields, may not cover the
 seperators.  This is an undocumented but tested limitation of
 yum-versionlock.
+
+lint:ignore:140chars
 
 * **Note** Each field may contain wildcard characters (`*`), but the
 
@@ -818,11 +988,15 @@ yum-versionlock.
 
 ```
 
-Alias of `Pattern[/^([0-9\*]+):([0-9a-zA-Z\._\+%\{\}\*-]+)-([^-]+)-([^-]+)\.(([0-9a-zZ-Z_\*]+)(?:\.(noarch|x86_64|i386|arm|ppc64|ppc64le|sparc64|ia64|alpha|ip|m68k|mips|mipsel|mk68k|mint|ppc|rs6000|s390|s390x|sh|sparc|xtensa|\*))?)$/]`
+Alias of
+
+```puppet
+Pattern[/^([0-9\*]+):([0-9a-zA-Z\._\+%\{\}\*-]+)-([^-]+)-([^-]+)\.(([0-9a-zZ-Z_\*]+)(?:\.(noarch|x86_64|i386|arm|ppc64|ppc64le|sparc64|ia64|alpha|ip|m68k|mips|mipsel|mk68k|mint|ppc|rs6000|s390|s390x|sh|sparc|xtensa|\*))?)$/]
+```
 
 ## Tasks
 
-### `init`
+### <a name="init"></a>`init`
 
 Allows you to perform yum functions
 

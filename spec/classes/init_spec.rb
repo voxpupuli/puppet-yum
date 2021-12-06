@@ -19,6 +19,12 @@ shared_examples 'a catalog containing repos' do |repos|
   end
 end
 
+shared_examples 'a catalog not containing repos' do |repos|
+  repos.each do |repo|
+    it { is_expected.not_to contain_yumrepo(repo) }
+  end
+end
+
 describe 'yum' do
   on_supported_os.each do |os, facts|
     context "on #{os}" do
@@ -42,47 +48,102 @@ describe 'yum' do
         case facts[:os]['name']
         when 'Rocky'
           it_behaves_like 'a catalog containing repos', [
-            'baseos',
             'appstream',
-            'extras',
-            'baseos-source',
             'appstream-source',
-            'extras-source',
-            'plus-source',
+            'baseos',
+            'baseos-source',
             'devel',
+            'extras',
             'ha',
+            'ha-source',
+            'nfv',
+            'plus',
             'powertools',
-            'resilient-storage'
+            'powertools-source',
+            'resilient-storage',
+            'resilient-storage-source',
+            'rt'
           ]
           case facts[:os]['release']['major']
           when '8'
-            it { is_expected.to have_yumrepo_resource_count(11) }
+            it { is_expected.to have_yumrepo_resource_count(15) }
           else
             it { is_expected.to have_yumrepo_resource_count(0) } # rubocop:disable RSpec/RepeatedExample
           end
         when 'CentOS'
           it_behaves_like 'a catalog containing repos', [
-            'base',
-            'updates',
             'extras',
-            'base-source',
-            'updates-source',
+            'centosplus',
+            'fasttrack',
             'extras-source',
             'base-debuginfo',
-            'centosplus',
-            'centos-media'
           ]
           case facts[:os]['release']['major']
           when '8'
-            it { is_expected.to have_yumrepo_resource_count(9) }
+            it_behaves_like 'a catalog containing repos', [
+              'AppStream',
+              'BaseOS',
+              'cr',
+              'Devel',
+              'HA',
+              'PowerTools',
+              'BaseOS-source',
+              'Appstream-source',
+              'c8-media-BaseOS',
+              'c8-media-AppStream'
+            ]
+            it_behaves_like 'a catalog not containing repos', [
+              'base',
+              'updates',
+              'contrib',
+              'base-source',
+              'updates-source',
+              'centos-media'
+            ]
           when '7'
-            it { is_expected.to contain_yumrepo('cr') }
-            it { is_expected.not_to contain_yumrepo('contrib') }
+            it_behaves_like 'a catalog containing repos', [
+              'base',
+              'updates',
+              'cr',
+              'base-source',
+              'updates-source',
+              'centos-media'
+            ]
+            it_behaves_like 'a catalog not containing repos', [
+              'contrib',
+              'AppStream',
+              'BaseOS',
+              'Devel',
+              'HA',
+              'PowerTools',
+              'BaseOS-source',
+              'Appstream-source',
+              'c8-media-BaseOS',
+              'c8-media-AppStream'
+            ]
           when '6'
-            it { is_expected.to contain_yumrepo('contrib') }
-            it { is_expected.not_to contain_yumrepo('cr') }
+            it_behaves_like 'a catalog containing repos', [
+              'contrib',
+              'base',
+              'updates',
+              'centos-media',
+              'base-source',
+              'updates-source'
+            ]
+            it_behaves_like 'a catalog not containing repos', [
+              'cr',
+              'AppStream',
+              'BaseOS',
+              'Devel',
+              'HA',
+              'PowerTools',
+              'BaseOS-source',
+              'Appstream-source',
+              'c8-media-BaseOS',
+              'c8-media-AppStream'
+            ]
           else
-            it { is_expected.to have_yumrepo_resource_count(10) }
+            it { is_expected.to have_yumrepo_resource_count(4) }
           end
         when 'Amazon'
           it { is_expected.to have_yumrepo_resource_count(16) } # rubocop:disable RSpec/RepeatedExample
@@ -189,21 +250,63 @@ describe 'yum' do
         end
 
         context 'and the CentOS base repo is negated' do
-          let(:params) { super().merge(repo_exclusions: ['base']) }
+          case facts[:os]['release']['major']
+          when '8'
+            let(:params) { super().merge(repo_exclusions: ['BaseOS']) }
+          else
+            let(:params) { super().merge(repo_exclusions: ['base']) }
+          end
 
           case facts[:os]['name']
           when 'CentOS'
             it { is_expected.not_to contain_yumrepo('base') }
-            it_behaves_like 'a catalog containing repos', [
-              'updates',
-              'extras',
-              'base-source',
-              'updates-source',
-              'extras-source',
-              'base-debuginfo',
-              'centosplus',
-              'centos-media'
-            ]
+            it { is_expected.not_to contain_yumrepo('BaseOS') }
+            case facts[:os]['release']['major']
+            when '8'
+              it_behaves_like 'a catalog containing repos', [
+                'AppStream',
+                'cr',
+                'Devel',
+                'fasttrack',
+                'HA',
+                'PowerTools',
+                'BaseOS-source',
+                'Appstream-source',
+                'c8-media-BaseOS',
+                'c8-media-AppStream'
+              ]
+            when '7'
+              it_behaves_like 'a catalog containing repos', [
+                'cr',
+                'updates',
+                'extras',
+                'base-source',
+                'updates-source',
+                'extras-source',
+                'base-debuginfo',
+                'centosplus',
+                'centos-media'
+              ]
+            when '6'
+              it_behaves_like 'a catalog containing repos', [
+                'contrib',
+                'updates',
+                'extras',
+                'base-source',
+                'updates-source',
+                'extras-source',
+                'base-debuginfo',
+                'centosplus',
+                'centos-media'
+              ]
+            else
+              it_behaves_like 'a catalog containing repos', [
+                'extras',
+                'centosplus',
+                'extras-source',
+                'base-debuginfo'
+              ]
+            end
           when 'Amazon'
             it { is_expected.to have_yumrepo_resource_count(16) } # rubocop:disable RSpec/RepeatedExample
             it_behaves_like 'a catalog containing repos', [
@@ -304,6 +407,28 @@ describe 'yum' do
                 'extras-debuginfo',
               ]
             end
+          when 'Rocky'
+            case facts[:os]['release']['major']
+            when '8'
+              it { is_expected.to have_yumrepo_resource_count(15) }
+              it_behaves_like 'a catalog containing repos', [
+                'appstream',
+                'appstream-source',
+                'baseos',
+                'baseos-source',
+                'devel',
+                'extras',
+                'ha',
+                'ha-source',
+                'nfv',
+                'plus',
+                'powertools',
+                'powertools-source',
+                'resilient-storage',
+                'resilient-storage-source',
+                'rt',
+              ]
+            end
           else
             it { is_expected.to have_yumrepo_resource_count(0) }
           end
@@ -314,7 +439,18 @@ describe 'yum' do
         # TODO: This should be generated with something like `lookup('yum::repos').keys`,
         # but the setup for `Puppet::Pops::Lookup` is to complicated to be worth it as of
         # this writing (2017-04-11).  For now, we just pull from `repos.yaml`.
-        repos_yaml_data = YAML.safe_load(File.read('./spec/fixtures/modules/yum/data/repos.yaml'))
+
+        repos_yaml_data = YAML.safe_load(File.read('./spec/fixtures/modules/yum/data/repos/repos.yaml'))
+
+        case facts[:os]['family']
+        when 'RedHat'
+          case facts[:os]['release']['major']
+          when '8'
+            rh8_repos_yaml_data = YAML.safe_load(File.read('./spec/fixtures/modules/yum/data/repos/RedHat/8.yaml'))
+            repos_yaml_data = repos_yaml_data.deep_merge(rh8_repos_yaml_data)
+          end
+        end
+
         supported_repos = repos_yaml_data['yum::repos'].keys
 
         supported_repos.each do |supported_repo|
@@ -411,6 +547,8 @@ describe 'yum' do
 
         it { is_expected.to contain_yumrepo('epel') }
         case facts[:os]['release']['major']
+        when '8'
+          it { is_expected.to contain_yum__gpgkey('/etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-8') }
         when '7'
           it { is_expected.to contain_yum__gpgkey('/etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-7') }
         when '6'

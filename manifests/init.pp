@@ -97,7 +97,7 @@ class yum (
   Boolean $clean_old_kernels = true,
   Boolean $keep_kernel_devel = false,
   Hash[String, Variant[String, Integer, Boolean, Hash[String, Variant[String, Integer, Boolean]]]] $config_options = {},
-  Optional[Hash[String, Optional[Hash[String, Variant[String, Integer, Boolean]]]]] $repos = {},
+  Hash[String, Optional[Hash[String, Variant[String, Integer, Boolean]]]] $repos = {},
   Array[String] $managed_repos = [],
   Boolean $manage_os_default_repos = false,
   Array[String] $os_default_repos = [],

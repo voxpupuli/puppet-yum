@@ -15,7 +15,9 @@ hierarchy:
       - 'os/%{facts.os.family}.yaml'
 
   - name: 'Non-OS Yumrepos'
-    path: 'repos.yaml'
+    paths:
+      - 'repos/%{facts.os.family}/%{facts.os.release.major}.yaml'
+      - 'repos/repos.yaml'
 
   - name: 'Common Data'
     path: 'common.yaml'
