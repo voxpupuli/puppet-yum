@@ -313,6 +313,8 @@ yum::plugin { 'versionlock':
 ### Lock a package with the *versionlock* plugin
 The `versionlock` type changed between CentOS 7 and CentOS 8.
 
+The `yum::plugin::versionlock` class takes a `packages` argument to simplify defining these items.
+
 #### CentOS 7 and older
 Locks explicitly specified packages from updates. Package name must be precisely
 specified in format *`EPOCH:NAME-VERSION-RELEASE.ARCH`*. Wild card in package
@@ -368,6 +370,8 @@ yum::post_transaction_action{'touch_file':
   command => 'touch /tmp/openssh-package-updated',
 }
 ```
+
+or as the `actions` parameter to `yum::plugin::post_transaction_actions`.
 
 ### Install or remove *yum* package group
 

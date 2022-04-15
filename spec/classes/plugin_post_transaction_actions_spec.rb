@@ -43,6 +43,22 @@ describe 'yum::plugin::post_transaction_actions' do
               it { is_expected.not_to contain_package('yum-plugin-post-transaction-actions') }
             end
           end
+
+          context 'with action' do
+            let(:params) do
+              {
+                'actions' => {
+                  'touch_file' => {
+                    'key' => 'openssh-*',
+                    'command' => 'touch /tmp/openssh-package-updated',
+                  }
+                }
+              }
+            end
+
+            it { is_expected.to compile.with_all_deps }
+            it { is_expected.to contain_yum__post_transaction_action('touch_file') }
+          end
         end
       end
     end

@@ -3,14 +3,20 @@
 # @see https://dnf-plugins-core.readthedocs.io/en/latest/post-transaction-actions.html DNF Post Transaction Items
 #
 # @param ensure Should the post_transaction actions plugin be installed
+# @param actions Hash of actions to configure. See `yum::post_transaction_action`
 #
 # @example Enable post_transaction_action plugin
 #   class{'yum::plugin::post_transaction_actions':
-#     ensure => present,
+#     ensure  => present,
+#     actions => { 'touch_file':
+#       'key'     => 'openssh-*',
+#       'command' => 'touch /tmp/openssh-package-updated',
+#     }
 #   }
 #
 class yum::plugin::post_transaction_actions (
   Enum['present', 'absent'] $ensure = 'present',
+  Hash $actions = {}
 ) {
   if $facts['package_provider'] == 'yum' {
     $_pkg_prefix  = undef
@@ -38,6 +44,12 @@ class yum::plugin::post_transaction_actions (
       target  => 'puppet_actions',
       content => "# Puppet maintained actions\n# \$key:\$state:\$command\n\n",
       order   => '01',
+    }
+
+    $actions.each | $action_name, $action_params| {
+      yum::post_transaction_action { $action_name:
+        * => $action_params,
+      }
     }
   }
 }
