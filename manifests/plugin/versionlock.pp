@@ -33,11 +33,13 @@ class yum::plugin::versionlock (
       false => undef,
     }
 
-    concat { $path:
-      mode   => '0644',
-      owner  => 'root',
-      group  => 'root',
-      notify => $_clean_notify,
+    unless defined(Concat[$path]) {
+      concat { $path:
+        mode   => '0644',
+        owner  => 'root',
+        group  => 'root',
+        notify => $_clean_notify,
+      }
     }
 
     concat::fragment { 'versionlock_header':
