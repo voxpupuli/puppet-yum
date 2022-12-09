@@ -99,7 +99,7 @@ yum::repos:
         descr: 'Example Repo'
         baseurl: 'https://repos.example.com/example/'
         gpgcheck: true
-        gpgkey: 'file:///etc/pki/gpm-gpg/RPM-GPG-KEY-Example'
+        gpgkey: 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-Example'
 ```
 
 You can include gpgkeys in yaml as well, and if the key filename matches a
@@ -109,7 +109,7 @@ repo above could look like:
 ```yaml
 ---
 yum::gpgkeys:
-    /etc/pki/gpm-gpg/RPM-GPG-KEY-Example:
+    /etc/pki/rpm-gpg/RPM-GPG-KEY-Example:
         content: |
             -----BEGIN PGP PUBLIC KEY BLOCK-----
             Version: GnuPG v1.4.11 (GNU/Linux)
@@ -127,7 +127,7 @@ yum::gpgkeys:
 ```yaml
 ---
 yum::gpgkeys:
-    /etc/pki/gpm-gpg/RPM-GPG-KEY-Example:
+    /etc/pki/rpm-gpg/RPM-GPG-KEY-Example:
         source: puppet:///repos/RPM-GPG-KEY-Example
 ```
 
@@ -299,7 +299,7 @@ yum::gpgkey { '/etc/pki/rpm-gpg/RPM-GPG-KEY-puppet-smoketest1':
 }
 ```
 
-### Add/remove a GPGP RPM signing key using a key stored on a Puppet fileserver
+### Add/remove a GPG RPM signing key using a key stored on a Puppet fileserver
 
 ```puppet
 yum::gpgkey { '/etc/pki/rpm-gpg/RPM-GPG-KEY-elrepo.org':
