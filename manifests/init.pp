@@ -55,12 +55,6 @@
 # @param utils_package_name
 #   Name of the utils package, e.g. 'yum-utils', or 'dnf-utils'.
 #
-# @param purge_unmanaged_repos
-#   Should repos not managed by puppet be removed?
-#
-# @param repodir
-#   Where are repos stored on this system?
-#
 # @example Enable management of the default repos for a supported OS:
 #   ---
 #   yum::manage_os_default_repos: true
@@ -111,25 +105,11 @@ class yum (
   Array[String] $repo_exclusions = [],
   Hash[String, Hash[String, String]] $gpgkeys = {},
   String $utils_package_name = 'yum-utils',
-  Boolean $purge_unmanaged_repos = false,
-  Stdlib::Unixpath $repodir = '/etc/yum.repos.d',
 ) {
   $module_metadata            = load_module_metadata($module_name)
   $supported_operatingsystems = $module_metadata['operatingsystem_support']
   $supported_os_names         = $supported_operatingsystems.map |$os| {
     $os['operatingsystem']
-  }
-
-  if $purge_unmanaged_repos {
-    file { $repodir:
-      ensure       => 'directory',
-      owner        => 'root',
-      group        => 'root',
-      mode         => '0644',
-      recurse      => true,
-      recurselimit => 1,
-      purge        => true,
-    }
   }
 
   unless member($supported_os_names, $facts['os']['name']) {

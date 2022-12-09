@@ -618,10 +618,9 @@ describe 'yum' do
         end
 
         context 'to an array of all supported repos' do
-          let(:params) { { managed_repos: supported_repos, purge_unmanaged_repos: true } }
+          let(:params) { { managed_repos: supported_repos } }
 
           it { is_expected.to compile.with_all_deps }
-          it { is_expected.to contain_file('/etc/yum.repos.d').with_purge(true) }
           it { is_expected.to have_yumrepo_resource_count(supported_repos.count) }
 
           it_behaves_like 'a catalog containing repos', supported_repos
