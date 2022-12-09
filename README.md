@@ -299,7 +299,7 @@ yum::gpgkey { '/etc/pki/rpm-gpg/RPM-GPG-KEY-puppet-smoketest1':
 }
 ```
 
-### Add/remove a GPGP RPM signing key using a key stored on a Puppet fileserver
+### Add/remove a GPG RPM signing key using a key stored on a Puppet fileserver
 
 ```puppet
 yum::gpgkey { '/etc/pki/rpm-gpg/RPM-GPG-KEY-elrepo.org':
