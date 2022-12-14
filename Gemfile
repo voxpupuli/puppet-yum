@@ -8,7 +8,7 @@ group :test do
   gem 'coveralls',                  :require => false
   gem 'simplecov-console',          :require => false
   # gem 'puppet_metadata', '~> 1.0',  :require => false
-  gem 'puppet_metadata', git: 'https://github.com/bastelfreak/puppet_metadata', branch: 'rocky'
+  gem 'puppet_metadata', git: 'https://github.com/bastelfreak/puppet_metadata', branch: 'almalinux'
 end
 
 group :development do
