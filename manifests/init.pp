@@ -32,6 +32,9 @@
 #   @note This only indicates the *managed* state of the repos, the `ensure` state must be managed
 #     in the `repos` data.
 #
+# @param purge_unmanaged_repos
+#   Should repos not managed by puppet be removed?
+#
 # @param manage_os_default_repos
 #   Whether or not to add an operating system's default repos to the `managed_repos` array.
 #
@@ -105,6 +108,7 @@ class yum (
   Array[String] $repo_exclusions = [],
   Hash[String, Hash[String, String]] $gpgkeys = {},
   String $utils_package_name = 'yum-utils',
+  Boolean $purge_unmanaged_repos = false,
 ) {
   $module_metadata            = load_module_metadata($module_name)
   $supported_operatingsystems = $module_metadata['operatingsystem_support']
@@ -119,6 +123,12 @@ class yum (
   $_managed_repos = $manage_os_default_repos ? {
     true    => $managed_repos + $os_default_repos,
     default => $managed_repos,
+  }
+
+  if $purge_unmanaged_repos {
+    resources { 'yumrepo':
+      purge => true,
+    }
   }
 
   unless empty($_managed_repos) or empty($repos) {
