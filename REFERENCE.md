@@ -114,8 +114,6 @@ The following parameters are available in the `yum` class:
 * [`repo_exclusions`](#-yum--repo_exclusions)
 * [`gpgkeys`](#-yum--gpgkeys)
 * [`utils_package_name`](#-yum--utils_package_name)
-* [`purge_unmanaged_repos`](#-yum--purge_unmanaged_repos)
-* [`repodir`](#-yum--repodir)
 
 ##### <a name="-yum--clean_old_kernels"></a>`clean_old_kernels`
 
@@ -220,22 +218,6 @@ Data type: `String`
 Name of the utils package, e.g. 'yum-utils', or 'dnf-utils'.
 
 Default value: `'yum-utils'`
-
-##### <a name="-yum--purge_unmanaged_repos"></a>`purge_unmanaged_repos`
-
-Data type: `Boolean`
-
-Should repos not managed by puppet be removed?
-
-Default value: `false`
-
-##### <a name="-yum--repodir"></a>`repodir`
-
-Data type: `Stdlib::Unixpath`
-
-Where are repos stored on this system?
-
-Default value: `'/etc/yum.repos.d'`
 
 ### <a name="yum--clean"></a>`yum::clean`
 

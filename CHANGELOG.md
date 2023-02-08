@@ -4,6 +4,25 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not affect the functionality of the module.
 
+## [v6.2.0](https://github.com/voxpupuli/puppet-yum/tree/v6.2.0) (2023-02-08)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-yum/compare/v6.1.0...v6.2.0)
+
+**Implemented enhancements:**
+
+- add Fedora 37 support [\#284](https://github.com/voxpupuli/puppet-yum/pull/284) ([vchepkov](https://github.com/vchepkov))
+- Deploying multiple gpgkey in one repo [\#278](https://github.com/voxpupuli/puppet-yum/pull/278) ([teluq-pbrideau](https://github.com/teluq-pbrideau))
+
+**Fixed bugs:**
+
+- Revert \#258 that added purge\_unmanaged\_repos [\#285](https://github.com/voxpupuli/puppet-yum/issues/285)
+- Revert \#258, which added purge\_unmanaged\_repos [\#287](https://github.com/voxpupuli/puppet-yum/pull/287) ([kenyon](https://github.com/kenyon))
+
+**Merged pull requests:**
+
+- README: fix typos [\#288](https://github.com/voxpupuli/puppet-yum/pull/288) ([kenyon](https://github.com/kenyon))
+- README: remove yumrepo.target in example [\#286](https://github.com/voxpupuli/puppet-yum/pull/286) ([kenyon](https://github.com/kenyon))
+
 ## [v6.1.0](https://github.com/voxpupuli/puppet-yum/tree/v6.1.0) (2022-11-08)
 
 [Full Changelog](https://github.com/voxpupuli/puppet-yum/compare/v6.0.0...v6.1.0)
