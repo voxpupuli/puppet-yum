@@ -6,7 +6,6 @@
 
 ### Classes
 
-* [`yum`](#yum): A class to install and manage Yum configuration.
 * [`yum::clean`](#yum--clean): A $(yum clean all) Exec to be notified if desired.
 * [`yum::plugin::post_transaction_actions`](#yum--plugin--post_transaction_actions): Class to install post_transaction plugin
 * [`yum::plugin::versionlock`](#yum--plugin--versionlock): This class installs versionlock plugin
