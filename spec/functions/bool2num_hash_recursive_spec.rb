@@ -36,6 +36,6 @@ describe 'yum::bool2num_hash_recursive' do
   end
 
   it 'fails on an array' do
-    is_expected.to run.with_params([true, false]).and_raise_error(Puppet::Error)
+    is_expected.to run.with_params([true, false]).and_raise_error(ArgumentError)
   end
 end
