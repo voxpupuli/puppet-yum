@@ -717,6 +717,8 @@ describe 'yum' do
         it { is_expected.to contain_yumrepo('epel') }
 
         case facts[:os]['release']['major']
+        when '9'
+          it { is_expected.to contain_yum__gpgkey('/etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-9') }
         when '8'
           it { is_expected.to contain_yum__gpgkey('/etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-8') }
         when '7'
