@@ -44,14 +44,17 @@ describe 'yum::versionlock define' do
       apply_manifest(pp, catch_changes:  true)
     end
 
-    describe file('/etc/yum/pluginconf.d/versionlock.list') do
-      it { is_expected.to be_file }
-
-      if %w[7].include?(fact('os.release.major'))
+    if fact('os.release.major') == '7'
+      describe file('/etc/yum/pluginconf.d/versionlock.list') do
+        it { is_expected.to be_file }
         it { is_expected.to contain '0:bash-4.1.2-9.el6_2.*' }
         it { is_expected.to contain '0:tcsh-3.1.2-9.el6_2.*' }
         it { is_expected.to contain '2:netscape-8.1.2-9.el6_2.*' }
-      else
+      end
+    else
+      describe file('/etc/dnf/plugins/versionlock.list') do
+        it { is_expected.to be_file }
+
         it { is_expected.to contain 'bash-0:4.1.2-9.el6_2.*' }
         it { is_expected.to contain 'tcsh-0:3.1.2-9.el6_2.*' }
         it { is_expected.to contain 'netscape-2:8.1.2-9.el6_2.*' }
