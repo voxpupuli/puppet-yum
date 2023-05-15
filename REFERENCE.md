@@ -10,6 +10,7 @@
 * [`yum::clean`](#yum--clean): A $(yum clean all) Exec to be notified if desired.
 * [`yum::plugin::post_transaction_actions`](#yum--plugin--post_transaction_actions): Class to install post_transaction plugin
 * [`yum::plugin::versionlock`](#yum--plugin--versionlock): This class installs versionlock plugin
+* [`yum::settings`](#yum--settings): Simple settings to use
 
 ### Defined types
 
@@ -298,6 +299,24 @@ Default value: `false`
 Data type: `String`
 
 filepath for the versionlock.list, default based on your system.
+
+### <a name="yum--settings"></a>`yum::settings`
+
+Simple settings to use
+
+#### Parameters
+
+The following parameters are available in the `yum::settings` class:
+
+* [`mainconf`](#-yum--settings--mainconf)
+
+##### <a name="-yum--settings--mainconf"></a>`mainconf`
+
+Data type: `Enum['/etc/yum.conf','/etc/dnf/dnf.conf']`
+
+Augeas location of the dnf or yum configuration file.
+The default is set into hiera according to the package_provider
+being yum or dnf.
 
 ## Defined types
 

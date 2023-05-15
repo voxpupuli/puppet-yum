@@ -18,6 +18,9 @@ define yum::config (
   Variant[Boolean, Integer, Enum['absent'], String, Sensitive[String]] $ensure,
   String                                            $key     = $title,
 ) {
+  include yum::settings
+  $_mainconf = $yum::settings::mainconf
+
   $_ensure = $ensure ? {
     Boolean   => bool2num($ensure),
     Sensitive => $ensure.unwrap,
@@ -34,10 +37,10 @@ define yum::config (
     default   => true,
   }
 
-  augeas { "yum.conf_${key}":
-    incl      => '/etc/yum.conf',
+  augeas { "${facts['package_provider']}.conf_${key}":
+    incl      => $_mainconf,
     lens      => 'Yum.lns',
-    context   => '/files/etc/yum.conf/main/',
+    context   => "/files${_mainconf}/main/",
     changes   => $_changes,
     show_diff => $_show_diff,
   }
