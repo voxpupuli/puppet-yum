@@ -205,19 +205,22 @@ class yum (
     default                  => '3',
   }
 
-  $_pc_cmd = [
-    '/usr/bin/package-cleanup',
-    '--oldkernels',
-    "--count=${_real_installonly_limit}",
-    '-y',
-    $keep_kernel_devel ? {
-      true    => '--keepdevel',
-      default => undef,
+  $_keep_kernel_devel = $keep_kernel_devel ? {
+    true    => $facts['package_provider'] ? {
+      'yum'   => '--keepdevel ',
+      'dnf'   => '--exclude kernel-release',
+      default => fail("Fact package_provider is not set to \'yum\' or \'dnf\' - giving up"),
     },
-  ].filter |$val| { $val =~ NotUndef }
+    default => '',
+  }
+
+  $_pc_cmd = $facts['package_provider'] ? {
+    'yum'   => "/usr/bin/package-cleanup --oldkernels --count=${_real_installonly_limit} -y${$_keep_kernel_devel}",
+    default => "/usr/bin/dnf -y remove $(/usr/bin/dnf repoquery --installonly --latest-limit=-${_real_installonly_limit}${_keep_kernel_devel} | /usr/bin/grep -v ${facts['kernelrelease']})"
+  }
 
   exec { 'package-cleanup_oldkernels':
-    command     => shellquote($_pc_cmd),
+    command     => $_pc_cmd,
     refreshonly => true,
     require     => Package[$utils_package_name],
     subscribe   => $_clean_old_kernels_subscribe,
