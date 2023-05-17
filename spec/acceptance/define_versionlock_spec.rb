@@ -61,12 +61,12 @@ describe 'yum::versionlock define' do
       end
     end
 
-    if fact('os.release.major') >= '8'
-      describe package('python3-dnf-plugin-versionlock') do
+    if fact('os.release.major') == '7'
+      describe package('yum-plugin-versionlock') do
         it { is_expected.to be_installed }
       end
     else
-      describe package('yum-plugin-versionlock') do
+      describe package('python3-dnf-plugin-versionlock') do
         it { is_expected.to be_installed }
       end
     end
@@ -101,8 +101,10 @@ describe 'yum::versionlock define' do
     if fact('os.release.major') == '7'
       shell('yum -C repolist -d0 | grep -v "repo id"  | awk "{print $NF}" FS=  | grep -v 0', acceptable_exit_codes: [1])
       shell('yum -q list available samba-devel', acceptable_exit_codes: [1])
-    else
+    elsif %w[8 9].include?(fact('os.release.major'))
       shell('dnf -q list --available samba-devel', acceptable_exit_codes: [1])
+    else
+      shell('dnf install -y samba-devel | grep "All matches were filtered"', acceptable_exit_codes: [0])
     end
   end
 end
