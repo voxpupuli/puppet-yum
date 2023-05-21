@@ -625,6 +625,15 @@ describe 'yum' do
 
           it_behaves_like 'a catalog containing repos', supported_repos
         end
+
+        context 'and purge_unmanaged_repos is set' do 
+          let(:params) { { managed_repos: supported_repos, purge_unmanaged_repos: true } }
+
+          it { is_expected.to compile.with_all_deps }
+          it { is_expected.to have_yumrepo_resource_count(supported_repos.count) }
+          # FIXME idk how to use assertions in RSpec & Puppet :shrug:
+          # it { is_expected.to have_purge_unmanaged_repos(true) }
+        end
       end
 
       context 'when `config_options[installonly_limit]` is modified' do
