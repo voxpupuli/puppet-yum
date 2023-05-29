@@ -1,18 +1,10 @@
-# Define: yum::copr
 #
-# This definition manages Copr (Cool Other Package Repo) repositories.
+# @summary This definition manages Copr (Cool Other Package Repo) repositories.
 #
-# Parameters:
-#   [*copr_repo*] - name of repository, defaults to title
-#   [*ensure*]    - specifies if repo should be enabled,
-#                   disabled or removed
+# @param copr_repo name of repository, defaults to title
+# @param ensure specifies if repo should be enabled, disabled or removed
 #
-# Actions:
-#
-# Requires:
-#   RPM based system
-#
-# Sample usage:
+# @example add and enable COPR restic repository
 #   yum::copr { 'copart/restic':
 #     ensure  => 'enabled',
 #   }
