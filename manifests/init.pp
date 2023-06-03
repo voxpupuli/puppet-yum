@@ -55,6 +55,9 @@
 # @param utils_package_name
 #   Name of the utils package, e.g. 'yum-utils', or 'dnf-utils'.
 #
+# @param groups
+#   A hash of yum::group instances to manage.
+#
 # @example Enable management of the default repos for a supported OS:
 #   ---
 #   yum::manage_os_default_repos: true
@@ -94,6 +97,14 @@
 #           baseurl: 'https://repos.example.com/CentOS/base/'
 #           mirrorlist: '--'
 #
+# @example Install a couple of `yum::group`s.
+#   ---
+#   yum::groups:
+#     'Development Tools':
+#       ensure: present
+#     'System Tools':
+#       ensure: present
+#
 class yum (
   Boolean $clean_old_kernels = true,
   Boolean $keep_kernel_devel = false,
@@ -105,6 +116,7 @@ class yum (
   Array[String] $repo_exclusions = [],
   Hash[String, Hash[String, String]] $gpgkeys = {},
   String $utils_package_name = 'yum-utils',
+  Stdlib::CreateResources $groups = {}
 ) {
   $module_metadata            = load_module_metadata($module_name)
   $supported_operatingsystems = $module_metadata['operatingsystem_support']
@@ -221,5 +233,11 @@ class yum (
     refreshonly => true,
     require     => Package[$utils_package_name],
     subscribe   => $_clean_old_kernels_subscribe,
+  }
+
+  $groups.each |$_group, $_group_attrs| {
+    yum::group { $_group:
+      * => $_group_attrs,
+    }
   }
 }

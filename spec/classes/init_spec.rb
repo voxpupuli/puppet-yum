@@ -43,6 +43,7 @@ describe 'yum' do
 
         it_behaves_like 'a Yum class'
         it { is_expected.to have_yumrepo_resource_count(0) }
+        it { is_expected.to have_yum__group_resource_count(0) }
       end
 
       context 'when `manage_os_default_repos` is enabled' do
@@ -796,6 +797,24 @@ describe 'yum' do
         it { is_expected.to contain_yumrepo('example') }
         it { is_expected.to contain_yum__gpgkey('/etc/pki/rpm-gpg/RPM-GPG-KEY-example') }
         it { is_expected.to contain_yum__gpgkey('/etc/pki/rpm-gpg/RPM-GPG-KEY-example2') }
+      end
+
+      context 'when groups parameter is set' do
+        let(:params) do
+          {
+            groups: {
+              'Dev Tools': {
+                ensure: 'installed',
+              },
+              'Puppet Tools': {
+                ensure: 'absent',
+              },
+            },
+          }
+        end
+
+        it { is_expected.to contain_yum__group('Puppet Tools').with_ensure('absent') }
+        it { is_expected.to contain_yum__group('Dev Tools').with_ensure('installed') }
       end
     end
   end
