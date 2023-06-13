@@ -38,6 +38,10 @@ Puppet::Type.type(:dnf_module).provide(:dnf_module) do
       resource[:enabled_stream].nil? and ! @module_state.key?(:enabled_stream)
     raise ArgumentError, "No default stream to enable in module \"#{resource[:module]}\"" if
       resource[:enabled_stream] == true and ! @module_state.key?(:default_stream)
+    return nil if resource[:enabled_stream].nil?
+    return false unless @module_state.key?(:enabled_stream)
+    return true if resource[:enabled_stream] == true and
+      @module_state[:enabled_stream] == @module_state[:default_stream]
   end
 
   def enabled_stream=(stream)
