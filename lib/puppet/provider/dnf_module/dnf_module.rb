@@ -13,6 +13,8 @@ Puppet::Type.type(:dnf_module).provide(:dnf_module) do
       if ! @stream_start.nil?
         stream_string = line[@stream_start, @stream_length].rstrip
         stream = stream_string.split[0]
+        module_hash[:default_stream] = stream if stream_string.include?('[d]')
+        module_hash[:enabled_stream] = stream if stream_string.include?('[e]')
         module_hash[:streams][stream] = {}
       elsif line.split[0] == 'Name'
         @stream_start = line[/Name\s+/].length
