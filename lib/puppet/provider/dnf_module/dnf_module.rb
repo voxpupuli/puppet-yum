@@ -42,6 +42,7 @@ Puppet::Type.type(:dnf_module).provide(:dnf_module) do
     return false unless @module_state.key?(:enabled_stream)
     return true if resource[:enabled_stream] == true and
       @module_state[:enabled_stream] == @module_state[:default_stream]
+    @module_state[:enabled_stream]
   end
 
   def enabled_stream=(stream)
