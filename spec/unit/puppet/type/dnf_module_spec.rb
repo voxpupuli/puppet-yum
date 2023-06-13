@@ -8,6 +8,10 @@ RSpec.describe 'the dnf_module type' do
     %i[title module]
   end
 
+  let :properties do
+    %i[enabled_stream]
+  end
+
   it 'loads' do
     expect(dnf_module).not_to be_nil
   end
@@ -15,6 +19,12 @@ RSpec.describe 'the dnf_module type' do
   it 'has expected parameters' do
     params.each do |param|
       expect(dnf_module.parameters).to be_include(param)
+    end
+  end
+
+  it 'has expected properties' do
+    properties.each do |property|
+      expect(dnf_module.properties.map(&:name)).to be_include(property)
     end
   end
 end
