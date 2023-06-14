@@ -10,7 +10,7 @@ shared_examples 'a Yum class' do |value|
 
   it 'contains Exec[package-cleanup_oldkernels' do
     is_expected.to contain_exec('package-cleanup_oldkernels').with(
-      command: "/usr/bin/package-cleanup --oldkernels --count=#{value} -y",
+      command: %r{/usr/bin/dnf -y remove \$\(/usr/bin/dnf repoquery --installonly --latest-limit=-\$\{value\} | /usr/bin/grep -v \S+\)},
       refreshonly: true
     ).that_subscribes_to('Yum::Config[installonly_limit]')
   end
@@ -43,6 +43,20 @@ describe 'yum' do
 
         it_behaves_like 'a Yum class'
         it { is_expected.to have_yumrepo_resource_count(0) }
+      end
+
+      context 'with package_provider yum' do
+        let(:facts) do
+          facts.merge({ package_provider: 'yum' })
+        end
+
+        it { is_expected.to compile.with_all_deps }
+
+        it {
+          is_expected.to contain_exec('package-cleanup_oldkernels').with(
+            command: '/usr/bin/package-cleanup --oldkernels --count=3 -y'
+          )
+        }
       end
 
       context 'when `manage_os_default_repos` is enabled' do
