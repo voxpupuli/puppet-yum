@@ -77,6 +77,10 @@ Puppet::Type.type(:dnf_module).provide(:dnf_module) do
     if resource[:installed_profiles] == [true]
       raise ArgumentError, "No default profile to install in module:stream \"#{resource[:module]}:#{stream}\"" unless
         @module_state[:streams][stream].key?(:default_profile)
+    else
+      invalid = resource[:installed_profiles] - @module_state[:streams][stream][:profiles]
+      raise ArgumentError, "Profile(s) #{invalid.map{ |profile| "\"#{profile}\""}.join(', ')} " +
+        "not found in module:stream \"#{resource[:module]}:#{stream}\"" unless invalid.empty?
     end
   end
 
