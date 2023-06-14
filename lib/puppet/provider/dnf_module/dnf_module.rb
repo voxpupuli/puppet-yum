@@ -15,10 +15,17 @@ Puppet::Type.type(:dnf_module).provide(:dnf_module) do
         stream = stream_string.split[0]
         module_hash[:default_stream] = stream if stream_string.include?('[d]')
         module_hash[:enabled_stream] = stream if stream_string.include?('[e]')
-        module_hash[:streams][stream] = {}
+        module_hash[:streams][stream] = {profiles: []}
+        profiles_string = line[@profiles_start, @profiles_length].rstrip
+        profiles_string.split(', ').each do |profile_string|
+          profile = profile_string.split[0]
+          module_hash[:streams][stream][:profiles] << profile
+        end
       elsif line.split[0] == 'Name'
         @stream_start = line[/Name\s+/].length
         @stream_length = line[/Stream\s+/].length
+        @profiles_start = @stream_start + @stream_length
+        @profiles_length = line[/Profiles\s+/].length
       end
     end
     module_hash
