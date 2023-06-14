@@ -68,6 +68,11 @@ Puppet::Type.type(:dnf_module).provide(:dnf_module) do
 
   def installed_profiles
     get_module_state(resource[:module])
+    stream = @module_state[:enabled_stream] || @module_state[:default_stream]
+    if stream.nil?
+      return [] if resource[:installed_profiles].empty?
+      raise ArgumentError, "No enabled or default stream in module \"#{resource[:module]}\""
+    end
   end
 
   def installed_profiles=(profiles)
