@@ -3,10 +3,11 @@
 Puppet::Type.newtype(:dnf_module) do
   @doc = <<-EOS
     @summary Manage DNF modules
-    @example Enable MariaDB 10.5 stream
-      dnf_module { 'mariadb_10.5':
-        module         => 'mariadb',
-        enabled_stream => '10.5',
+    @example Install MariaDB 10.5 Galera profile
+      dnf_module { 'mariadb_galera_10.5':
+        module             => 'mariadb',
+        enabled_stream     => '10.5',
+        installed_profiles => 'galera',
       }
     @param title
       Resource unique id
@@ -14,6 +15,8 @@ Puppet::Type.newtype(:dnf_module) do
       Module to be managed
     @param enabled_stream
       Module stream to be enabled
+    @param installed_profiles
+      Module profile(s) to be installed
 
     This type allows Puppet to enable/disable streams and install/remove profiles via DNF modules
 EOS
@@ -43,4 +46,11 @@ EOS
     end
   end
 
+  newproperty(:installed_profiles, :array_matching => :all) do
+    desc <<-EOS
+      Module profile(s) that should be installed
+        String or Array - Specify profile(s)
+        true - Default profile
+    EOS
+  end
 end

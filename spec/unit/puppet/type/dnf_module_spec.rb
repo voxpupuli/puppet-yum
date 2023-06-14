@@ -9,7 +9,7 @@ RSpec.describe 'the dnf_module type' do
   end
 
   let :properties do
-    %i[enabled_stream]
+    %i[enabled_stream installed_profiles]
   end
 
   it 'loads' do

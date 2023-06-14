@@ -34,6 +34,7 @@ Puppet::Type.type(:dnf_module).provide(:dnf_module) do
   end
 
   def get_module_state(module_name)
+    return unless @module_state.nil?
     dnf_output = dnf('-q', 'module', 'list', module_name)
   rescue Puppet::ExecutionFailure
     raise ArgumentError, "Module \"#{module_name}\" not found"
@@ -63,5 +64,13 @@ Puppet::Type.type(:dnf_module).provide(:dnf_module) do
     else
       dnf('-y', 'module', 'switch-to', "#{resource[:module]}:#{stream}")
     end
+  end
+
+  def installed_profiles
+    get_module_state(resource[:module])
+  end
+
+  def installed_profiles=(profiles)
+    nil
   end
 end
