@@ -52,5 +52,10 @@ EOS
         String or Array - Specify profile(s)
         true - Default profile
     EOS
+    defaultto []
+    validate do |value|
+      raise TypeError, 'Module profiles should be a string, an array of strings or true' unless
+        value == true or value.is_a?(String)
+    end
   end
 end
