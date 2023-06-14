@@ -46,6 +46,13 @@ Puppet::Type.type(:dnf_module).provide(:dnf_module) do
   end
 
   def enabled_stream=(stream)
-    nil
+    case stream
+    when false
+      dnf('-y', 'module', 'reset', resource[:module])
+    when true
+      dnf('-y', 'module', 'switch-to', "#{resource[:module]}:#{@module_state[:default_stream]}")
+    else
+      dnf('-y', 'module', 'switch-to', "#{resource[:module]}:#{stream}")
+    end
   end
 end
