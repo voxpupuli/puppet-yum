@@ -73,6 +73,11 @@ Puppet::Type.type(:dnf_module).provide(:dnf_module) do
       return [] if resource[:installed_profiles].empty?
       raise ArgumentError, "No enabled or default stream in module \"#{resource[:module]}\""
     end
+    installed = @module_state[:streams][stream][:installed_profiles]
+    if resource[:installed_profiles] == [true]
+      raise ArgumentError, "No default profile to install in module:stream \"#{resource[:module]}:#{stream}\"" unless
+        @module_state[:streams][stream].key?(:default_profile)
+    end
   end
 
   def installed_profiles=(profiles)
