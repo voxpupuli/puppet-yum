@@ -42,6 +42,10 @@ Puppet::Type.type(:dnf_module).provide(:dnf_module) do
     @module_state = dnf_output_2_hash(dnf_output)
   end
 
+  def set_module_state(module_spec, action)
+    dnf('-y', 'module', action, module_spec)
+  end
+
   def enabled_stream
     get_module_state(resource[:module])
     raise ArgumentError, "No enabled stream to keep in module \"#{resource[:module]}\"" if
@@ -58,11 +62,11 @@ Puppet::Type.type(:dnf_module).provide(:dnf_module) do
   def enabled_stream=(stream)
     case stream
     when false
-      dnf('-y', 'module', 'reset', resource[:module])
+      set_module_state(resource[:module], 'reset')
     when true
-      dnf('-y', 'module', 'switch-to', "#{resource[:module]}:#{@module_state[:default_stream]}")
+      set_module_state("#{resource[:module]}:#{@module_state[:default_stream]}", 'switch-to')
     else
-      dnf('-y', 'module', 'switch-to', "#{resource[:module]}:#{stream}")
+      set_module_state("#{resource[:module]}:#{stream}", 'switch-to')
     end
   end
 
@@ -88,11 +92,11 @@ Puppet::Type.type(:dnf_module).provide(:dnf_module) do
 
   def installed_profiles=(profiles)
     if profiles == [true]
-      dnf('-y', 'module', 'install', resource[:module])
+      set_module_state(resource[:module], 'install')
     else
       stream = @module_state[:enabled_stream] || @module_state[:default_stream]
       install = profiles - @module_state[:streams][stream][:installed_profiles]
-      dnf('-y', 'module', 'install', install.map{ |profile| "#{resource[:module]}/#{profile}"}.join(' '))
+      set_module_state(install.map{ |profile| "#{resource[:module]}/#{profile}"}.join(' '), 'install')
     end
   end
 end
