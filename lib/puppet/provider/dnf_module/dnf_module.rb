@@ -40,6 +40,14 @@ Puppet::Type.type(:dnf_module).provide(:dnf_module) do
     raise ArgumentError, "Module \"#{module_name}\" not found"
   else
     @module_state = dnf_output_2_hash(dnf_output)
+    case resource[:enabled_stream]
+    when false, true
+      @profiles_stream = @module_state[:default_stream]
+    when nil
+      @profiles_stream = @module_state[:enabled_stream] || @module_state[:default_stream]
+    else
+      @profiles_stream = resource[:enabled_stream]
+    end
   end
 
   def set_module_state(module_spec, action)
@@ -72,20 +80,20 @@ Puppet::Type.type(:dnf_module).provide(:dnf_module) do
 
   def installed_profiles
     get_module_state(resource[:module])
-    stream = @module_state[:enabled_stream] || @module_state[:default_stream]
-    if stream.nil?
+    if @profiles_stream.nil?
       return [] if resource[:installed_profiles].empty?
       raise ArgumentError, "No enabled or default stream in module \"#{resource[:module]}\""
     end
-    installed = @module_state[:streams][stream][:installed_profiles]
+    stream_contents = @module_state[:streams][@profiles_stream]
+    installed = stream_contents[:installed_profiles]
     if resource[:installed_profiles] == [true]
-      raise ArgumentError, "No default profile to install in module:stream \"#{resource[:module]}:#{stream}\"" unless
-        @module_state[:streams][stream].key?(:default_profile)
-      installed.include?(@module_state[:streams][stream][:default_profile]) ? [true] : []
+      raise ArgumentError, "No default profile to install in module:stream \"#{resource[:module]}:#{@profiles_stream}\"" unless
+        stream_contents.key?(:default_profile)
+      installed.include?(stream_contents[:default_profile]) ? [true] : []
     else
-      invalid = resource[:installed_profiles] - @module_state[:streams][stream][:profiles]
+      invalid = resource[:installed_profiles] - @module_state[:streams][@profiles_stream][:profiles]
       raise ArgumentError, "Profile(s) #{invalid.map{ |profile| "\"#{profile}\""}.join(', ')} " +
-        "not found in module:stream \"#{resource[:module]}:#{stream}\"" unless invalid.empty?
+        "not found in module:stream \"#{resource[:module]}:#{@profiles_stream}\"" unless invalid.empty?
       installed & resource[:installed_profiles]
     end
   end
@@ -94,8 +102,7 @@ Puppet::Type.type(:dnf_module).provide(:dnf_module) do
     if profiles == [true]
       set_module_state(resource[:module], 'install')
     else
-      stream = @module_state[:enabled_stream] || @module_state[:default_stream]
-      install = profiles - @module_state[:streams][stream][:installed_profiles]
+      install = profiles - @module_state[:streams][@profiles_stream][:installed_profiles]
       set_module_state(install.map{ |profile| "#{resource[:module]}/#{profile}"}.join(' '), 'install')
     end
   end
