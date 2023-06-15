@@ -89,6 +89,10 @@ Puppet::Type.type(:dnf_module).provide(:dnf_module) do
   def installed_profiles=(profiles)
     if profiles == [true]
       dnf('-y', 'module', 'install', resource[:module])
+    else
+      stream = @module_state[:enabled_stream] || @module_state[:default_stream]
+      install = profiles - @module_state[:streams][stream][:installed_profiles]
+      dnf('-y', 'module', 'install', install.map{ |profile| "#{resource[:module]}/#{profile}"}.join(' '))
     end
   end
 end
