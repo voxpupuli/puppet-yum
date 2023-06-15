@@ -87,6 +87,8 @@ Puppet::Type.type(:dnf_module).provide(:dnf_module) do
   end
 
   def installed_profiles=(profiles)
-    nil
+    if profiles == [true]
+      dnf('-y', 'module', 'install', resource[:module])
+    end
   end
 end
