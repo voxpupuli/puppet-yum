@@ -101,6 +101,17 @@ yum::repos:
         mirrorlist: '--'
 ```
 
+##### Install a couple of `yum::group`s.
+
+```puppet
+---
+yum::groups:
+  'Development Tools':
+    ensure: present
+  'System Tools':
+    ensure: present
+```
+
 #### Parameters
 
 The following parameters are available in the `yum` class:
@@ -115,6 +126,7 @@ The following parameters are available in the `yum` class:
 * [`repo_exclusions`](#-yum--repo_exclusions)
 * [`gpgkeys`](#-yum--gpgkeys)
 * [`utils_package_name`](#-yum--utils_package_name)
+* [`groups`](#-yum--groups)
 
 ##### <a name="-yum--clean_old_kernels"></a>`clean_old_kernels`
 
@@ -219,6 +231,14 @@ Data type: `String`
 Name of the utils package, e.g. 'yum-utils', or 'dnf-utils'.
 
 Default value: `'yum-utils'`
+
+##### <a name="-yum--groups"></a>`groups`
+
+Data type: `Stdlib::CreateResources`
+
+A hash of yum::group instances to manage.
+
+Default value: `{}`
 
 ### <a name="yum--clean"></a>`yum::clean`
 
