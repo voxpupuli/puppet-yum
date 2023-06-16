@@ -524,37 +524,37 @@ describe 'yum' do
 
               it_behaves_like 'a catalog containing repos', %w[
                 appstream
-                appstream-debug
+                appstream-debuginfo
                 appstream-source
                 plus
-                plus-debug
+                plus-debuginfo
                 plus-source
                 saphana
-                saphana-debug
+                saphana-debuginfo
                 saphana-source
                 crb
-                crb-debug
+                crb-debuginfo
                 crb-source
                 baseos
-                baseos-debug
+                baseos-debuginfo
                 baseos-source
                 highavailability
-                highavailability-debug
+                highavailability-debuginfo
                 highavailability-source
                 extras
-                extras-debug
+                extras-debuginfo
                 extras-source
                 nfv
-                nfv-debug
+                nfv-debuginfo
                 nfv-source
                 resilientstorage
-                resilientstorage-debug
+                resilientstorage-debuginfo
                 resilientstorage-source
                 rt
-                rt-debug
+                rt-debuginfo
                 rt-source
                 sap
-                sap-debug
+                sap-debuginfo
                 sap-source
               ]
             end

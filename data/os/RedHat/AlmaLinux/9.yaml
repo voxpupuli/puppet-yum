@@ -1,40 +1,40 @@
 ---
 yum::os_default_repos:
 - appstream
-- appstream-debug
+- appstream-debuginfo
 - appstream-source
 - plus
-- plus-debug
+- plus-debuginfo
 - plus-source
 - saphana
-- saphana-debug
+- saphana-debuginfo
 - saphana-source
 - crb
-- crb-debug
+- crb-debuginfo
 - crb-source
 - baseos
-- baseos-debug
+- baseos-debuginfo
 - baseos-source
 - highavailability
-- highavailability-debug
+- highavailability-debuginfo
 - highavailability-source
 - extras
-- extras-debug
+- extras-debuginfo
 - extras-source
 - nfv
-- nfv-debug
+- nfv-debuginfo
 - nfv-source
 - resilientstorage
-- resilientstorage-debug
+- resilientstorage-debuginfo
 - resilientstorage-source
 - rt
-- rt-debug
+- rt-debuginfo
 - rt-source
 - sap
-- sap-debug
+- sap-debuginfo
 - sap-source
 yum::repos:
-  appstream-debug:
+  appstream-debuginfo:
     descr: AlmaLinux $releasever - AppStream - Debug
     enabled: false
     gpgcheck: true
@@ -58,7 +58,7 @@ yum::repos:
     metadata_expire: 86400
     mirrorlist: https://mirrors.almalinux.org/mirrorlist/$releasever/appstream
     target: "/etc/yum.repos.d/almalinux-appstream.repo"
-  baseos-debug:
+  baseos-debuginfo:
     descr: AlmaLinux $releasever - BaseOS - Debug
     enabled: false
     gpgcheck: true
@@ -82,7 +82,7 @@ yum::repos:
     metadata_expire: 86400
     mirrorlist: https://mirrors.almalinux.org/mirrorlist/$releasever/baseos
     target: "/etc/yum.repos.d/almalinux-baseos.repo"
-  crb-debug:
+  crb-debuginfo:
     descr: AlmaLinux $releasever - CRB - Debug
     enabled: false
     gpgcheck: true
@@ -106,7 +106,7 @@ yum::repos:
     metadata_expire: 86400
     mirrorlist: https://mirrors.almalinux.org/mirrorlist/$releasever/crb
     target: "/etc/yum.repos.d/almalinux-crb.repo"
-  extras-debug:
+  extras-debuginfo:
     descr: AlmaLinux $releasever - Extras - Debug
     enabled: false
     gpgcheck: true
@@ -130,7 +130,7 @@ yum::repos:
     metadata_expire: 86400
     mirrorlist: https://mirrors.almalinux.org/mirrorlist/$releasever/extras
     target: "/etc/yum.repos.d/almalinux-extras.repo"
-  highavailability-debug:
+  highavailability-debuginfo:
     descr: AlmaLinux $releasever - HighAvailability - Debug
     enabled: false
     gpgcheck: true
@@ -154,7 +154,7 @@ yum::repos:
     metadata_expire: 86400
     mirrorlist: https://mirrors.almalinux.org/mirrorlist/$releasever/highavailability
     target: "/etc/yum.repos.d/almalinux-highavailability.repo"
-  nfv-debug:
+  nfv-debuginfo:
     descr: AlmaLinux $releasever - NFV - Debug
     enabled: false
     gpgcheck: true
@@ -178,7 +178,7 @@ yum::repos:
     metadata_expire: 86400
     mirrorlist: https://mirrors.almalinux.org/mirrorlist/$releasever/nfv
     target: "/etc/yum.repos.d/almalinux-nfv.repo"
-  plus-debug:
+  plus-debuginfo:
     descr: AlmaLinux $releasever - Plus - Debug
     enabled: false
     gpgcheck: true
@@ -202,7 +202,7 @@ yum::repos:
     metadata_expire: 86400
     mirrorlist: https://mirrors.almalinux.org/mirrorlist/$releasever/plus
     target: "/etc/yum.repos.d/almalinux-plus.repo"
-  resilientstorage-debug:
+  resilientstorage-debuginfo:
     descr: AlmaLinux $releasever - ResilientStorage - Debug
     enabled: false
     gpgcheck: true
@@ -226,7 +226,7 @@ yum::repos:
     metadata_expire: 86400
     mirrorlist: https://mirrors.almalinux.org/mirrorlist/$releasever/resilientstorage
     target: "/etc/yum.repos.d/almalinux-resilientstorage.repo"
-  rt-debug:
+  rt-debuginfo:
     descr: AlmaLinux $releasever - RT - Debug
     enabled: false
     gpgcheck: true
@@ -250,7 +250,7 @@ yum::repos:
     metadata_expire: 86400
     mirrorlist: https://mirrors.almalinux.org/mirrorlist/$releasever/rt
     target: "/etc/yum.repos.d/almalinux-rt.repo"
-  sap-debug:
+  sap-debuginfo:
     descr: AlmaLinux $releasever - SAP - Debug
     enabled: false
     gpgcheck: true
@@ -274,7 +274,7 @@ yum::repos:
     metadata_expire: 86400
     mirrorlist: https://mirrors.almalinux.org/mirrorlist/$releasever/sap
     target: "/etc/yum.repos.d/almalinux-sap.repo"
-  saphana-debug:
+  saphana-debuginfo:
     descr: AlmaLinux $releasever - SAPHANA - Debug
     enabled: false
     gpgcheck: true
