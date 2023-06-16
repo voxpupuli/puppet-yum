@@ -38,6 +38,6 @@ function yum::bool2num_hash_recursive($arg) {
     # https://github.com/kuleuven/puppet-lint-manifest_whitespace-check/issues/8
     Hash({ $key => $return_value })
   }.reduce |$attrs_memo, $kv| {
-    merge($attrs_memo, $kv)
+    $attrs_memo + $kv
   }
 }
