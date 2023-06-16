@@ -183,13 +183,13 @@ class yum (
       }
 
       $_normalized_attrs = $attrs ? {
-        Hash    => merge($attrs, $_normalized_ensure),
+        Hash    => $attrs + $_normalized_ensure,
         default => $_normalized_ensure,
       }
 
       Hash({ $key => $_normalized_attrs })
     }.reduce |$memo, $cfg_opt_hash| {
-      merge($memo, $cfg_opt_hash)
+      $memo + $cfg_opt_hash
     }
 
     $_normalized_config_options.each |$config, $attributes| {
@@ -209,7 +209,7 @@ class yum (
   }
 
   # cleanup old kernels
-  ensure_packages([$utils_package_name])
+  stdlib::ensure_packages([$utils_package_name])
 
   $_real_installonly_limit = $config_options['installonly_limit'] ? {
     Variant[String, Integer] => $config_options['installonly_limit'],
