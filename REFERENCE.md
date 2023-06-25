@@ -15,6 +15,7 @@
 ### Defined types
 
 * [`yum::config`](#yum--config): This definition manages yum.conf
+* [`yum::copr`](#yum--copr): This definition manages Copr (Cool Other Package Repo) repositories.
 * [`yum::gpgkey`](#yum--gpgkey): imports/deleted public GPG key for RPM. Key can be stored on Puppet's fileserver or as inline content.
 * [`yum::group`](#yum--group): This definition installs or removes yum package group.
 * [`yum::install`](#yum--install): Installs/removes rpms from local file/URL via yum install command.
@@ -382,6 +383,43 @@ Data type: `String`
 alternative conf. key (defaults to name)
 
 Default value: `$title`
+
+### <a name="yum--copr"></a>`yum::copr`
+
+This definition manages Copr (Cool Other Package Repo) repositories.
+
+#### Examples
+
+##### add and enable COPR restic repository
+
+```puppet
+yum::copr { 'copart/restic':
+  ensure  => 'enabled',
+}
+```
+
+#### Parameters
+
+The following parameters are available in the `yum::copr` defined type:
+
+* [`copr_repo`](#-yum--copr--copr_repo)
+* [`ensure`](#-yum--copr--ensure)
+
+##### <a name="-yum--copr--copr_repo"></a>`copr_repo`
+
+Data type: `String`
+
+name of repository, defaults to title
+
+Default value: `$title`
+
+##### <a name="-yum--copr--ensure"></a>`ensure`
+
+Data type: `Enum['enabled', 'disabled', 'removed']`
+
+specifies if repo should be enabled, disabled or removed
+
+Default value: `'enabled'`
 
 ### <a name="yum--gpgkey"></a>`yum::gpgkey`
 
