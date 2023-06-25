@@ -1,8 +1,12 @@
 #
 # @summary This definition manages Copr (Cool Other Package Repo) repositories.
 #
-# @param copr_repo name of repository, defaults to title
-# @param ensure specifies if repo should be enabled, disabled or removed
+# @param copr_repo
+#   Name of repository, defaults to title.
+# @param manage_prereq_plugin
+#   Wheter required plugin for dnf/yum should be installed by this resource.
+# @param ensure
+#   Specifies if repo should be enabled, disabled or removed.
 #
 # @example add and enable COPR restic repository
 #   yum::copr { 'copart/restic':
@@ -10,14 +14,17 @@
 #   }
 #
 define yum::copr (
-  String                                 $copr_repo = $title,
-  Enum['enabled', 'disabled', 'removed'] $ensure    = 'enabled',
+  String                                 $copr_repo            = $title,
+  Boolean                                $manage_prereq_plugin = true,
+  Enum['enabled', 'disabled', 'removed'] $ensure               = 'enabled',
 ) {
   $prereq_plugin = $facts['package_provider'] ? {
     'dnf'   => 'dnf-plugins-core',
     default => 'yum-plugin-copr',
   }
-  stdlib::ensure_packages([$prereq_plugin])
+  if $manage_prereq_plugin {
+    stdlib::ensure_packages([$prereq_plugin])
+  }
 
   if $facts['package_provider'] == 'dnf' {
     case $ensure {

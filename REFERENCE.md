@@ -403,21 +403,30 @@ yum::copr { 'copart/restic':
 The following parameters are available in the `yum::copr` defined type:
 
 * [`copr_repo`](#-yum--copr--copr_repo)
+* [`manage_prereq_plugin`](#-yum--copr--manage_prereq_plugin)
 * [`ensure`](#-yum--copr--ensure)
 
 ##### <a name="-yum--copr--copr_repo"></a>`copr_repo`
 
 Data type: `String`
 
-name of repository, defaults to title
+Name of repository, defaults to title.
 
 Default value: `$title`
+
+##### <a name="-yum--copr--manage_prereq_plugin"></a>`manage_prereq_plugin`
+
+Data type: `Boolean`
+
+Wheter required plugin for dnf/yum should be installed by this resource.
+
+Default value: `true`
 
 ##### <a name="-yum--copr--ensure"></a>`ensure`
 
 Data type: `Enum['enabled', 'disabled', 'removed']`
 
-specifies if repo should be enabled, disabled or removed
+Specifies if repo should be enabled, disabled or removed.
 
 Default value: `'enabled'`
 
