@@ -26,8 +26,7 @@
 #     qux => [{ 'c' => true }, { 'd' => false }],
 #   }
 #
-function yum::bool2num_hash_recursive($arg) {
-  assert_type(Hash, $arg)
+function yum::bool2num_hash_recursive(Hash $arg) >> Hash {
   $arg.map |$key, $value| {
     $return_value = $value ? {
       Boolean => bool2num($value),

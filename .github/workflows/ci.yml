@@ -13,6 +13,6 @@ concurrency:
 jobs:
   puppet:
     name: Puppet
-    uses: voxpupuli/gha-puppet/.github/workflows/beaker.yml@v1
+    uses: ekohl/gha-puppet/.github/workflows/beaker.yml@use-short-domain
     with:
       pidfile_workaround: 'false'
