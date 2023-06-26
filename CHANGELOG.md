@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not affect the functionality of the module.
 
+## [v7.1.0](https://github.com/voxpupuli/puppet-yum/tree/v7.1.0) (2023-06-26)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-yum/compare/v7.0.0...v7.1.0)
+
+**Implemented enhancements:**
+
+- Add yum::copr resource to handle COPR repositories. [\#215](https://github.com/voxpupuli/puppet-yum/pull/215) ([olifre](https://github.com/olifre))
+
 ## [v7.0.0](https://github.com/voxpupuli/puppet-yum/tree/v7.0.0) (2023-06-16)
 
 [Full Changelog](https://github.com/voxpupuli/puppet-yum/compare/v6.2.0...v7.0.0)
