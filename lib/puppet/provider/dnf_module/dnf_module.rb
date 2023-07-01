@@ -54,6 +54,12 @@ Puppet::Type.type(:dnf_module).provide(:dnf_module) do
     dnf('-y', 'module', action, module_spec)
   end
 
+  def validate_profiles(module_name, specified, existing)
+    invalid = specified - existing
+    raise ArgumentError, "Profile(s) #{invalid.map{ |profile| "\"#{profile}\""}.join(', ')} " +
+      "not found in module:stream \"#{module_name}:#{@profiles_stream}\"" unless invalid.empty?
+  end
+
   def enabled_stream
     get_module_state(resource[:module])
     raise ArgumentError, "No enabled stream to keep in module \"#{resource[:module]}\"" if
@@ -91,9 +97,7 @@ Puppet::Type.type(:dnf_module).provide(:dnf_module) do
         stream_contents.key?(:default_profile)
       installed.include?(stream_contents[:default_profile]) ? [true] : []
     else
-      invalid = resource[:installed_profiles] - @module_state[:streams][@profiles_stream][:profiles]
-      raise ArgumentError, "Profile(s) #{invalid.map{ |profile| "\"#{profile}\""}.join(', ')} " +
-        "not found in module:stream \"#{resource[:module]}:#{@profiles_stream}\"" unless invalid.empty?
+      validate_profiles(resource[:module], resource[:installed_profiles], stream_contents[:profiles])
       installed & resource[:installed_profiles]
     end
   end
