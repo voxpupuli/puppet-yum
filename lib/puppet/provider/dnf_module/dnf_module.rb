@@ -177,6 +177,6 @@ Puppet::Type.type(:dnf_module).provide(:dnf_module) do
   end
 
   def removed_profiles=(profiles)
-    nil
+    dnf('-y', 'module', 'remove', @profiles_to_remove.map{ |profile| "#{resource[:module]}/#{profile}"}.join(' '))
   end
 end
