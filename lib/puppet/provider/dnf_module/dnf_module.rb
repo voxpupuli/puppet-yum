@@ -155,6 +155,7 @@ Puppet::Type.type(:dnf_module).provide(:dnf_module) do
   end
 
   def removed_profiles
+    return resource[:removed_profiles] if resource[:removed_profiles].nil? or resource[:removed_profiles].empty?
     get_module_state(resource[:module])
     stream_contents = @module_state[:streams][@profiles_stream]
     # Profiles exist inside stream
