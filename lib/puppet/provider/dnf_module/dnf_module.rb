@@ -164,6 +164,9 @@ Puppet::Type.type(:dnf_module).provide(:dnf_module) do
     if resource[:removed_profiles] == [true]
       # Act if any currently installed profiles aren't in specified ones
       (stream_contents[:installed_profiles] - @profiles_to_install).empty? ? [true] : []
+    else
+      # Installed profiles become missing from removed list and cause action
+      resource[:removed_profiles] - stream_contents[:installed_profiles]
     end
   end
 
