@@ -90,18 +90,16 @@ Puppet::Type.type(:dnf_module).provide(:dnf_module) do
 
   def enabled_stream
     get_module_state(resource[:module])
-    # Specified stream = nil requires a previously enabled stream
-    raise ArgumentError, "No enabled stream to keep in module \"#{resource[:module]}\"" if
-      resource[:enabled_stream].nil? and ! @module_state.key?(:enabled_stream)
-    # Specified stream = true requires an existing default stream
-    raise ArgumentError, "No default stream to enable in module \"#{resource[:module]}\"" if
-      resource[:enabled_stream] == true and ! @module_state.key?(:default_stream)
     case resource[:enabled_stream]
     when nil    # Nothing to do
       nil
     when false  # Act if any stream is enabled
+      # Doesn't call setter, even if statement below returns true. Might be bug.
       @module_state.key?(:enabled_stream)
     when true   # Act if default stream isn't enabled
+      # Specified stream = true requires an existing default stream
+      raise ArgumentError, "No default stream to enable in module \"#{resource[:module]}\"" unless
+        @module_state.key?(:default_stream)
       @module_state[:enabled_stream] == @module_state[:default_stream]
     else        # Act if specified stream isn't enabled
       @module_state[:enabled_stream]
@@ -123,6 +121,8 @@ Puppet::Type.type(:dnf_module).provide(:dnf_module) do
     get_module_state(resource[:module])
     # Profiles exist inside stream
     if @profiles_stream.nil?
+      # Used by function removed_profiles
+      @profiles_to_install = []
       return [] if resource[:installed_profiles].empty?
       raise ArgumentError, "No enabled or default stream in module \"#{resource[:module]}\""
     end
@@ -132,10 +132,14 @@ Puppet::Type.type(:dnf_module).provide(:dnf_module) do
       # Specified profile = true requires an existing default profile
       raise ArgumentError, "No default profile to install in module:stream \"#{resource[:module]}:#{@profiles_stream}\"" unless
         stream_contents.key?(:default_profile)
+      # Used by function removed_profiles
+      @profiles_to_install = stream_contents[:default_profile]
       # Act if default profile isn't installed
       installed.include?(stream_contents[:default_profile]) ? [true] : []
     else
       validate_profiles(resource[:module], resource[:installed_profiles], stream_contents[:profiles])
+      # Used by function removed_profiles
+      @profiles_to_install = resource[:installed_profiles]
       # Only installed profiles included in specified ones are relevant here
       installed & resource[:installed_profiles]
     end
