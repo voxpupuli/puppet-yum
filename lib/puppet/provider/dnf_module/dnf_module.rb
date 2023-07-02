@@ -153,4 +153,12 @@ Puppet::Type.type(:dnf_module).provide(:dnf_module) do
       set_module_state(install.map{ |profile| "#{resource[:module]}/#{profile}"}.join(' '), 'install')
     end
   end
+
+  def removed_profiles
+    nil
+  end
+
+  def removed_profiles=(profiles)
+    nil
+  end
 end

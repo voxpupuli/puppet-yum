@@ -8,6 +8,7 @@ Puppet::Type.newtype(:dnf_module) do
         module             => 'mariadb',
         enabled_stream     => '10.5',
         installed_profiles => 'galera',
+        removed_profiles   => true,
       }
     @param title
       Resource unique id
@@ -17,6 +18,8 @@ Puppet::Type.newtype(:dnf_module) do
       Module stream to be enabled
     @param installed_profiles
       Module profile(s) to be installed
+    @param removed_profiles
+      Module profile(s) to be removed
 
     This type allows Puppet to enable/disable streams and install/remove profiles via DNF modules
 EOS
@@ -57,5 +60,13 @@ EOS
       raise TypeError, 'Module profiles should be a string, an array of strings or true' unless
         value == true or value.is_a?(String)
     end
+  end
+
+  newproperty(:removed_profiles, :array_matching => :all) do
+    desc <<-EOS
+      Module profile(s) that should be removed
+        String or Array - Specify profile(s)
+        true - All not listed in installed_profiles
+    EOS
   end
 end
