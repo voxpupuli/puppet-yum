@@ -318,6 +318,46 @@ class { 'yum':
 }
 ```
 
+### Manage DNF modules
+
+#### Enable nginx module default stream
+
+```puppet
+dnf_module { 'module_nginx_stream_1.20':
+  module         => 'nginx',
+  enabled_stream => true,
+}
+```
+
+#### Install default profile from nginx module '1.20' stream
+
+```puppet
+dnf_module { 'module_nginx_stream_1.20':
+  module             => 'nginx',
+  enabled_stream     => '1.20',
+  installed_profiles => true,
+}
+```
+
+#### Install 'minimal' and 'devel' profiles from php module current stream
+
+```puppet
+dnf_module { 'module_nginx_stream_1.20':
+  module             => 'php',
+  installed_profiles => ['minimal', 'devel'],
+}
+```
+
+#### Uninstall all profiles from php module current stream
+
+```puppet
+dnf_module { 'module_nginx_stream_1.20':
+  module             => 'php',
+  installed_profiles => [],
+  removed_profiles   => true,
+}
+```
+
 ### Add/remove a GPG RPM signing key using an inline key block
 
 ```puppet
