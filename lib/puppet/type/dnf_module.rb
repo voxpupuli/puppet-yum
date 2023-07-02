@@ -68,5 +68,6 @@ EOS
         String or Array - Specify profile(s)
         true - All not listed in installed_profiles
     EOS
+    defaultto []
   end
 end
