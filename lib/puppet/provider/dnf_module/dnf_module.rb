@@ -161,6 +161,10 @@ Puppet::Type.type(:dnf_module).provide(:dnf_module) do
     # Profiles exist inside stream
     raise ArgumentError, "No enabled or default stream in module \"#{resource[:module]}\"" if
       @profiles_stream.nil?
+    if resource[:removed_profiles] == [true]
+      # Act if any currently installed profiles aren't in specified ones
+      (stream_contents[:installed_profiles] - @profiles_to_install).empty? ? [true] : []
+    end
   end
 
   def removed_profiles=(profiles)
