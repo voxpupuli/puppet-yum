@@ -36,6 +36,10 @@
 * [`Yum::RpmVersion`](#Yum--RpmVersion): Valid rpm version fields.
 * [`Yum::VersionlockString`](#Yum--VersionlockString): This type matches strings appropriate for use with yum-versionlock. Its basic format, using the `rpm(8)` query string format, is `%{EPOCH}:%{
 
+### Custom types
+
+* [`dnf_module`](#dnf_module): This custom type manages DNF modules
+
 ### Tasks
 
 * [`init`](#init): Allows you to perform yum functions
@@ -1023,6 +1027,14 @@ lint:ignore:140chars
 ```
 
 Alias of `Pattern[/^([0-9\*]+):([0-9a-zA-Z\._\+%\{\}\*-]+)-([^-]+)-([^-]+)\.(([0-9a-zZ-Z_\*]+)(?:\.(noarch|x86_64|i386|arm|ppc64|ppc64le|sparc64|ia64|alpha|ip|m68k|mips|mipsel|mk68k|mint|ppc|rs6000|s390|s390x|sh|sparc|xtensa|\*))?)$/]`
+
+## Custom types
+
+### <a name="dnf_module"></a>`dnf_module`
+
+Manages DNF modules
+
+> Only works in Linux distros which use DNF as package manager, like RHEL/Rocky >= 8
 
 ## Tasks
 
