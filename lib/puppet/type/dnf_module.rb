@@ -31,6 +31,7 @@ EOS
   newparam(:module) do
     desc 'Module to be managed (String)'
     validate do |value|
+      Puppet.debug { "Module: \"#{value}\"" }
       raise TypeError, 'Module name should be a string' unless value.is_a?(String)
     end
   end
@@ -47,6 +48,10 @@ EOS
       raise TypeError, 'Module stream should be a string, true, false or undef' unless
         [true, false, nil].include?(value) or value.is_a?(String)
     end
+    def insync?(is)
+      Puppet.debug { "enabled_stream - is: \"#{is}\" - should: \"#{should}\"" }
+      is == should
+    end
   end
 
   newproperty(:installed_profiles, :array_matching => :all) do
@@ -62,6 +67,7 @@ EOS
     end
     # Ignore profiles order if user provided a list
     def insync?(is)
+      Puppet.debug { "installed_profiles - is: \"#{is}\" - should: \"#{should}\"" }
       is.is_a?(Array) ? is.sort == should.sort : is == should
     end
   end
@@ -79,6 +85,7 @@ EOS
     end
     # Ignore profiles order if user provided a list
     def insync?(is)
+      Puppet.debug { "removed_profiles - is: \"#{is}\" - should: \"#{should}\"" }
       is.is_a?(Array) ? is.sort == should.sort : is == should
     end
   end
