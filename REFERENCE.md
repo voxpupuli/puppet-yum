@@ -1040,6 +1040,43 @@ Manages DNF modules
 
 [Read the Docs - DNF - Modularity](https://dnf.readthedocs.io/en/latest/modularity.html)
 
+#### Parameters
+
+- [`module`](#-yum--module)
+- [`enabled_stream`](#-yum--enabled_stream)
+- [`installed_profiles`](#-yum--installed_profiles)
+- [`removed_profiles`](#-yum--removed_profiles)
+
+##### <a name="-yum--module"></a>`module`
+
+Data type: `String`
+
+DNF module to manage. Fails if module doesn't exist.
+
+##### <a name="-yum--enabled_stream"></a>`enabled_stream`
+
+Data type: `Variant[String, Boolean, Undef]`
+
+DNF module stream to enable. Keep current state if `Undef`, enable default stream if `true`, reset (disable any stream) if `false`. Fails if stream doesn't exist.
+
+Default value: `Undef`
+
+##### <a name="-yum--installed_profiles"></a>`installed_profiles`
+
+Data type: `Variant[String, Array[String], Boolean[true], Undef]`
+
+DNF module profile(s) to install. Keep current state if `Undef` or `[]`, install default profile if `true`. Fails if any profile doesn't exist.
+
+Default value: `[]`
+
+##### <a name="-yum--removed_profiles"></a>`removed_profiles`
+
+Data type: `Variant[String, Array[String], Boolean[true], Undef]`
+
+DNF module profile(s) to uninstall. Keep current state if `Undef` or `[]`, uninstall all profile(s) not specified in [`installed_profiles`](#-yum--installed_profiles) if `true`. Fails if any profile doesn't exist or is also listed in [`installed_profiles`](#-yum--installed_profiles).
+
+Default value: `[]`
+
 ## Tasks
 
 ### <a name="init"></a>`init`
