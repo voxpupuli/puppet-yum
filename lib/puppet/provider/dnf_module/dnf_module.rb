@@ -3,6 +3,8 @@
 Puppet::Type.type(:dnf_module).provide(:dnf_module) do
   desc 'Unique provider'
 
+  confine package_provider: 'dnf'
+
   commands dnf: 'dnf'
 
   # Converts plain output from 'dnf module list <Module>' to an array formatted as:
