@@ -1036,6 +1036,10 @@ Manages DNF modules
 
 > Only works in Linux distros which use DNF as package manager, like RHEL/Rocky >= 8
 
+#### See also
+
+[Read the Docs - DNF - Modularity](https://dnf.readthedocs.io/en/latest/modularity.html)
+
 ## Tasks
 
 ### <a name="init"></a>`init`
