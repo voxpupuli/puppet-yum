@@ -82,6 +82,7 @@ Puppet::Type.type(:dnf_module).provide(:dnf_module) do
 
   # Checks if all specified profiles exist in module's stream
   def validate_profiles(module_name, specified, existing)
+    return unless specified.is_a?(Array)
     invalid = specified - existing
     raise ArgumentError, "Profile(s) #{invalid.map{ |profile| "\"#{profile}\""}.join(', ')} " +
       "not found in module:stream \"#{module_name}:#{@profiles_stream}\"" unless invalid.empty?
