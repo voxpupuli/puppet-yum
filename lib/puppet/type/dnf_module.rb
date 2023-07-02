@@ -60,6 +60,10 @@ EOS
       raise TypeError, 'Module profiles should be a string, an array of strings or true' unless
         value == true or value.is_a?(String)
     end
+    # Ignore profiles order if user provided a list
+    def insync?(is)
+      is.is_a?(Array) ? is.sort == should.sort : is == should
+    end
   end
 
   newproperty(:removed_profiles, :array_matching => :all) do
@@ -72,6 +76,10 @@ EOS
     validate do |value|
       raise TypeError, 'Module profiles should be a string, an array of strings or true' unless
         value == true or value.is_a?(String)
+    end
+    # Ignore profiles order if user provided a list
+    def insync?(is)
+      is.is_a?(Array) ? is.sort == should.sort : is == should
     end
   end
 end
