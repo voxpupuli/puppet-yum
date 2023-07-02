@@ -155,7 +155,11 @@ Puppet::Type.type(:dnf_module).provide(:dnf_module) do
   end
 
   def removed_profiles
-    nil
+    get_module_state(resource[:module])
+    stream_contents = @module_state[:streams][@profiles_stream]
+    # Profiles exist inside stream
+    raise ArgumentError, "No enabled or default stream in module \"#{resource[:module]}\"" if
+      @profiles_stream.nil?
   end
 
   def removed_profiles=(profiles)
