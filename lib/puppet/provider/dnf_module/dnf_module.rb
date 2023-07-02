@@ -165,6 +165,10 @@ Puppet::Type.type(:dnf_module).provide(:dnf_module) do
       # Act if any currently installed profiles aren't in specified ones
       (stream_contents[:installed_profiles] - @profiles_to_install).empty? ? [true] : []
     else
+      conflicting = @profiles_to_install & resource[:removed_profiles]
+      raise ArgumentError, "Profile(s) #{conflicting}.join(', ') listed to both install and remove " +
+        "in module \"#{resource[:module]}\"" unless conflicting.empty?
+      validate_profiles(resource[:module], resource[:removed_profiles], stream_contents[:profiles])
       # Installed profiles become missing from removed list and cause action
       resource[:removed_profiles] - stream_contents[:installed_profiles]
     end
