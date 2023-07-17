@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 Puppet::Type.newtype(:dnf_module) do
-  @doc = <<-EOS
+  @doc = <<-TYPE_DOC
     @summary Manage DNF modules
     @example Install MariaDB 10.5 Galera profile
       dnf_module { 'mariadb_galera_10.5':
@@ -22,7 +22,7 @@ Puppet::Type.newtype(:dnf_module) do
       Module profile(s) to be removed
 
     This type allows Puppet to enable/disable streams and install/remove profiles via DNF modules
-EOS
+  TYPE_DOC
 
   newparam(:title, namevar: true) do
     desc 'Resource title'
@@ -46,7 +46,7 @@ EOS
     EOS
     validate do |value|
       raise TypeError, 'Module stream should be a string, true, false or undef' unless
-        [true, false, nil].include?(value) or value.is_a?(String)
+        [true, false, nil].include?(value) || value.is_a?(String)
     end
     def insync?(is)
       Puppet.debug { "enabled_stream - is: \"#{is}\" - should: \"#{should}\"" }
@@ -54,7 +54,7 @@ EOS
     end
   end
 
-  newproperty(:installed_profiles, :array_matching => :all) do
+  newproperty(:installed_profiles, array_matching: 'all') do
     desc <<-EOS
       Module profile(s) that should be installed
         String or Array - Specify profile(s)
@@ -63,7 +63,7 @@ EOS
     defaultto []
     validate do |value|
       raise TypeError, 'Module profiles should be a string, an array of strings or true' unless
-        value == true or value.is_a?(String)
+        value == true || value.is_a?(String)
     end
     # Ignore profiles order if user provided a list
     def insync?(is)
@@ -72,7 +72,7 @@ EOS
     end
   end
 
-  newproperty(:removed_profiles, :array_matching => :all) do
+  newproperty(:removed_profiles, array_matching: 'all') do
     desc <<-EOS
       Module profile(s) that should be removed
         String or Array - Specify profile(s)
@@ -81,7 +81,7 @@ EOS
     defaultto []
     validate do |value|
       raise TypeError, 'Module profiles should be a string, an array of strings or true' unless
-        value == true or value.is_a?(String)
+        value == true || value.is_a?(String)
     end
     # Ignore profiles order if user provided a list
     def insync?(is)
