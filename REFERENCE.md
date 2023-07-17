@@ -23,6 +23,10 @@
 * [`yum::post_transaction_action`](#yum--post_transaction_action): Creates post transaction configuratons for dnf or yum.
 * [`yum::versionlock`](#yum--versionlock): Locks package from updates.
 
+### Resource types
+
+* [`dnf_module`](#dnf_module): Manage DNF modules
+
 ### Functions
 
 * [`yum::bool2num_hash_recursive`](#yum--bool2num_hash_recursive): This functions converts the Boolean values of a Hash to Integers, either '0' or '1'.  It does this recursively, decending as far as the langu
@@ -35,10 +39,6 @@
 * [`Yum::RpmRelease`](#Yum--RpmRelease): Valid rpm release fields.
 * [`Yum::RpmVersion`](#Yum--RpmVersion): Valid rpm version fields.
 * [`Yum::VersionlockString`](#Yum--VersionlockString): This type matches strings appropriate for use with yum-versionlock. Its basic format, using the `rpm(8)` query string format, is `%{EPOCH}:%{
-
-### Custom types
-
-* [`dnf_module`](#dnf_module): This custom type manages DNF modules
 
 ### Tasks
 
@@ -829,6 +829,74 @@ Epoch of the package if CentOS 8 mechanism is used.
 
 Default value: `0`
 
+## Resource types
+
+### <a name="dnf_module"></a>`dnf_module`
+
+This type allows Puppet to enable/disable streams and install/remove profiles via DNF modules
+
+#### Examples
+
+##### Install MariaDB 10.5 Galera profile
+
+```puppet
+dnf_module { 'mariadb_galera_10.5':
+  module             => 'mariadb',
+  enabled_stream     => '10.5',
+  installed_profiles => 'galera',
+  removed_profiles   => true,
+}
+```
+
+#### Properties
+
+The following properties are available in the `dnf_module` type.
+
+##### `enabled_stream`
+
+      Module stream that should be enabled
+String - Specify stream
+true - Default stream
+false - No stream (resets module)
+nil (default) - Keep current
+
+##### `installed_profiles`
+
+      Module profile(s) that should be installed
+String or Array - Specify profile(s)
+true - Default profile
+
+Default value: `[]`
+
+##### `removed_profiles`
+
+      Module profile(s) that should be removed
+String or Array - Specify profile(s)
+true - All not listed in installed_profiles
+
+Default value: `[]`
+
+#### Parameters
+
+The following parameters are available in the `dnf_module` type.
+
+* [`module`](#-dnf_module--module)
+* [`provider`](#-dnf_module--provider)
+* [`title`](#-dnf_module--title)
+
+##### <a name="-dnf_module--module"></a>`module`
+
+Module to be managed (String)
+
+##### <a name="-dnf_module--provider"></a>`provider`
+
+The specific backend to use for this `dnf_module` resource. You will seldom need to specify this --- Puppet will usually
+discover the appropriate provider for your platform.
+
+##### <a name="-dnf_module--title"></a>`title`
+
+Resource title
+
 ## Functions
 
 ### <a name="yum--bool2num_hash_recursive"></a>`yum::bool2num_hash_recursive`
@@ -1027,95 +1095,6 @@ lint:ignore:140chars
 ```
 
 Alias of `Pattern[/^([0-9\*]+):([0-9a-zA-Z\._\+%\{\}\*-]+)-([^-]+)-([^-]+)\.(([0-9a-zZ-Z_\*]+)(?:\.(noarch|x86_64|i386|arm|ppc64|ppc64le|sparc64|ia64|alpha|ip|m68k|mips|mipsel|mk68k|mint|ppc|rs6000|s390|s390x|sh|sparc|xtensa|\*))?)$/]`
-
-## Custom types
-
-### <a name="dnf_module"></a>`dnf_module`
-
-Manages DNF modules
-
-> Only works in Linux distros which use DNF as package manager, like RHEL/Rocky >= 8
-
-#### See also
-
-[Read the Docs - DNF - Modularity](https://dnf.readthedocs.io/en/latest/modularity.html)
-
-#### Examples
-
-##### Enable nginx module default stream
-
-```puppet
-dnf_module { 'module_nginx_stream_1.20':
-  module         => 'nginx',
-  enabled_stream => true,
-}
-```
-
-##### Install default profile from nginx module '1.20' stream
-
-```puppet
-dnf_module { 'module_nginx_stream_1.20':
-  module             => 'nginx',
-  enabled_stream     => '1.20',
-  installed_profiles => true,
-}
-```
-
-##### Install 'minimal' and 'devel' profiles from php module current stream
-
-```puppet
-dnf_module { 'module_nginx_stream_1.20':
-  module             => 'php',
-  installed_profiles => ['minimal', 'devel'],
-}
-```
-
-##### Uninstall all profiles from php module current stream
-
-```puppet
-dnf_module { 'module_nginx_stream_1.20':
-  module             => 'php',
-  installed_profiles => [],
-  removed_profiles   => true,
-}
-```
-
-#### Parameters
-
-- [`module`](#-yum--module)
-- [`enabled_stream`](#-yum--enabled_stream)
-- [`installed_profiles`](#-yum--installed_profiles)
-- [`removed_profiles`](#-yum--removed_profiles)
-
-##### <a name="-yum--module"></a>`module`
-
-Data type: `String`
-
-DNF module to manage. Fails if module doesn't exist.
-
-##### <a name="-yum--enabled_stream"></a>`enabled_stream`
-
-Data type: `Variant[String, Boolean, Undef]`
-
-DNF module stream to enable. Keep current state if `Undef`, enable default stream if `true`, reset (disable any stream) if `false`. Fails if stream doesn't exist.
-
-Default value: `Undef`
-
-##### <a name="-yum--installed_profiles"></a>`installed_profiles`
-
-Data type: `Variant[String, Array[String], Boolean[true], Undef]`
-
-DNF module profile(s) to install. Keep current state if `Undef` or `[]`, install default profile if `true`. Fails if any profile doesn't exist.
-
-Default value: `[]`
-
-##### <a name="-yum--removed_profiles"></a>`removed_profiles`
-
-Data type: `Variant[String, Array[String], Boolean[true], Undef]`
-
-DNF module profile(s) to uninstall. Keep current state if `Undef` or `[]`, uninstall all profile(s) not specified in [`installed_profiles`](#-yum--installed_profiles) if `true`. Fails if any profile doesn't exist or is also listed in [`installed_profiles`](#-yum--installed_profiles).
-
-Default value: `[]`
 
 ## Tasks
 
