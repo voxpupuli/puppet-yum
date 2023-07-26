@@ -16,7 +16,7 @@ describe 'yum::config' do
       %w[dnf yum].each do |pkgmgr|
         context "when package_provider fact is #{pkgmgr}" do
           let(:facts) do
-            super().merge({package_provider: pkgmgr })
+            super().merge({ package_provider: pkgmgr })
           end
 
           context 'when ensure is a Boolean' do
