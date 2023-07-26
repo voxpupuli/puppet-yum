@@ -114,12 +114,12 @@ describe 'yum::config' do
               case pkgmgr
               when 'yum'
                 is_expected.to contain_augeas("yum.conf_#{title}").with(
-                  changes: "set assumeyes '1, 2'"
+                  changes: "set assumeyes '1, 2'",
                   show_diff: false
                 )
               else
                 is_expected.to contain_augeas("dnf.conf_#{title}").with(
-                  changes: "set assumeyes '1, 2'"
+                  changes: "set assumeyes '1, 2'",
                   show_diff: false
                 )
               end
