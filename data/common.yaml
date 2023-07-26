@@ -20,3 +20,4 @@ lookup_options:
 
 # Default is currently yum path
 yum::plugin::versionlock::path: /etc/yum/pluginconf.d/versionlock.list
+yum::settings::mainconf: /etc/yum.conf

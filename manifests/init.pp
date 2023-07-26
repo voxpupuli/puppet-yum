@@ -55,11 +55,8 @@
 # @param utils_package_name
 #   Name of the utils package, e.g. 'yum-utils', or 'dnf-utils'.
 #
-# @param purge_unmanaged_repos
-#   Should repos not managed by puppet be removed?
-#
-# @param repodir
-#   Where are repos stored on this system?
+# @param groups
+#   A hash of yum::group instances to manage.
 #
 # @param show_diff
 #   Wether to display diff when a config is changed.  It is useful when there is confidental
@@ -104,6 +101,14 @@
 #           baseurl: 'https://repos.example.com/CentOS/base/'
 #           mirrorlist: '--'
 #
+# @example Install a couple of `yum::group`s.
+#   ---
+#   yum::groups:
+#     'Development Tools':
+#       ensure: present
+#     'System Tools':
+#       ensure: present
+#
 class yum (
   Boolean $clean_old_kernels = true,
   Boolean $keep_kernel_devel = false,
@@ -115,26 +120,13 @@ class yum (
   Array[String] $repo_exclusions = [],
   Hash[String, Hash[String, String]] $gpgkeys = {},
   String $utils_package_name = 'yum-utils',
-  Boolean $purge_unmanaged_repos = false,
-  Stdlib::Unixpath $repodir = '/etc/yum.repos.d',
   Boolean $show_diff = true,
+  Stdlib::CreateResources $groups = {}
 ) {
   $module_metadata            = load_module_metadata($module_name)
   $supported_operatingsystems = $module_metadata['operatingsystem_support']
   $supported_os_names         = $supported_operatingsystems.map |$os| {
     $os['operatingsystem']
-  }
-
-  if $purge_unmanaged_repos {
-    file { $repodir:
-      ensure       => 'directory',
-      owner        => 'root',
-      group        => 'root',
-      mode         => '0644',
-      recurse      => true,
-      recurselimit => 1,
-      purge        => true,
-    }
   }
 
   unless member($supported_os_names, $facts['os']['name']) {
@@ -157,18 +149,21 @@ class yum (
         }
         # Handle GPG Key
         if ('gpgkey' in $attributes) {
-          $matches = $attributes['gpgkey'].match('^file://(.*)$')
-          if $matches {
-            $gpgkey = $matches[1]
-            if $gpgkey =~ Stdlib::AbsolutePath and $gpgkey in $gpgkeys {
-              if !defined(Yum::Gpgkey[$gpgkey]) {
-                yum::gpgkey { $gpgkey:
-                  *      => $gpgkeys[$gpgkey],
-                  before => Package[$utils_package_name],  # GPG Keys for any managed repository need to be installed before we attempt to install any packages.
-                }
-              } # end if Yum::Gpgkey[$gpgkey] is not defined
-            } # end if $gpgkey exists in gpgkeys
-          } # end if gpgkey is a file:// resource
+          $matches = $attributes['gpgkey'].split(/\s/).match('^file://(.*)$')
+          $matches.each |$match| {
+            if $match {
+              $gpgkey = $match[1]
+              if $gpgkey =~ Stdlib::AbsolutePath and $gpgkey in $gpgkeys {
+                if !defined(Yum::Gpgkey[$gpgkey]) {
+                  yum::gpgkey { $gpgkey:
+                    *      => $gpgkeys[$gpgkey],
+                    before => Package[$utils_package_name],
+                    # GPG Keys for any managed repository need to be installed before we attempt to install any packages.
+                  }
+                } # end if Yum::Gpgkey[$gpgkey] is not defined
+              } # end if $gpgkey exists in gpgkeys
+            } # end if gpgkey is a file:// resource
+          } # end each matches
         } # end if $attributes has a gpgkey
       }
     }
@@ -188,18 +183,18 @@ class yum (
       }
 
       $_normalized_ensure = $_ensure ? {
-        Boolean => Hash( { 'ensure' => bool2num($_ensure) }),
-        default => Hash( { ensure => $_ensure }), # lint:ignore:unquoted_string_in_selector
+        Boolean => Hash({ 'ensure' => bool2num($_ensure) }),
+        default => Hash({ ensure => $_ensure }), # lint:ignore:unquoted_string_in_selector
       }
 
       $_normalized_attrs = $attrs ? {
-        Hash    => merge($attrs, $_normalized_ensure),
+        Hash    => $attrs + $_normalized_ensure,
         default => $_normalized_ensure,
       }
 
-      Hash( { $key => $_normalized_attrs })
+      Hash({ $key => $_normalized_attrs })
     }.reduce |$memo, $cfg_opt_hash| {
-      merge($memo, $cfg_opt_hash)
+      $memo + $cfg_opt_hash
     }
 
     $_normalized_config_options.each |$config, $attributes| {
@@ -219,7 +214,7 @@ class yum (
   }
 
   # cleanup old kernels
-  ensure_packages([$utils_package_name])
+  stdlib::ensure_packages([$utils_package_name])
 
   $_real_installonly_limit = $config_options['installonly_limit'] ? {
     Variant[String, Integer] => $config_options['installonly_limit'],
@@ -227,21 +222,30 @@ class yum (
     default                  => '3',
   }
 
-  $_pc_cmd = [
-    '/usr/bin/package-cleanup',
-    '--oldkernels',
-    "--count=${_real_installonly_limit}",
-    '-y',
-    $keep_kernel_devel ? {
-      true    => '--keepdevel',
-      default => undef,
+  $_keep_kernel_devel = $keep_kernel_devel ? {
+    true    => $facts['package_provider'] ? {
+      'yum'   => '--keepdevel ',
+      'dnf'   => '--exclude kernel-release',
+      default => fail("Fact package_provider is not set to \'yum\' or \'dnf\' - giving up"),
     },
-  ].filter |$val| { $val =~ NotUndef }
+    default => '',
+  }
+
+  $_pc_cmd = $facts['package_provider'] ? {
+    'yum'   => "/usr/bin/package-cleanup --oldkernels --count=${_real_installonly_limit} -y${$_keep_kernel_devel}",
+    default => "/usr/bin/dnf -y remove $(/usr/bin/dnf repoquery --installonly --latest-limit=-${_real_installonly_limit}${_keep_kernel_devel} | /usr/bin/grep -v ${facts['kernelrelease']})"
+  }
 
   exec { 'package-cleanup_oldkernels':
-    command     => shellquote($_pc_cmd),
+    command     => $_pc_cmd,
     refreshonly => true,
     require     => Package[$utils_package_name],
     subscribe   => $_clean_old_kernels_subscribe,
+  }
+
+  $groups.each |$_group, $_group_attrs| {
+    yum::group { $_group:
+      * => $_group_attrs,
+    }
   }
 }

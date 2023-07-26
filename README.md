@@ -70,6 +70,36 @@ yum::config { 'debuglevel':
 }
 ```
 
+### Manage COPR repositories
+
+This module also supports managing
+COPR ([Cool Other Package Repo](https://fedoraproject.org/wiki/Category:Copr))
+repositories via the `yum::copr` resource. The resource title specifies
+the COPR repository name, and `ensure` accepts the values `enabled`, `disabled`
+or `removed`. Example usage:
+
+```puppet
+yum::copr { 'copart/restic':
+  ensure => enabled,
+}
+```
+
+Please note that repositories added this way are not managed via `yumrepo` resources, but enabled and disabled via native package manager commands. As such, they would be purged by a declaration such as:
+
+```puppet
+resources { 'yumrepo':
+   purge => true,
+}
+```
+
+However, you can use modules such as [crayfishx-purge](https://forge.puppet.com/modules/crayfishx/purge) to exclude these resources from purging:
+
+```puppet
+purge { 'yumrepo':
+  unless => [ 'name', '=~', 'copr:.*' ],
+}
+```
+
 ### Manage a custom repo via Hiera data
 
 Using Hiera and automatic parameter lookup (APL), this module can manage
@@ -99,8 +129,7 @@ yum::repos:
         descr: 'Example Repo'
         baseurl: 'https://repos.example.com/example/'
         gpgcheck: true
-        gpgkey: 'file:///etc/pki/gpm-gpg/RPM-GPG-KEY-Example'
-        target: '/etc/yum.repos.d/example.repo'
+        gpgkey: 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-Example'
 ```
 
 You can include gpgkeys in yaml as well, and if the key filename matches a
@@ -110,7 +139,7 @@ repo above could look like:
 ```yaml
 ---
 yum::gpgkeys:
-    /etc/pki/gpm-gpg/RPM-GPG-KEY-Example:
+    /etc/pki/rpm-gpg/RPM-GPG-KEY-Example:
         content: |
             -----BEGIN PGP PUBLIC KEY BLOCK-----
             Version: GnuPG v1.4.11 (GNU/Linux)
@@ -128,7 +157,7 @@ yum::gpgkeys:
 ```yaml
 ---
 yum::gpgkeys:
-    /etc/pki/gpm-gpg/RPM-GPG-KEY-Example:
+    /etc/pki/rpm-gpg/RPM-GPG-KEY-Example:
         source: puppet:///repos/RPM-GPG-KEY-Example
 ```
 
@@ -300,7 +329,7 @@ yum::gpgkey { '/etc/pki/rpm-gpg/RPM-GPG-KEY-puppet-smoketest1':
 }
 ```
 
-### Add/remove a GPGP RPM signing key using a key stored on a Puppet fileserver
+### Add/remove a GPG RPM signing key using a key stored on a Puppet fileserver
 
 ```puppet
 yum::gpgkey { '/etc/pki/rpm-gpg/RPM-GPG-KEY-elrepo.org':

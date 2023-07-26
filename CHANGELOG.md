@@ -4,6 +4,74 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not affect the functionality of the module.
 
+## [v7.1.0](https://github.com/voxpupuli/puppet-yum/tree/v7.1.0) (2023-06-26)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-yum/compare/v7.0.0...v7.1.0)
+
+**Implemented enhancements:**
+
+- Add yum::copr resource to handle COPR repositories. [\#215](https://github.com/voxpupuli/puppet-yum/pull/215) ([olifre](https://github.com/olifre))
+
+## [v7.0.0](https://github.com/voxpupuli/puppet-yum/tree/v7.0.0) (2023-06-16)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-yum/compare/v6.2.0...v7.0.0)
+
+**Breaking changes:**
+
+- puppetlabs/stdlib: Require 9.x [\#315](https://github.com/voxpupuli/puppet-yum/pull/315) ([bastelfreak](https://github.com/bastelfreak))
+- Drop Puppet 6 support [\#304](https://github.com/voxpupuli/puppet-yum/pull/304) ([bastelfreak](https://github.com/bastelfreak))
+- add Fedora 38, drop Fedora 35 [\#303](https://github.com/voxpupuli/puppet-yum/pull/303) ([vchepkov](https://github.com/vchepkov))
+
+**Implemented enhancements:**
+
+- Add Puppet 8 support [\#314](https://github.com/voxpupuli/puppet-yum/pull/314) ([bastelfreak](https://github.com/bastelfreak))
+- New yum::groups parameter to manage groups [\#311](https://github.com/voxpupuli/puppet-yum/pull/311) ([traylenator](https://github.com/traylenator))
+- allow puppetlabs/concat 8.x [\#302](https://github.com/voxpupuli/puppet-yum/pull/302) ([vchepkov](https://github.com/vchepkov))
+- Add RHEL 9 to supported OS [\#300](https://github.com/voxpupuli/puppet-yum/pull/300) ([tuxmea](https://github.com/tuxmea))
+
+**Fixed bugs:**
+
+- Almalinux 9.2 shows these repos as `-debuginfo` [\#312](https://github.com/voxpupuli/puppet-yum/pull/312) ([jcpunk](https://github.com/jcpunk))
+- Fix purge of unwanted kernels on DNF based machines [\#309](https://github.com/voxpupuli/puppet-yum/pull/309) ([traylenator](https://github.com/traylenator))
+- Use dnf or yum augeas path for main configuration [\#307](https://github.com/voxpupuli/puppet-yum/pull/307) ([traylenator](https://github.com/traylenator))
+- add missing RPM-GPG-KEY-EPEL-9 [\#299](https://github.com/voxpupuli/puppet-yum/pull/299) ([vchepkov](https://github.com/vchepkov))
+
+**Merged pull requests:**
+
+- Fix acceptance tests for Fedora 36 [\#308](https://github.com/voxpupuli/puppet-yum/pull/308) ([traylenator](https://github.com/traylenator))
+
+## [v6.2.0](https://github.com/voxpupuli/puppet-yum/tree/v6.2.0) (2023-02-08)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-yum/compare/v6.1.0...v6.2.0)
+
+**Implemented enhancements:**
+
+- add Fedora 37 support [\#284](https://github.com/voxpupuli/puppet-yum/pull/284) ([vchepkov](https://github.com/vchepkov))
+- Deploying multiple gpgkey in one repo [\#278](https://github.com/voxpupuli/puppet-yum/pull/278) ([teluq-pbrideau](https://github.com/teluq-pbrideau))
+
+**Fixed bugs:**
+
+- Revert \#258 that added purge\_unmanaged\_repos [\#285](https://github.com/voxpupuli/puppet-yum/issues/285)
+- Revert \#258, which added purge\_unmanaged\_repos [\#287](https://github.com/voxpupuli/puppet-yum/pull/287) ([kenyon](https://github.com/kenyon))
+
+**Merged pull requests:**
+
+- README: fix typos [\#288](https://github.com/voxpupuli/puppet-yum/pull/288) ([kenyon](https://github.com/kenyon))
+- README: remove yumrepo.target in example [\#286](https://github.com/voxpupuli/puppet-yum/pull/286) ([kenyon](https://github.com/kenyon))
+
+## [v6.1.0](https://github.com/voxpupuli/puppet-yum/tree/v6.1.0) (2022-11-08)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-yum/compare/v6.0.0...v6.1.0)
+
+**Implemented enhancements:**
+
+- add AlmaLinux 9 support [\#281](https://github.com/voxpupuli/puppet-yum/pull/281) ([jhoblitt](https://github.com/jhoblitt))
+- Add sensitive support for configs [\#275](https://github.com/voxpupuli/puppet-yum/pull/275) ([teluq-pbrideau](https://github.com/teluq-pbrideau))
+
+**Fixed bugs:**
+
+- fix puppet-lint errors [\#282](https://github.com/voxpupuli/puppet-yum/pull/282) ([jhoblitt](https://github.com/jhoblitt))
+
 ## [v6.0.0](https://github.com/voxpupuli/puppet-yum/tree/v6.0.0) (2022-08-04)
 
 [Full Changelog](https://github.com/voxpupuli/puppet-yum/compare/v5.6.1...v6.0.0)

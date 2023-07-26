@@ -10,7 +10,7 @@ shared_examples 'a Yum class' do |value|
 
   it 'contains Exec[package-cleanup_oldkernels' do
     is_expected.to contain_exec('package-cleanup_oldkernels').with(
-      command: "/usr/bin/package-cleanup --oldkernels --count=#{value} -y",
+      command: %r{/usr/bin/dnf -y remove \$\(/usr/bin/dnf repoquery --installonly --latest-limit=-\$\{value\} | /usr/bin/grep -v \S+\)},
       refreshonly: true
     ).that_subscribes_to('Yum::Config[installonly_limit]')
   end
@@ -43,6 +43,21 @@ describe 'yum' do
 
         it_behaves_like 'a Yum class'
         it { is_expected.to have_yumrepo_resource_count(0) }
+        it { is_expected.to have_yum__group_resource_count(0) }
+      end
+
+      context 'with package_provider yum' do
+        let(:facts) do
+          facts.merge({ package_provider: 'yum' })
+        end
+
+        it { is_expected.to compile.with_all_deps }
+
+        it {
+          is_expected.to contain_exec('package-cleanup_oldkernels').with(
+            command: '/usr/bin/package-cleanup --oldkernels --count=3 -y'
+          )
+        }
       end
 
       context 'when `manage_os_default_repos` is enabled' do
@@ -505,6 +520,44 @@ describe 'yum' do
                 plus-debuginfo
                 resilientstorage-debuginfo
               ]
+            when '9'
+              it { is_expected.to have_yumrepo_resource_count(33) }
+
+              it_behaves_like 'a catalog containing repos', %w[
+                appstream
+                appstream-debuginfo
+                appstream-source
+                plus
+                plus-debuginfo
+                plus-source
+                saphana
+                saphana-debuginfo
+                saphana-source
+                crb
+                crb-debuginfo
+                crb-source
+                baseos
+                baseos-debuginfo
+                baseos-source
+                highavailability
+                highavailability-debuginfo
+                highavailability-source
+                extras
+                extras-debuginfo
+                extras-source
+                nfv
+                nfv-debuginfo
+                nfv-source
+                resilientstorage
+                resilientstorage-debuginfo
+                resilientstorage-source
+                rt
+                rt-debuginfo
+                rt-source
+                sap
+                sap-debuginfo
+                sap-source
+              ]
             end
           when 'Rocky'
             case facts[:os]['release']['major']
@@ -580,10 +633,9 @@ describe 'yum' do
         end
 
         context 'to an array of all supported repos' do
-          let(:params) { { managed_repos: supported_repos, purge_unmanaged_repos: true } }
+          let(:params) { { managed_repos: supported_repos } }
 
           it { is_expected.to compile.with_all_deps }
-          it { is_expected.to contain_file('/etc/yum.repos.d').with_purge(true) }
           it { is_expected.to have_yumrepo_resource_count(supported_repos.count) }
 
           it_behaves_like 'a catalog containing repos', supported_repos
@@ -680,6 +732,8 @@ describe 'yum' do
         it { is_expected.to contain_yumrepo('epel') }
 
         case facts[:os]['release']['major']
+        when '9'
+          it { is_expected.to contain_yum__gpgkey('/etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-9') }
         when '8'
           it { is_expected.to contain_yum__gpgkey('/etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-8') }
         when '7'
@@ -705,6 +759,76 @@ describe 'yum' do
 
         it { is_expected.not_to contain_package('yum-utils') }
         it { is_expected.to contain_package('dnf-utils') }
+      end
+
+      context 'when custom repos is set' do
+        let(:params) do
+          {
+            managed_repos: ['example'],
+            repos: {
+              example: {
+                baseurl: 'https://example.com',
+                gpgkey: 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-example'
+              }
+            },
+            gpgkeys: {
+              '/etc/pki/rpm-gpg/RPM-GPG-KEY-example' => {
+                'source' => 'http://example.com/gpg'
+              }
+            }
+          }
+        end
+
+        it { is_expected.to compile.with_all_deps }
+        it { is_expected.to have_yumrepo_resource_count(1) }
+        it { is_expected.to contain_yumrepo('example') }
+        it { is_expected.to contain_yum__gpgkey('/etc/pki/rpm-gpg/RPM-GPG-KEY-example') }
+      end
+
+      context 'when custom repos with multiple gpgkeys is set' do
+        let(:params) do
+          {
+            managed_repos: ['example'],
+            repos: {
+              example: {
+                baseurl: 'https://example.com',
+                gpgkey: 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-example file:///etc/pki/rpm-gpg/RPM-GPG-KEY-example2',
+              }
+            },
+            gpgkeys: {
+              '/etc/pki/rpm-gpg/RPM-GPG-KEY-example' => {
+                'source' => 'http://example.com/gpg'
+              },
+              '/etc/pki/rpm-gpg/RPM-GPG-KEY-example2' => {
+                'source' => 'http://example.com/gpg2'
+              }
+            }
+          }
+        end
+
+        it { is_expected.to compile.with_all_deps }
+        it { is_expected.to have_yumrepo_resource_count(1) }
+        it { is_expected.to contain_yumrepo('example') }
+        it { is_expected.to contain_yum__gpgkey('/etc/pki/rpm-gpg/RPM-GPG-KEY-example') }
+        it { is_expected.to contain_yum__gpgkey('/etc/pki/rpm-gpg/RPM-GPG-KEY-example2') }
+      end
+
+      context 'when groups parameter is set' do
+        let(:params) do
+          {
+            groups: {
+              'Dev Tools': {
+                ensure: 'installed',
+              },
+              'Puppet Tools': {
+                ensure: 'absent',
+              },
+            },
+          }
+        end
+
+        it { is_expected.to contain_yum__group('Puppet Tools').with_ensure('absent') }
+        it { is_expected.to contain_yum__group('Dev Tools').with_ensure('installed') }
       end
     end
   end

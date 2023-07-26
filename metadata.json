@@ -1,6 +1,6 @@
 {
   "name": "puppet-yum",
-  "version": "6.0.1-rc0",
+  "version": "7.1.1-rc0",
   "author": "Vox Pupuli",
   "summary": "YUM utilities",
   "license": "MIT",
@@ -10,11 +10,11 @@
   "dependencies": [
     {
       "name": "puppetlabs/stdlib",
-      "version_requirement": ">= 4.18.0 < 9.0.0"
+      "version_requirement": ">= 9.0.0 < 10.0.0"
     },
     {
       "name": "puppetlabs/concat",
-      "version_requirement": ">= 1.2.5 < 8.0.0"
+      "version_requirement": ">= 1.2.5 < 10.0.0"
     }
   ],
   "tags": [
@@ -29,7 +29,8 @@
       "operatingsystem": "RedHat",
       "operatingsystemrelease": [
         "7",
-        "8"
+        "8",
+        "9"
       ]
     },
     {
@@ -75,21 +76,23 @@
     {
       "operatingsystem": "AlmaLinux",
       "operatingsystemrelease": [
-        "8"
+        "8",
+        "9"
       ]
     },
     {
       "operatingsystem": "Fedora",
       "operatingsystemrelease": [
-        "35",
-        "36"
+        "36",
+        "37",
+        "38"
       ]
     }
   ],
   "requirements": [
     {
       "name": "puppet",
-      "version_requirement": ">= 6.1.0 < 8.0.0"
+      "version_requirement": ">= 7.0.0 < 9.0.0"
     }
   ]
 }
