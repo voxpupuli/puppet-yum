@@ -7,7 +7,8 @@ group :test do
   gem 'voxpupuli-test', '~> 6.0',   :require => false
   gem 'coveralls',                  :require => false
   gem 'simplecov-console',          :require => false
-  gem 'puppet_metadata', '~> 3.0',  :require => false
+  #gem 'puppet_metadata', '~> 3.0',  :require => false
+  gem 'puppet_metadata', git: 'https://github.com/bastelfreak/puppet_metadata', branch: 'oraclelinux'
 end
 
 group :development do
@@ -16,6 +17,7 @@ group :development do
 end
 
 group :system_tests do
+  gem 'beaker-hostgenerator', git: 'https://github.com/bastelfreak/beaker-hostgenerator', branch: 'oraclelinux'
   gem 'voxpupuli-acceptance', '~> 2.0',  :require => false
 end
 
