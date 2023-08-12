@@ -56,12 +56,23 @@ Puppet::Type.type(:dnf_module_stream).provide(:dnf_module_stream) do
     dnf('-y', 'module', 'reset', module_name)
   end
 
+  def enable_stream(module_name, target_stream)
+    dnf('-y', 'module', 'switch-to', "#{module_name}:#{target_stream}")
+  end
+
   def stream
     streams_state(resource[:module])
     case resource[:stream]
     when :absent
       # Act if any stream is enabled
       @streams_current_state.key?(:enabled_stream) ? @streams_current_state[:enabled_stream] : :absent
+    when :default
+      # Act if default stream isn't enabled
+      # Specified stream = :default requires an existing default stream
+      raise ArgumentError, "No default stream to enable in module \"#{resource[:module]}\"" unless
+        @streams_current_state.key?(:default_stream)
+
+      @streams_current_state[:enabled_stream] == @streams_current_state[:default_stream] ? :default : @streams_current_state[:enabled_stream]
     end
   end
 
@@ -69,6 +80,8 @@ Puppet::Type.type(:dnf_module_stream).provide(:dnf_module_stream) do
     case target_stream
     when :absent
       disable_stream(resource[:module])
+    when :default
+      enable_stream(resource[:module], @streams_current_state[:default_stream])
     end
   end
 end
