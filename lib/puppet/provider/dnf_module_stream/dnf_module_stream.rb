@@ -57,7 +57,8 @@ Puppet::Type.type(:dnf_module_stream).provide(:dnf_module_stream) do
   end
 
   def enable_stream(module_name, target_stream)
-    dnf('-y', 'module', 'switch-to', "#{module_name}:#{target_stream}")
+    action = @streams_current_state.key?(:enabled_stream) ? 'switch-to' : 'enable'
+    dnf('-y', 'module', action, "#{module_name}:#{target_stream}")
   end
 
   def stream
