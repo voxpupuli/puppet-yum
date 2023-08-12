@@ -80,6 +80,9 @@ Puppet::Type.type(:dnf_module_stream).provide(:dnf_module_stream) do
         @streams_current_state.key?(:default_stream) || @streams_current_state.key?(:enabled_stream)
 
       @streams_current_state.key?(:enabled_stream) ? :present : :absent
+    else
+      # Act if specified stream isn't enabled
+      @streams_current_state[:enabled_stream]
     end
   end
 
@@ -89,6 +92,8 @@ Puppet::Type.type(:dnf_module_stream).provide(:dnf_module_stream) do
       disable_stream(resource[:module])
     when :default, :present
       enable_stream(resource[:module], @streams_current_state[:default_stream])
+    else
+      enable_stream(resource[:module], target_stream)
     end
   end
 end
