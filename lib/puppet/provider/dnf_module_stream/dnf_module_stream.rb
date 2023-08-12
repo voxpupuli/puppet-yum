@@ -52,11 +52,23 @@ Puppet::Type.type(:dnf_module_stream).provide(:dnf_module_stream) do
     @streams_current_state = dnf_output_2_hash(dnf_output)
   end
 
+  def disable_stream(module_name)
+    dnf('-y', 'module', 'reset', module_name)
+  end
+
   def stream
-    nil
+    streams_state(resource[:module])
+    case resource[:stream]
+    when :absent
+      # Act if any stream is enabled
+      @streams_current_state.key?(:enabled_stream) ? @streams_current_state[:enabled_stream] : :absent
+    end
   end
 
   def stream=(target_stream)
-    nil
+    case target_stream
+    when :absent
+      disable_stream(resource[:module])
+    end
   end
 end
