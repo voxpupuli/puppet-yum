@@ -15,15 +15,20 @@ Puppet::Type.newtype(:dnf_module_stream) do
       dnf_module_stream { 'mariadb':
         stream => absent,
       }
-    @param name
-      Module to be managed
+    @param module
+      Module to be managed - Defaults to title
     @param stream
       Module stream to be enabled
 
     This type allows Puppet to enable/disable streams via DNF modules
   TYPE_DOC
 
-  newparam(:name, namevar: true) do
+  newparam(:title, namevar: true) do
+    desc 'Resource title'
+    newvalues(%r{.+})
+  end
+
+  newparam(:module) do
     desc 'DNF module to be managed'
     newvalues(%r{.+})
   end

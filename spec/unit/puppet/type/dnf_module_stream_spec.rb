@@ -8,8 +8,8 @@ RSpec.describe 'the dnf_module_stream type' do
     expect(dnf_module_stream).not_to be_nil
   end
 
-  it 'has parameter name' do
-    expect(dnf_module_stream.parameters).to be_include(:name)
+  it 'has parameter module' do
+    expect(dnf_module_stream.parameters).to be_include(:module)
   end
 
   it 'has property stream' do
