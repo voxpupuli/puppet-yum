@@ -7,6 +7,21 @@ Puppet::Type.type(:dnf_module_stream).provide(:dnf_module_stream) do
 
   commands dnf: 'dnf'
 
+  def dnf_output_2_hash(dnf_output)
+    dnf_output.lines.each do |line|
+      line.chomp!
+      break if line.empty?
+
+      # @stream_start and @stream_length: chunk of dnf output line with stream info
+      if line.split[0] == 'Name'
+        # 'dnf module list' output header is 'Name<Spaces>Stream<Spaces>Profiles<Spaces>...'
+        # Each field has same position of data that follows
+        @stream_start = line[%r{Name\s+}].length
+        @stream_length = line[%r{Stream\s+}].length
+      end
+    end
+  end
+
   # Gets module default, enabled and available streams
   # Output formatted by function dnf_output_2_hash
   def streams_state(module_name)
