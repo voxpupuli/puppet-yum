@@ -86,7 +86,14 @@
         "36",
         "37"
       ]
+    },
+    {
+      "operatingsystem": "openEuler",
+      "operatingsystemrelease": [
+        "22"
+      ]
     }
+
   ],
   "requirements": [
     {
