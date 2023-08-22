@@ -462,6 +462,40 @@ yum::install { 'package-name':
 
 Please note that resource name must be same as installed package name.
 
+### Manage DNF modules streams
+
+Enable default stream
+
+```puppet
+dnf_module_stream { '<Module>':
+  stream => default,
+}
+```
+
+Keep current enabled stream - if there isn't, enable default one
+
+```puppet
+dnf_module_stream { '<Module>':
+  stream => present,
+}
+```
+
+Enable a specific stream
+
+```puppet
+dnf_module_stream { '<Module>':
+  stream => <Stream name>,
+}
+```
+
+Disable stream (reset module)
+
+```puppet
+dnf_module_stream { '<Module>':
+  stream => absent,
+}
+```
+
 ### Puppet tasks
 
 The module has a puppet task that allows to run `yum update` or `yum upgrade`.
