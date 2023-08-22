@@ -39,7 +39,7 @@ Puppet::Type.newtype(:dnf_module_stream) do
         String - Specify stream
         present - Keep current enabled stream if any, otherwise enable default one
         default - Enable default stream
-        false - No stream (resets module)
+        absent - No stream (resets module)
     EOS
     newvalues(:present, :default, :absent, %r{.+})
   end
