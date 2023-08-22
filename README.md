@@ -464,6 +464,8 @@ Please note that resource name must be same as installed package name.
 
 ### Manage DNF modules streams
 
+> When changing from one enabled stream to another one, the provider runs `dnf module switch-to <Stream>`, which replaces all installed profiles from the DNF module. Bear the consequences in mind.
+
 Enable default stream
 
 ```puppet
