@@ -873,7 +873,7 @@ Valid values: `present`, `default`, `absent`, `%r{.+}`
 String - Specify stream
 present - Keep current enabled stream if any, otherwise enable default one
 default - Enable default stream
-false - No stream (resets module)
+absent - No stream (resets module)
 
 #### Parameters
 
