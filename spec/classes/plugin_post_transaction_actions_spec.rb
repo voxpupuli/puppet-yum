@@ -17,7 +17,6 @@ describe 'yum::plugin::post_transaction_actions' do
 
           case provider
           when 'yum'
-            pending('must first enable ol7_optional_latest repo in OracleLinux 7')
             it { is_expected.to contain_package('yum-plugin-post-transaction-actions').with_ensure('present') }
             it { is_expected.not_to contain_package('python3-dnf-plugin-post-transaction-actions') }
             it { is_expected.to contain_concat('puppet_actions').with_path('/etc/yum/post-actions/puppet_maintained.action') }

@@ -15,6 +15,7 @@ describe 'yum::post_transaction_action define' do
 
     # Using puppet_apply as a helper
     it 'must work idempotently with no errors' do
+      pending('must first enable ol7_optional_latest repo in OracleLinux 7')
       pp = <<-EOS
       yum::post_transaction_action{'touch_file':
         key     => 'vim-*',
