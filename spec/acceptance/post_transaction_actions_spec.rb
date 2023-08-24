@@ -4,6 +4,15 @@ require 'spec_helper_acceptance'
 
 describe 'yum::post_transaction_action define' do
   context 'simple parameters' do
+    let(:pre_condition) do
+      "
+        package{ 'vim-enhanced-absent':
+          name    => 'vim-enhanced',
+          ensure  => 'absent',
+        }
+      "
+    end
+
     # Using puppet_apply as a helper
     it 'must work idempotently with no errors' do
       pp = <<-EOS
