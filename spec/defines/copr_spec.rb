@@ -81,7 +81,7 @@ describe 'yum::copr' do
       it {
         is_expected.to contain_exec("dnf -y copr enable #{title}").with(
           'path'    => '/bin:/usr/bin:/sbin/:/usr/sbin',
-          'unless'  => "dnf copr list | egrep -q '#{title}\$'",
+          'unless'  => "dnf copr list | egrep -q '#{title}$'",
           'require' => "Package[#{prereq_plugin}]"
         )
       }
@@ -95,7 +95,7 @@ describe 'yum::copr' do
       it {
         is_expected.to contain_exec("dnf -y copr disable #{title}").with(
           'path'    => '/bin:/usr/bin:/sbin/:/usr/sbin',
-          'unless'  => "dnf copr list | egrep -q '#{title} (disabled)\$'",
+          'unless'  => "dnf copr list | egrep -q '#{title} (disabled)$'",
           'require' => "Package[#{prereq_plugin}]"
         )
       }
