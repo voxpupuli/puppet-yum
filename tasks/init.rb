@@ -17,7 +17,7 @@ def yum(action, quiet)
 end
 
 def process_list_updates(output)
-  status = output[:status].lines[1..-1]
+  status = output[:status].lines[1..]
   status ||= []
 
   result = status.map do |line|
