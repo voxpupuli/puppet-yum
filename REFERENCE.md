@@ -23,6 +23,10 @@
 * [`yum::post_transaction_action`](#yum--post_transaction_action): Creates post transaction configuratons for dnf or yum.
 * [`yum::versionlock`](#yum--versionlock): Locks package from updates.
 
+### Resource types
+
+* [`dnf_module_stream`](#dnf_module_stream): Manage DNF module streams
+
 ### Functions
 
 * [`yum::bool2num_hash_recursive`](#yum--bool2num_hash_recursive): This functions converts the Boolean values of a Hash to Integers, either '0' or '1'.  It does this recursively, decending as far as the langu
@@ -824,6 +828,77 @@ Data type: `Integer[0]`
 Epoch of the package if CentOS 8 mechanism is used.
 
 Default value: `0`
+
+## Resource types
+
+### <a name="dnf_module_stream"></a>`dnf_module_stream`
+
+This type allows Puppet to enable/disable streams via DNF modules
+
+#### Examples
+
+##### Enable MariaDB default stream
+
+```puppet
+dnf_module_stream { 'mariadb':
+  stream => default,
+}
+```
+
+##### Enable MariaDB 10.5 stream
+
+```puppet
+dnf_module_stream { 'mariadb':
+  stream => '10.5',
+}
+```
+
+##### Disable MariaDB streams
+
+```puppet
+dnf_module_stream { 'mariadb':
+  stream => absent,
+}
+```
+
+#### Properties
+
+The following properties are available in the `dnf_module_stream` type.
+
+##### `stream`
+
+Valid values: `present`, `default`, `absent`, `%r{.+}`
+
+      Module stream that should be enabled
+String - Specify stream
+present - Keep current enabled stream if any, otherwise enable default one
+default - Enable default stream
+absent - No stream (resets module)
+
+#### Parameters
+
+The following parameters are available in the `dnf_module_stream` type.
+
+* [`module`](#-dnf_module_stream--module)
+* [`provider`](#-dnf_module_stream--provider)
+* [`title`](#-dnf_module_stream--title)
+
+##### <a name="-dnf_module_stream--module"></a>`module`
+
+Valid values: `%r{.+}`
+
+DNF module to be managed
+
+##### <a name="-dnf_module_stream--provider"></a>`provider`
+
+The specific backend to use for this `dnf_module_stream` resource. You will seldom need to specify this --- Puppet will
+usually discover the appropriate provider for your platform.
+
+##### <a name="-dnf_module_stream--title"></a>`title`
+
+Valid values: `%r{.+}`
+
+Resource title
 
 ## Functions
 

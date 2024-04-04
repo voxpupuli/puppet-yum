@@ -462,6 +462,56 @@ yum::install { 'package-name':
 
 Please note that resource name must be same as installed package name.
 
+### Manage DNF modules streams
+
+> When changing from one enabled stream to another one, the provider runs `dnf module switch-to <Stream>`, which replaces all installed profiles from the DNF module. Bear the consequences in mind.
+
+Enable default stream
+
+```puppet
+dnf_module_stream { '<Module>':
+  stream => default,
+}
+```
+
+Keep current enabled stream - if there isn't, enable default one
+
+```puppet
+dnf_module_stream { '<Module>':
+  stream => present,
+}
+```
+
+Enable a specific stream
+
+```puppet
+dnf_module_stream { '<Module>':
+  stream => <Stream name>,
+}
+```
+
+Disable stream (reset module)
+
+```puppet
+dnf_module_stream { '<Module>':
+  stream => absent,
+}
+```
+
+#### `dnf_module_stream` resource versus `dnfmodule` provider
+
+[DNF modules](https://dnf.readthedocs.io/en/latest/modularity.html) is a feature from `yum` successor, `dnf`, which allows easier and more robust selections of software versions and collections.
+
+As of Aug 22, 2023, [core Puppet `package` resource `dnfmodule` provider](https://www.puppet.com/docs/puppet/8/types/package.html#package-provider-dnfmodule) has some support for managing streams and profiles, but it has some issues:
+
+1. Setting stream is mandatory when (un)installing profiles - No way of just keeping currently enabled stream
+1. It only supports installing a single profile, despite the fact `dnf` supports multi-profile installations and there are use cases for that
+1. Managing two things - streams setting and profile (un)installation - in the same resource invocation is inherently messy
+
+One can fix 1 and 2, and add good docs to deal with 3. A compelling reason not to keep 1 and 3 is that a stream is a setting, not something one (un)installs. This makes it unsuitable for the `package` resource which, in principle, should only (un)install stuff.
+
+So, while one fix 2, this custom resource aims to fully and better replace `dnfmodule` provider stream support.
+
 ### Puppet tasks
 
 The module has a puppet task that allows to run `yum update` or `yum upgrade`.
