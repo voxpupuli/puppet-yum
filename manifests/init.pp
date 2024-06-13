@@ -58,6 +58,10 @@
 # @param groups
 #   A hash of yum::group instances to manage.
 #
+# @param show_diff
+#   Wether to display diff when a config is changed.  It is useful when there is confidental
+#   information that you do not want displayed in the puppet logs.
+#
 # @example Enable management of the default repos for a supported OS:
 #   ---
 #   yum::manage_os_default_repos: true
@@ -116,6 +120,7 @@ class yum (
   Array[String] $repo_exclusions = [],
   Hash[String, Hash[String, String]] $gpgkeys = {},
   String $utils_package_name = 'yum-utils',
+  Boolean $show_diff = true,
   Stdlib::CreateResources $groups = {}
 ) {
   $module_metadata            = load_module_metadata($module_name)
