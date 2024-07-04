@@ -104,6 +104,29 @@ describe 'yum::config' do
               end
             end
           end
+
+          context 'when show_diff is disabled in yum::show_diff' do
+            let(:title) { 'assumeyes' }
+            let(:params) { { ensure: '1, 2' } }
+            let(:pre_condition) { 'class { yum : show_diff => false }' }
+
+            it { is_expected.to compile.with_all_deps }
+
+            it 'contains an Augeas resource with the correct changes' do
+              case pkgmgr
+              when 'yum'
+                is_expected.to contain_augeas("yum.conf_#{title}").with(
+                  changes: "set assumeyes '1, 2'",
+                  show_diff: false
+                )
+              else
+                is_expected.to contain_augeas("dnf.conf_#{title}").with(
+                  changes: "set assumeyes '1, 2'",
+                  show_diff: false
+                )
+              end
+            end
+          end
         end
       end
     end
