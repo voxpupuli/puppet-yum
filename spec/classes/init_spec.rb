@@ -688,7 +688,7 @@ describe 'yum' do
         context 'to a Sensitive value' do
           let(:params) { { config_options: { 'proxy_password' => sensitive('secret') } } }
 
-          it { is_expected.to contain_yum__config('proxy_password').with_ensure('Sensitive [value redacted]') }
+          it { is_expected.to contain_yum__config('proxy_password').with_ensure('Sensitive("secret")') }
 
           it_behaves_like 'a Yum class'
         end
