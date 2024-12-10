@@ -51,13 +51,15 @@
       "operatingsystemrelease": [
         "36",
         "37",
-        "38"
+        "38",
+        "40"
       ]
     },
     {
       "operatingsystem": "OracleLinux",
       "operatingsystemrelease": [
-        "8"
+        "8",
+        "9"
       ]
     },
     {
@@ -71,7 +73,8 @@
     {
       "operatingsystem": "Rocky",
       "operatingsystemrelease": [
-        "8"
+        "8",
+        "9"
       ]
     },
     {
