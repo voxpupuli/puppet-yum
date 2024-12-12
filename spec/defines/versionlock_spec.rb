@@ -4,10 +4,7 @@ require 'spec_helper'
 
 describe 'yum::versionlock' do
   context 'with package_provider set to yum' do
-    let(:facts) do
-      { os: { release: { major: 7 } },
-        package_provider: 'yum' }
-    end
+    let(:facts) { { package_provider: 'yum' } }
 
     context 'with a simple, well-formed title 0:bash-4.1.2-9.el6_2.x86_64' do
       let(:title) { '0:bash-4.1.2-9.el6_2.x86_64' }
@@ -101,10 +98,7 @@ describe 'yum::versionlock' do
   end
 
   context 'with a simple, well-formed package name title bash and a version' do
-    let(:facts) do
-      { os: { release: { major: 7 } },
-        package_provider: 'yum' }
-    end
+    let(:facts) { { package_provider: 'yum' } }
 
     let(:title) { 'bash' }
     let(:params) { { version: '4.3' } }
@@ -138,10 +132,7 @@ describe 'yum::versionlock' do
   end
 
   context 'with package_provider set to dnf' do
-    let(:facts) do
-      { os: { release: { major: 8 } },
-        package_provider: 'dnf' }
-    end
+    let(:facts) { { package_provider: 'dnf' } }
 
     context 'with a simple, well-formed title, no version set' do
       let(:title) { 'bash' }
@@ -198,9 +189,6 @@ describe 'yum::versionlock' do
   end
 
   context 'with package_provider unset' do
-    let(:facts) do
-      { os: { release: { major: 7 } } }
-    end
     let(:title) { 'bash' }
     let(:params) { { version: '4.3' } }
 
