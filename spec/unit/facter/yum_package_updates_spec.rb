@@ -9,7 +9,7 @@ describe 'yum_package_updates fact' do
 
   describe 'on non-Redhat distro' do
     before do
-      allow(Facter.fact(:osfamily)).to receive(:value).once.and_return('Debian')
+      allow(Facter.fact('os.family')).to receive(:value).and_return('Debian')
     end
 
     it { is_expected.to be_nil }
@@ -17,7 +17,7 @@ describe 'yum_package_updates fact' do
 
   describe 'on Redhat distro' do
     before do
-      allow(Facter.fact(:osfamily)).to receive(:value).once.and_return('Redhat')
+      allow(Facter.fact('os.family')).to receive(:value).and_return('Redhat')
       allow(File).to receive(:executable?) # Stub all other calls
       allow(File).to receive(:executable?).with('/usr/bin/yum').and_return(true)
       allow(Facter::Util::Resolution).to receive(:exec).with('/usr/bin/yum --assumeyes --quiet --cacheonly list updates').and_return(yum_list_updates_result)
