@@ -16,14 +16,7 @@ define yum::plugin (
   Optional[String]          $pkg_prefix = undef,
   Optional[String]          $pkg_name   = undef,
 ) {
-  if $pkg_prefix {
-    $_pkg_prefix = $pkg_prefix
-  } else {
-    $_pkg_prefix = $facts['os']['release']['major'] ? {
-      Variant[Integer[5,5], Enum['5']] => 'yum',
-      default                          => 'yum-plugin',
-    }
-  }
+  $_pkg_prefix = $pkg_prefix.lest || { 'yum-plugin' }
 
   $_pkg_name = $pkg_name ? {
     Variant[Enum[''], Undef] => "${_pkg_prefix}-${name}",
