@@ -3,11 +3,11 @@
 require 'spec_helper_acceptance'
 
 describe 'yum::copr' do
-  context 'when @caddy/caddy and copart/restic are enabled' do
+  context 'when @caddy/caddy and nucleo/wget are enabled' do
     # Using puppet_apply as a helper
     it 'must work idempotently with no errors' do
       pp = <<-PUPPET
-      yum::copr { ['@caddy/caddy', 'copart/restic']: }
+      yum::copr { ['@caddy/caddy', 'nucleo/wget']: }
       PUPPET
 
       # Run it twice and test for idempotency
@@ -16,16 +16,16 @@ describe 'yum::copr' do
     end
 
     describe command('dnf copr list') do
-      its(:stdout) { is_expected.to match(%r{^copr.fedorainfracloud.org/copart/restic$}) }
+      its(:stdout) { is_expected.to match(%r{^copr.fedorainfracloud.org/nucleo/wget$}) }
       its(:stdout) { is_expected.to match(%r{^copr.fedorainfracloud.org/group_caddy/caddy$}) }
     end
   end
 
-  context 'when copart/restic is disabled' do
+  context 'when nucleo/wget is disabled' do
     # Using puppet_apply as a helper
     it 'must work idempotently with no errors' do
       pp = <<-PUPPET
-      yum::copr { ['@caddy/caddy', 'copart/restic']:
+      yum::copr { ['@caddy/caddy', 'nucleo/wget']:
         ensure => 'disabled',
       }
       PUPPET
@@ -36,16 +36,16 @@ describe 'yum::copr' do
     end
 
     describe command('dnf copr list') do
-      its(:stdout) { is_expected.to match(%r{^copr.fedorainfracloud.org/copart/restic \(disabled\)$}) }
+      its(:stdout) { is_expected.to match(%r{^copr.fedorainfracloud.org/nucleo/wget \(disabled\)$}) }
       its(:stdout) { is_expected.to match(%r{^copr.fedorainfracloud.org/group_caddy/caddy \(disabled\)$}) }
     end
   end
 
-  context 'when copart/restic is removed' do
+  context 'when nucleo/wget is removed' do
     # Using puppet_apply as a helper
     it 'must work idempotently with no errors' do
       pp = <<-PUPPET
-      yum::copr { ['@caddy/caddy', 'copart/restic']:
+      yum::copr { ['@caddy/caddy', 'nucleo/wget']:
         ensure => 'removed',
       }
       PUPPET
@@ -56,7 +56,7 @@ describe 'yum::copr' do
     end
 
     describe command('dnf copr list') do
-      its(:stdout) { is_expected.not_to match(%r{^copr.fedorainfracloud.org/copart/restic$}) }
+      its(:stdout) { is_expected.not_to match(%r{^copr.fedorainfracloud.org/nucleo/wget$}) }
       its(:stdout) { is_expected.not_to match(%r{^copr.fedorainfracloud.org/group_caddy/caddy$}) }
     end
   end
