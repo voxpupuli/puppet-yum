@@ -82,12 +82,8 @@ describe 'yum' do
             resilient-storage-source
             rt
           ]
-          case facts[:os]['release']['major']
-          when '8'
-            it { is_expected.to have_yumrepo_resource_count(15) }
-          else
-            it { is_expected.to have_yumrepo_resource_count(0) } # rubocop:disable RSpec/RepeatedExample
-          end
+
+          it { is_expected.to have_yumrepo_resource_count(15) }
         when 'CentOS'
           case facts[:os]['release']['major']
           when '9'
@@ -315,7 +311,7 @@ describe 'yum' do
             updates-testing-source
           ]
         else
-          it { is_expected.to have_yumrepo_resource_count(0) } # rubocop:disable RSpec/RepeatedExample
+          it { is_expected.to have_yumrepo_resource_count(0) }
         end
 
         context 'and the CentOS base repo is negated' do
@@ -560,28 +556,25 @@ describe 'yum' do
               ]
             end
           when 'Rocky'
-            case facts[:os]['release']['major']
-            when '8'
-              it { is_expected.to have_yumrepo_resource_count(15) }
+            it { is_expected.to have_yumrepo_resource_count(15) }
 
-              it_behaves_like 'a catalog containing repos', %w[
-                appstream
-                appstream-source
-                baseos
-                baseos-source
-                devel
-                extras
-                ha
-                ha-source
-                nfv
-                plus
-                powertools
-                powertools-source
-                resilient-storage
-                resilient-storage-source
-                rt
-              ]
-            end
+            it_behaves_like 'a catalog containing repos', %w[
+              appstream
+              appstream-source
+              baseos
+              baseos-source
+              devel
+              extras
+              ha
+              ha-source
+              nfv
+              plus
+              powertools
+              powertools-source
+              resilient-storage
+              resilient-storage-source
+              rt
+            ]
           when 'Fedora'
             it { is_expected.to have_yumrepo_resource_count(11) }
 
