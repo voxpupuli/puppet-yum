@@ -23,14 +23,14 @@ define yum::group (
   case $ensure {
     'present', 'installed', default: {
       exec { "yum-groupinstall-${name}":
-        command => join(concat(["yum -y groupinstall '${name}'"], $install_options), ' '),
-        unless  => "yum grouplist hidden '${name}' | egrep -i '^Installed.+Groups:$'",
+        command => join(concat(["yum -y group install '${name}'"], $install_options), ' '),
+        unless  => "yum group list hidden '${name}' | egrep -i '^Installed.+Groups:$'",
         timeout => $timeout,
       }
       if $ensure == 'latest' {
         exec { "yum-groupinstall-${name}-latest":
-          command => join(concat(["yum -y groupinstall '${name}'"], $install_options), ' '),
-          onlyif  => "yum groupinfo '${name}' | egrep '\\s+\\+'",
+          command => join(concat(["yum -y group install '${name}'"], $install_options), ' '),
+          unless  => 'test $(yum --assumeno group install DVT-Full 2>/dev/null| grep -c "^Install.*Package\|^Upgrade.*Package") -eq 0',
           timeout => $timeout,
           require => Exec["yum-groupinstall-${name}"],
         }
