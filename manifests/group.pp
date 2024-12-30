@@ -30,7 +30,7 @@ define yum::group (
       if $ensure == 'latest' {
         exec { "yum-groupinstall-${name}-latest":
           command => join(concat(["yum -y group install '${name}'"], $install_options), ' '),
-          unless  => 'test $(yum --assumeno group install DVT-Full 2>/dev/null| grep -c "^Install.*Package\|^Upgrade.*Package") -eq 0',
+          unless  => "test $(yum --assumeno group install '${name}' 2>/dev/null| grep -c '^Install.*Package\|^Upgrade.*Package') -eq 0",
           timeout => $timeout,
           require => Exec["yum-groupinstall-${name}"],
         }
