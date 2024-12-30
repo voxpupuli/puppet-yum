@@ -24,7 +24,7 @@ define yum::group (
     'present', 'installed', default: {
       exec { "yum-groupinstall-${name}":
         command => join(concat(["yum -y group install '${name}'"], $install_options), ' '),
-        unless  => "yum group list hidden '${name}' | egrep -i '^Installed.+Groups:$'",
+        unless  => "test $(yum --assumeno group install '${name}' 2>/dev/null| grep -c '^Install.*Package') -eq 0",
         timeout => $timeout,
       }
       if $ensure == 'latest' {
