@@ -36,11 +36,10 @@ define yum::group (
       }
     }
     'latest': { # install the yum group and update if any packages are out of date.
-      exec { "yum-groupinstall-${name}-latest":
+      exec { "yum-groupinstall-${name}":
         command => join(concat(["yum -y group install '${name}'"], $install_options), ' '),
-        unless  => "test $(yum --assumeno group install '${name}' 2>/dev/null| grep -c '^Install.*Package\|^Upgrade.*Package') -eq 0",
+        unless  => "test $(yum --assumeno group install '${name}' 2>/dev/null| grep -c -e '^Install.*Package' -e '^Upgrade.*Package') -eq 0",
         timeout => $timeout,
-        require => Exec["yum-groupinstall-${name}"],
       }
     }
     'absent', 'purged': {
