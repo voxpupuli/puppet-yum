@@ -21,22 +21,27 @@ define yum::group (
   }
 
   case $ensure {
-    'present', 'installed', default: {
+    'present', default: { # just install the yum group and ensure the group is present.
       exec { "yum-groupinstall-${name}":
-        command => join(concat(["yum -y groupinstall '${name}'"], $install_options), ' '),
+        command => join(concat(["yum -y group install '${name}'"], $install_options), ' '),
         unless  => "yum grouplist hidden '${name}' | egrep -i '^Installed.+Groups:$'",
         timeout => $timeout,
       }
-      if $ensure == 'latest' {
-        exec { "yum-groupinstall-${name}-latest":
-          command => join(concat(["yum -y groupinstall '${name}'"], $install_options), ' '),
-          onlyif  => "yum groupinfo '${name}' | egrep '\\s+\\+'",
-          timeout => $timeout,
-          require => Exec["yum-groupinstall-${name}"],
-        }
+    }
+    'installed': { # install the yum group and re-install if any packages are missing.
+      exec { "yum-groupinstall-${name}":
+        command => join(concat(["yum -y group install '${name}'"], $install_options), ' '),
+        unless  => "test $(yum --assumeno group install '${name}' 2>/dev/null| grep -c '^Install.*Package') -eq 0",
+        timeout => $timeout,
       }
     }
-
+    'latest': { # install the yum group and update if any packages are out of date.
+      exec { "yum-groupinstall-${name}":
+        command => join(concat(["yum -y group install '${name}'"], $install_options), ' '),
+        unless  => "test $(yum --assumeno group install '${name}' 2>/dev/null| grep -c -e '^Install.*Package' -e '^Upgrade.*Package') -eq 0",
+        timeout => $timeout,
+      }
+    }
     'absent', 'purged': {
       exec { "yum-groupremove-${name}":
         command => "yum -y groupremove '${name}'",
