@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not affect the functionality of the module.
 
+## [v7.3.0](https://github.com/voxpupuli/puppet-yum/tree/v7.3.0) (2025-04-15)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-yum/compare/v7.2.0...v7.3.0)
+
+**Implemented enhancements:**
+
+- Add support for dnf5 [\#351](https://github.com/voxpupuli/puppet-yum/pull/351) ([hboetes](https://github.com/hboetes))
+- metadata.json: Add OpenVox [\#350](https://github.com/voxpupuli/puppet-yum/pull/350) ([jstraw](https://github.com/jstraw))
+
 ## [v7.2.0](https://github.com/voxpupuli/puppet-yum/tree/v7.2.0) (2024-12-12)
 
 [Full Changelog](https://github.com/voxpupuli/puppet-yum/compare/v7.1.0...v7.2.0)
