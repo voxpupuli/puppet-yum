@@ -7,7 +7,7 @@ describe 'yum::group' do
     let(:title) { 'Core' }
 
     it { is_expected.to compile.with_all_deps }
-    it { is_expected.to contain_exec("yum-groupinstall-#{title}").with_command("yum -y groupinstall 'Core'") }
+    it { is_expected.to contain_exec("yum-groupinstall-#{title}").with_command("yum -y group install 'Core'") }
   end
 
   context 'when ensure is set to `absent`' do
@@ -15,7 +15,7 @@ describe 'yum::group' do
     let(:params) { { ensure: 'absent' } }
 
     it { is_expected.to compile.with_all_deps }
-    it { is_expected.to contain_exec("yum-groupremove-#{title}").with_command("yum -y groupremove 'Core'") }
+    it { is_expected.to contain_exec("yum-groupremove-#{title}").with_command("yum -y group remove 'Core'") }
   end
 
   context 'with a timeout specified' do
@@ -31,7 +31,7 @@ describe 'yum::group' do
     let(:params) { { install_options: ['--enablerepo=epel'] } }
 
     it { is_expected.to compile.with_all_deps }
-    it { is_expected.to contain_exec("yum-groupinstall-#{title}").with_command("yum -y groupinstall 'Core' --enablerepo=epel") }
+    it { is_expected.to contain_exec("yum-groupinstall-#{title}").with_command("yum -y group install 'Core' --enablerepo=epel") }
   end
 
   context 'when ensure is set to `latest`' do
@@ -39,7 +39,7 @@ describe 'yum::group' do
     let(:params) { { ensure: 'latest' } }
 
     it { is_expected.to compile.with_all_deps }
-    it { is_expected.to contain_exec("yum-groupinstall-#{title}").with_command("yum -y groupinstall 'Core'") }
-    it { is_expected.to contain_exec("yum-groupinstall-#{title}-latest").with_command("yum -y groupinstall 'Core'") }
+    it { is_expected.to contain_exec("yum-groupinstall-#{title}").with_command("yum -y group install 'Core'") }
+    it { is_expected.to contain_exec("yum-groupinstall-#{title}-latest").with_command("yum -y group install 'Core'") }
   end
 end
