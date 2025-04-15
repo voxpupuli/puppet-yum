@@ -17,18 +17,8 @@ describe 'managing a yum::group' do
       apply_manifest(pp, catch_changes:  true)
     end
 
-    # On stupid 7 test package has to be leaf package
-    # to be removed with a "group remove". Can't find
-    # a common package that works.
-    case fact('os.release.major')
-    when '7'
-      describe package('libtool') do
-        it { is_expected.to be_installed }
-      end
-    else
-      describe package('make') do
-        it { is_expected.to be_installed }
-      end
+    describe package('make') do
+      it { is_expected.to be_installed }
     end
   end
 
@@ -46,15 +36,8 @@ describe 'managing a yum::group' do
       apply_manifest(pp, catch_changes:  true)
     end
 
-    case fact('os.release.major')
-    when '7'
-      describe package('libtool') do
-        it { is_expected.not_to be_installed }
-      end
-    else
-      describe package('make') do
-        it { is_expected.not_to be_installed }
-      end
+    describe package('make') do
+      it { is_expected.not_to be_installed }
     end
   end
 end
