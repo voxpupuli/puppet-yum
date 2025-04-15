@@ -18,7 +18,7 @@ describe 'managing a yum::group' do
     end
 
     # On stupid 7 test package has to be leaf package
-    # to be removed with a "groupremove". Can't find
+    # to be removed with a "group remove". Can't find
     # a common package that works.
     case fact('os.release.major')
     when '7'
