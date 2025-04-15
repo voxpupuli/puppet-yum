@@ -151,56 +151,9 @@ describe 'yum' do
               updates-source
               centos-media
             ]
-          when '7'
-            it_behaves_like 'a catalog containing repos', %w[
-              base
-              updates
-              cr
-              base-source
-              updates-source
-              centos-media
-              extras
-              centosplus
-              fasttrack
-              extras-source
-              base-debuginfo
-            ]
-            it_behaves_like 'a catalog not containing repos', %w[
-              contrib
-              AppStream
-              BaseOS
-              Devel
-              HA
-              PowerTools
-              BaseOS-source
-              Appstream-source
-              c8-media-BaseOS
-              c8-media-AppStream
-            ]
           else
             it { is_expected.to have_yumrepo_resource_count(4) }
           end
-        when 'Amazon'
-          it { is_expected.to have_yumrepo_resource_count(16) } # rubocop:disable RSpec/RepeatedExample
-
-          it_behaves_like 'a catalog containing repos', %w[
-            amzn-main
-            amzn-main-debuginfo
-            amzn-main-source
-            amzn-nosrc
-            amzn-preview
-            amzn-preview-debuginfo
-            amzn-preview-source
-            amzn-updates
-            amzn-updates-debuginfo
-            amzn-updates-source
-            epel
-            epel-debuginfo
-            epel-source
-            epel-testing
-            epel-testing-debuginfo
-            epel-testing-source
-          ]
         when 'RedHat'
           it { is_expected.to have_yumrepo_resource_count(18) }
 
@@ -224,47 +177,6 @@ describe 'yum' do
             rhui-REGION-rhel-server-debug-supplementary
             rhui-REGION-rhel-server-source-supplementary
           ]
-        when 'VirtuozzoLinux'
-          case facts[:os]['release']['major']
-          when '6'
-            it { is_expected.to have_yumrepo_resource_count(12) }
-
-            it_behaves_like 'a catalog containing repos', %w[
-              virtuozzolinux-base
-              virtuozzolinux-updates
-              virtuozzolinux-base-debuginfo
-              virtuozzolinux-updates-debuginfo
-              virtuozzolinux-factory
-              virtuozzolinux-factory-debuginfo
-              virtuozzo-os
-              virtuozzo-updates
-              virtuozzo-os-debuginfo
-              virtuozzo-updates-debuginfo
-              virtuozzo-readykernel
-              obsoleted_tmpls
-            ]
-          when '7'
-            it { is_expected.to have_yumrepo_resource_count(16) } # rubocop:disable RSpec/RepeatedExample
-
-            it_behaves_like 'a catalog containing repos', %w[
-              virtuozzolinux-base
-              virtuozzolinux-updates
-              virtuozzolinux-base-debuginfo
-              virtuozzolinux-updates-debuginfo
-              virtuozzolinux-factory
-              virtuozzolinux-factory-debuginfo
-              virtuozzo-os
-              virtuozzo-updates
-              virtuozzo-os-debuginfo
-              virtuozzo-updates-debuginfo
-              virtuozzo-readykernel
-              obsoleted_tmpls
-              factory
-              factory-debuginfo
-              virtuozzolinux-vz-factory
-              virtuozzolinux-vz-factory-debuginfo
-            ]
-          end
         when 'AlmaLinux'
           case facts[:os]['release']['major']
           when '8'
@@ -357,73 +269,7 @@ describe 'yum' do
                 extras-common
                 extras-common-source
               ]
-            when '8'
-              it_behaves_like 'a catalog containing repos', %w[
-                AppStream
-                cr
-                Devel
-                fasttrack
-                HA
-                PowerTools
-                BaseOS-source
-                Appstream-source
-                c8-media-BaseOS
-                c8-media-AppStream
-                extras
-                centosplus
-                extras-source
-                base-debuginfo
-              ]
-            when '7'
-              it_behaves_like 'a catalog containing repos', %w[
-                cr
-                updates
-                extras
-                base-source
-                updates-source
-                extras-source
-                base-debuginfo
-                centosplus
-                centos-media
-                extras
-                centosplus
-                extras-source
-                base-debuginfo
-              ]
-            when '6'
-              it_behaves_like 'a catalog containing repos', %w[
-                contrib
-                updates
-                extras
-                base-source
-                updates-source
-                extras-source
-                base-debuginfo
-                centosplus
-                centos-media
-              ]
             end
-          when 'Amazon'
-            it { is_expected.to have_yumrepo_resource_count(16) } # rubocop:disable RSpec/RepeatedExample
-
-            it_behaves_like 'a catalog containing repos', %w[
-              amzn-main
-              amzn-main-debuginfo
-              amzn-main-source
-              amzn-nosrc
-              amzn-preview
-              amzn-preview-debuginfo
-              amzn-preview-source
-              amzn-updates
-              amzn-updates-debuginfo
-              amzn-updates-source
-              epel
-              epel-debuginfo
-              epel-source
-              epel-testing
-              epel-testing-debuginfo
-              epel-testing-source
-            ]
           when 'RedHat'
             it { is_expected.to have_yumrepo_resource_count(18) }
 
@@ -447,47 +293,6 @@ describe 'yum' do
               rhui-REGION-rhel-server-debug-supplementary
               rhui-REGION-rhel-server-source-supplementary
             ]
-          when 'VirtuozzoLinux'
-            case facts[:os]['release']['major']
-            when '6'
-              it { is_expected.to have_yumrepo_resource_count(12) }
-
-              it_behaves_like 'a catalog containing repos', %w[
-                virtuozzolinux-base
-                virtuozzolinux-updates
-                virtuozzolinux-base-debuginfo
-                virtuozzolinux-updates-debuginfo
-                virtuozzolinux-factory
-                virtuozzolinux-factory-debuginfo
-                virtuozzo-os
-                virtuozzo-updates
-                virtuozzo-os-debuginfo
-                virtuozzo-updates-debuginfo
-                virtuozzo-readykernel
-                obsoleted_tmpls
-              ]
-            when '7'
-              it { is_expected.to have_yumrepo_resource_count(16) } # rubocop:disable RSpec/RepeatedExample
-
-              it_behaves_like 'a catalog containing repos', %w[
-                virtuozzolinux-base
-                virtuozzolinux-updates
-                virtuozzolinux-base-debuginfo
-                virtuozzolinux-updates-debuginfo
-                virtuozzolinux-factory
-                virtuozzolinux-factory-debuginfo
-                virtuozzo-os
-                virtuozzo-updates
-                virtuozzo-os-debuginfo
-                virtuozzo-updates-debuginfo
-                virtuozzo-readykernel
-                obsoleted_tmpls
-                factory
-                factory-debuginfo
-                virtuozzolinux-vz-factory
-                virtuozzolinux-vz-factory-debuginfo
-              ]
-            end
           when 'AlmaLinux'
             case facts[:os]['release']['major']
             when '8'
@@ -729,10 +534,6 @@ describe 'yum' do
           it { is_expected.to contain_yum__gpgkey('/etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-9') }
         when '8'
           it { is_expected.to contain_yum__gpgkey('/etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-8') }
-        when '7'
-          it { is_expected.to contain_yum__gpgkey('/etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-7') }
-        when '6'
-          it { is_expected.to contain_yum__gpgkey('/etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-6') }
         end
       end
 

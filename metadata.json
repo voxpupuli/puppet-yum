@@ -33,12 +33,6 @@
       ]
     },
     {
-      "operatingsystem": "Amazon",
-      "operatingsystemrelease": [
-        "2017"
-      ]
-    },
-    {
       "operatingsystem": "CentOS",
       "operatingsystemrelease": [
         "9"
@@ -47,9 +41,6 @@
     {
       "operatingsystem": "Fedora",
       "operatingsystemrelease": [
-        "36",
-        "37",
-        "38",
         "40"
       ]
     },
