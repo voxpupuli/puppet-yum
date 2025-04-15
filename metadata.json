@@ -41,7 +41,6 @@
     {
       "operatingsystem": "CentOS",
       "operatingsystemrelease": [
-        "8",
         "9"
       ]
     },
@@ -73,12 +72,6 @@
       "operatingsystemrelease": [
         "8",
         "9"
-      ]
-    },
-    {
-      "operatingsystem": "Scientific",
-      "operatingsystemrelease": [
-        "8"
       ]
     }
   ],
