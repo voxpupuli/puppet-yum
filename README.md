@@ -70,6 +70,39 @@ yum::config { 'debuglevel':
 }
 ```
 
+NOTE: The parameter `ensure` can be set as sensitive, but is not censored when
+another config nearby is changed. For example:
+
+```puppet
+yum::config { 'proxy_username':
+  ensure => 'user',
+}
+yum::config { 'proxy_password':
+  ensure => Sensitive('mysecretpassword'),
+}
+```
+
+```bash
+--- /etc/yum.conf       2022-09-28 10:53:13.958280359 -0400
++++ /etc/yum.conf.augnew        2022-09-28 11:44:01.581689900 -0400
+@@ -10,5 +10,5 @@
+ metadata_expire=0
+ mirrorlist_expire=0
+ proxy=http://host.example.com:3128
+-proxy_username=user
++proxy_username=anotheruser
+ proxy_password=mysecretpassword
+
+Notice: /Stage[main]/Yum/Yum::Config[proxy_username]/Augeas[yum.conf_proxy_username]/returns: executed successfully (corrective)
+```
+
+The parameter `show_diff => false` should be use in this case:
+```puppet
+class { 'yum':
+  show_diff => false,
+}
+```
+
 ### Manage COPR repositories
 
 This module also supports managing
