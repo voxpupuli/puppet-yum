@@ -132,6 +132,7 @@ The following parameters are available in the `yum` class:
 * [`gpgkeys`](#-yum--gpgkeys)
 * [`utils_package_name`](#-yum--utils_package_name)
 * [`groups`](#-yum--groups)
+* [`show_diff`](#-yum--show_diff)
 
 ##### <a name="-yum--clean_old_kernels"></a>`clean_old_kernels`
 
@@ -244,6 +245,15 @@ Data type: `Stdlib::CreateResources`
 A hash of yum::group instances to manage.
 
 Default value: `{}`
+
+##### <a name="-yum--show_diff"></a>`show_diff`
+
+Data type: `Boolean`
+
+Wether to display diff when a config is changed.  It is useful when there is confidental
+information that you do not want displayed in the puppet logs.
+
+Default value: `true`
 
 ### <a name="yum--clean"></a>`yum::clean`
 
