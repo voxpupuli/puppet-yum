@@ -132,6 +132,8 @@ The following parameters are available in the `yum` class:
 * [`gpgkeys`](#-yum--gpgkeys)
 * [`utils_package_name`](#-yum--utils_package_name)
 * [`groups`](#-yum--groups)
+* [`post_transaction_actions`](#-yum--post_transaction_actions)
+* [`versionlocks`](#-yum--versionlocks)
 
 ##### <a name="-yum--clean_old_kernels"></a>`clean_old_kernels`
 
@@ -242,6 +244,22 @@ Default value: `'yum-utils'`
 Data type: `Stdlib::CreateResources`
 
 A hash of yum::group instances to manage.
+
+Default value: `{}`
+
+##### <a name="-yum--post_transaction_actions"></a>`post_transaction_actions`
+
+Data type: `Stdlib::CreateResources`
+
+A hash of yum::post_transaction_action instances to manage
+
+Default value: `{}`
+
+##### <a name="-yum--versionlocks"></a>`versionlocks`
+
+Data type: `Stdlib::CreateResources`
+
+A hash of yum::versionlock instances to manage
 
 Default value: `{}`
 
