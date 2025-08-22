@@ -58,6 +58,12 @@
 # @param groups
 #   A hash of yum::group instances to manage.
 #
+# @param post_transaction_actions
+#   A hash of yum::post_transaction_action instances to manage
+#
+# @param versionlocks
+#   A hash of yum::versionlock instances to manage
+#
 # @example Enable management of the default repos for a supported OS:
 #   ---
 #   yum::manage_os_default_repos: true
@@ -116,7 +122,9 @@ class yum (
   Array[String] $repo_exclusions = [],
   Hash[String, Hash[String, String]] $gpgkeys = {},
   String $utils_package_name = 'yum-utils',
-  Stdlib::CreateResources $groups = {}
+  Stdlib::CreateResources $groups = {},
+  Stdlib::CreateResources $post_transaction_actions = {},
+  Stdlib::CreateResources $versionlocks = {},
 ) {
   $module_metadata            = load_module_metadata($module_name)
   $supported_operatingsystems = $module_metadata['operatingsystem_support']
@@ -241,6 +249,18 @@ class yum (
   $groups.each |$_group, $_group_attrs| {
     yum::group { $_group:
       * => $_group_attrs,
+    }
+  }
+
+  $post_transaction_actions.each |$_action, $_action_attrs| {
+    yum::post_transaction_action { $_action:
+      * => $_action_attrs,
+    }
+  }
+
+  $versionlocks.each |$_lock, $_lock_attrs| {
+    yum::versionlock { $_lock:
+      * => $_lock_attrs,
     }
   }
 }
