@@ -54,11 +54,11 @@
 #
 # @see http://man7.org/linux/man-pages/man1/yum-versionlock.1.html
 define yum::versionlock (
-  Enum['present', 'absent', 'exclude']      $ensure  = 'present',
-  Optional[Yum::RpmVersion]                 $version = undef,
-  Yum::RpmRelease                           $release = '*',
-  Integer[0]                                $epoch   = 0,
-  Variant[Yum::RpmArch, Enum['*']]          $arch    = '*',
+  Enum['present', 'absent', 'exclude']       $ensure  = 'present',
+  Optional[Yum::RpmVersion]                  $version = undef,
+  Yum::RpmRelease                            $release = '*',
+  Variant[Integer[0], Pattern[/^[1-9]\d*$/]] $epoch   = 0,
+  Variant[Yum::RpmArch, Enum['*']]           $arch    = '*',
 ) {
   require yum::plugin::versionlock
 
