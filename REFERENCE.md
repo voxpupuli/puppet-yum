@@ -841,7 +841,7 @@ Default value: `'*'`
 
 ##### <a name="-yum--versionlock--epoch"></a>`epoch`
 
-Data type: `Integer[0]`
+Data type: `Variant[Integer[0], Pattern[/^[1-9]\d*$/]]`
 
 Epoch of the package if CentOS 8 mechanism is used.
 
@@ -1025,7 +1025,7 @@ Examples 3.4 3.4.el6, 3.4.el6_2
 * **See also**
   * http://ftp.rpm.org/max-rpm/ch-rpm-file-format.html
 
-Alias of `Pattern[/\A([^-]+)\z/]`
+Alias of `Variant[Pattern[/\A([^-]+)\z/], Integer[0,], Float[0,]]`
 
 ### <a name="Yum--RpmVersion"></a>`Yum::RpmVersion`
 
@@ -1036,7 +1036,7 @@ Examples 3.4, 2.5.alpha6
 * **See also**
   * http://ftp.rpm.org/max-rpm/ch-rpm-file-format.html
 
-Alias of `Pattern[/\A([^-]+)\z/]`
+Alias of `Variant[Pattern[/\A([^-]+)\z/], Integer[0,], Float[0,]]`
 
 ### <a name="Yum--VersionlockString"></a>`Yum::VersionlockString`
 

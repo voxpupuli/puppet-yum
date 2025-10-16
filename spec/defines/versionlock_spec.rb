@@ -117,11 +117,30 @@ describe 'yum::versionlock' do
       end
     end
 
-    context 'with version, release, epoch and arch set' do
+    context 'with version, release, epoch and arch set as strings' do
       let(:params) do
         {
           version: '4.3',
           release: '3.2',
+          arch: 'arm',
+          epoch: '42'
+        }
+      end
+
+      context 'it works' do
+        it { is_expected.to compile.with_all_deps }
+
+        it 'contains a well-formed Concat::Fragment' do
+          is_expected.to contain_concat__fragment("yum-versionlock-#{title}").with_content("42:bash-4.3-3.2.arm\n")
+        end
+      end
+    end
+
+    context 'with version, release, epoch and arch set as numbers' do
+      let(:params) do
+        {
+          version: 4.3,
+          release: 3.2,
           arch: 'arm',
           epoch: 42
         }
