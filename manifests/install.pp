@@ -27,7 +27,7 @@ define yum::install (
     environment => 'LC_ALL=C',
   }
 
-  if $require_verify { 
+  if $require_verify {
     case $ensure {
       'present', 'installed', default: {
         exec { "yum-reinstall-${name}":
@@ -37,14 +37,14 @@ define yum::install (
           timeout => $timeout,
           before  => Exec["yum-install-${name}"],
         }
-  
+
         exec { "yum-install-${name}":
           command => "yum -y install '${source}'",
           unless  => "rpm -q '${name}'",
           timeout => $timeout,
         }
       }
-  
+
       'absent', 'purged': {
         package { $name:
           ensure => $ensure,
