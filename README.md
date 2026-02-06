@@ -18,9 +18,9 @@ This module provides helpful definitions for dealing with *yum*.
 Module has been tested on:
 
 * Puppet 4.10.9 and newer
-* CentOS 7,8
+* CentOS 8,9
 * Amazon Linux 2017
-* RHEL 7
+* RHEL 8,9
 * Fedora 35,36
 
 For the official list of all tested distributions, please take a look at the metadata.json.
@@ -345,53 +345,32 @@ yum::plugin { 'versionlock':
   ensure => present,
 }
 ```
+The module must be included to purge any unmanaged versionlock files on the system.
 
 ### Lock a package with the *versionlock* plugin
-The `versionlock` type changed between CentOS 7 and CentOS 8.
 
-#### CentOS 7 and older
-Locks explicitly specified packages from updates. Package name must be precisely
-specified in format *`EPOCH:NAME-VERSION-RELEASE.ARCH`*. Wild card in package
-name is allowed provided it does not span a field seperator.
+Specify the version and some of the release, epoch or arch values as parameters.
 
 ```puppet
-yum::versionlock { '0:bash-4.1.2-9.el6_2.*':
-  ensure => present,
+yum::versionlock{'bash':
+  ensure  => present,
+  version => '4.1.2',
+  release => '9.el8.2.*',
+  epoch   => 0,
+  arch    => 'x86_64',
 }
 ```
 
-Use the following command to retrieve a properly-formated string:
-
-```sh
-PACKAGE_NAME='bash'
-rpm -q "$PACKAGE_NAME" --qf '%|EPOCH?{%{EPOCH}}:{0}|:%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}\n'
-```
-
-To run a `yum clean all` after the versionlock file is updated.
+To run a `dnf clean all` after the versionlock file is updated.
 
 ```puppet
 class{'yum::plugin::versionlock':
   clean => true,
 }
-yum::versionlock { '0:bash-4.1.2-9.el6_2.*':
-  ensure => present,
-}
-```
-
-Note the CentOS 8 mechansim can be used if the parameter
-`version` is also set to anything other than the default `undef`. This allows
-common code to be used on CentOS  7 and 8 if the new style is used.
-
-#### CentOS 8 and newer
-Specify some of the version, release, epoch and arch values as parameters.
-
-```puppet
-yum::versionlock{'bash':
+yum::versionlock { 'bash':
   ensure => present,
   version => '4.1.2',
-  release => '9.el8.2.*',
-  epoch   => 0,
-  arch    => 'x86_64',
+  release => '9.el9_2',
 }
 ```
 

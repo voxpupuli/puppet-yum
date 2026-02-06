@@ -11,19 +11,13 @@
 #   }
 #
 class yum::plugin::versionlock (
-  String                    $path,
-  Enum['present', 'absent'] $ensure   = 'present',
-  Boolean                   $clean    = false,
+  Enum['present', 'absent'] $ensure = 'present',
+  String $path = '/etc/dnf/plugins/versionlock.list',
+  Boolean $clean = false,
 ) {
-  $pkg_prefix = $facts['package_provider'] ? {
-    'dnf'   => 'python3-dnf-plugin',
-    'yum'   => 'yum-plugin',
-    default => '',
-  }
-
   yum::plugin { 'versionlock':
     ensure     => $ensure,
-    pkg_prefix => $pkg_prefix,
+    pkg_prefix => 'python3-dnf-plugin',
   }
 
   if $ensure == 'present' {

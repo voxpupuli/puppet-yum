@@ -343,6 +343,8 @@ Data type: `String`
 
 filepath for the versionlock.list, default based on your system.
 
+Default value: `'/etc/dnf/plugins/versionlock.list'`
+
 ### <a name="yum--settings"></a>`yum::settings`
 
 Simple settings to use
@@ -747,50 +749,18 @@ The command to run
 
 Locks package from updates.
 
-* **Note** The resource title must use the format
-By default on CentOS 7 the following format is used.
-"%{EPOCH}:%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}".  This can be retrieved via
-the command `rpm -q --qf '%{EPOCH}:%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}'.
-If "%{EPOCH}" returns as '(none)', it should be set to '0'.  Wildcards may
-be used within token slots, but must not cover seperators, e.g.,
-'0:b*sh-4.1.2-9.*' covers Bash version 4.1.2, revision 9 on all
-architectures.
-By default on CentOS 8 and newer the resource title  to just set the
-package name.
-If a version is set on CentOS 7 then it behaves like CentOS 8
-
 * **See also**
-  * http://man7.org/linux/man-pages/man1/yum-versionlock.1.html
+  * https://dnf-plugins-core.readthedocs.io/en/latest/versionlock.html
 
 #### Examples
 
-##### Sample usage on CentOS 7
-
-```puppet
-yum::versionlock { '0:bash-4.1.2-9.el7.*':
-  ensure => present,
-}
-```
-
-##### Sample usage on CentOS 8
+##### Sample usage
 
 ```puppet
 yum::versionlock { 'bash':
   ensure => present,
   version => '4.1.2',
   release => '9.el8',
-  epoch   => 0,
-  arch    => 'noarch',
-}
-```
-
-##### Sample usage on CentOS 7 with new style version, release, epoch, name parameters.
-
-```puppet
-yum::versionlock { 'bash':
-  ensure => present,
-  version => '3.1.2',
-  release => '9.el7',
   epoch   => 0,
   arch    => 'noarch',
 }
@@ -805,6 +775,7 @@ The following parameters are available in the `yum::versionlock` defined type:
 * [`release`](#-yum--versionlock--release)
 * [`arch`](#-yum--versionlock--arch)
 * [`epoch`](#-yum--versionlock--epoch)
+* [`package`](#-yum--versionlock--package)
 
 ##### <a name="-yum--versionlock--ensure"></a>`ensure`
 
@@ -818,8 +789,7 @@ Default value: `'present'`
 
 Data type: `Optional[Yum::RpmVersion]`
 
-Version of the package if CentOS 8 mechanism is used. This must be set for dnf based systems (e.g CentOS 8).
-If version is set then the name var is assumed to a package name and not the full versionlock string.
+Version of the package
 
 Default value: `undef`
 
@@ -827,7 +797,7 @@ Default value: `undef`
 
 Data type: `Yum::RpmRelease`
 
-Release of the package if CentOS 8 mechanism is used.
+Release of the package
 
 Default value: `'*'`
 
@@ -835,7 +805,7 @@ Default value: `'*'`
 
 Data type: `Variant[Yum::RpmArch, Enum['*']]`
 
-Arch of the package if CentOS 8 mechanism is used.
+Arch of the package
 
 Default value: `'*'`
 
@@ -843,9 +813,17 @@ Default value: `'*'`
 
 Data type: `Variant[Integer[0], Pattern[/^[1-9]\d*$/]]`
 
-Epoch of the package if CentOS 8 mechanism is used.
+Epoch of the package
 
 Default value: `0`
+
+##### <a name="-yum--versionlock--package"></a>`package`
+
+Data type: `Yum::RpmNameGlob`
+
+The package name or package glob
+
+Default value: `$title`
 
 ## Resource types
 
