@@ -343,6 +343,8 @@ Data type: `String`
 
 filepath for the versionlock.list, default based on your system.
 
+Default value: `'/etc/yum/pluginconf.d/versionlock.list'`
+
 ### <a name="yum--settings"></a>`yum::settings`
 
 Simple settings to use
@@ -360,6 +362,8 @@ Data type: `Enum['/etc/yum.conf','/etc/dnf/dnf.conf']`
 Augeas location of the dnf or yum configuration file.
 The default is set into hiera according to the package_provider
 being yum or dnf.
+
+Default value: `'/etc/yum.conf'`
 
 ## Defined types
 
