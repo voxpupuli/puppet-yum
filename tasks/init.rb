@@ -25,7 +25,7 @@ def process_list_updates(output)
     {
       package: package,
       available_version: available_version,
-      repository: repository
+      repository: repository,
     }
   end
 

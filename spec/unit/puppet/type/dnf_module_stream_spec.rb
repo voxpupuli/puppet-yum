@@ -9,10 +9,10 @@ RSpec.describe 'the dnf_module_stream type' do
   end
 
   it 'has parameter module' do
-    expect(dnf_module_stream.parameters).to be_include(:module)
+    expect(dnf_module_stream.parameters).to include(:module)
   end
 
   it 'has property stream' do
-    expect(dnf_module_stream.properties.map(&:name)).to be_include(:stream)
+    expect(dnf_module_stream.properties.map(&:name)).to include(:stream)
   end
 end

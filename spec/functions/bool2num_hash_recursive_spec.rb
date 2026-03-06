@@ -8,12 +8,12 @@ describe 'yum::bool2num_hash_recursive' do
     {
       'a' => {
         'aa' => true, 'ab' => false, 'ac' => 'c',
-        'aaa' => true, 'aab' => false, 'aac' => 'c'
+        'aaa' => true, 'aab' => false, 'aac' => 'c',
       },
       'b' => { 'ba' => true, 'bb' => false, 'bc' => 'c' },
       'c' => true,
       'd' => false,
-      'e' => 5
+      'e' => 5,
     }
   end
 
@@ -22,17 +22,17 @@ describe 'yum::bool2num_hash_recursive' do
   end
 
   it 'appropriately modifies a nested hash' do
-    is_expected.to run.with_params(nested_hash).
-      and_return(
-        'a' => {
-          'aa' => 1, 'ab' => 0, 'ac' => 'c',
-          'aaa' => 1, 'aab' => 0, 'aac' => 'c'
-        },
-        'b' => { 'ba' => 1, 'bb' => 0, 'bc' => 'c' },
-        'c' => 1,
-        'd' => 0,
-        'e' => 5
-      )
+    is_expected.to run.with_params(nested_hash)
+                      .and_return(
+                        'a' => {
+                          'aa' => 1, 'ab' => 0, 'ac' => 'c',
+                          'aaa' => 1, 'aab' => 0, 'aac' => 'c',
+                        },
+                        'b' => { 'ba' => 1, 'bb' => 0, 'bc' => 'c' },
+                        'c' => 1,
+                        'd' => 0,
+                        'e' => 5,
+                      )
   end
 
   it 'fails on an array' do

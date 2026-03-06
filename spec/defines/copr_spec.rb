@@ -26,7 +26,7 @@ describe 'yum::copr' do
         is_expected.to contain_exec("yum -y copr enable #{title}").with(
           'path'    => '/bin:/usr/bin:/sbin/:/usr/sbin',
           'onlyif'  => "test ! -e /etc/yum.repos.d/_copr_#{copr_repo_name_part}.repo",
-          'require' => "Package[#{prereq_plugin}]"
+          'require' => "Package[#{prereq_plugin}]",
         )
       }
     end
@@ -40,7 +40,7 @@ describe 'yum::copr' do
         is_expected.to contain_exec("yum -y copr disable #{title}").with(
           'path'    => '/bin:/usr/bin:/sbin/:/usr/sbin',
           'onlyif'  => "test -e /etc/yum.repos.d/_copr_#{copr_repo_name_part}.repo",
-          'require' => "Package[#{prereq_plugin}]"
+          'require' => "Package[#{prereq_plugin}]",
         )
       }
     end
@@ -54,7 +54,7 @@ describe 'yum::copr' do
         is_expected.to contain_exec("yum -y copr disable #{title}").with(
           'path'    => '/bin:/usr/bin:/sbin/:/usr/sbin',
           'onlyif'  => "test -e /etc/yum.repos.d/_copr_#{copr_repo_name_part}.repo",
-          'require' => "Package[#{prereq_plugin}]"
+          'require' => "Package[#{prereq_plugin}]",
         )
       }
     end
@@ -82,7 +82,7 @@ describe 'yum::copr' do
         is_expected.to contain_exec("dnf -y copr enable #{title}").with(
           'path'    => '/bin:/usr/bin:/sbin/:/usr/sbin',
           'unless'  => "dnf copr list | egrep -q '#{title}$'",
-          'require' => "Package[#{prereq_plugin}]"
+          'require' => "Package[#{prereq_plugin}]",
         )
       }
     end
@@ -96,7 +96,7 @@ describe 'yum::copr' do
         is_expected.to contain_exec("dnf -y copr disable #{title}").with(
           'path'    => '/bin:/usr/bin:/sbin/:/usr/sbin',
           'unless'  => "dnf copr list | egrep -q '#{title} \\(disabled\\)$'",
-          'require' => "Package[#{prereq_plugin}]"
+          'require' => "Package[#{prereq_plugin}]",
         )
       }
     end
@@ -110,7 +110,7 @@ describe 'yum::copr' do
         is_expected.to contain_exec("dnf -y copr remove #{title}").with(
           'path'    => '/bin:/usr/bin:/sbin/:/usr/sbin',
           'onlyif'  => "dnf copr list | egrep -q '#{title}'",
-          'require' => "Package[#{prereq_plugin}]"
+          'require' => "Package[#{prereq_plugin}]",
         )
       }
     end
