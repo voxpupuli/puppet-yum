@@ -25,13 +25,13 @@ describe 'yum::config' do
             is_expected.to contain_augeas("yum.conf_#{title}").with(
               incl: '/etc/yum.conf',
               context: '/files/etc/yum.conf/main/',
-              changes: "set assumeyes '1'"
+              changes: "set assumeyes '1'",
             )
           else
             is_expected.to contain_augeas("dnf.conf_#{title}").with(
               incl: '/etc/dnf/dnf.conf',
               context: '/files/etc/dnf/dnf.conf/main/',
-              changes: "set assumeyes '1'"
+              changes: "set assumeyes '1'",
             )
           end
         end
@@ -47,11 +47,11 @@ describe 'yum::config' do
           case pkgmgr
           when 'yum'
             is_expected.to contain_augeas("yum.conf_#{title}").with(
-              changes: "set assumeyes '0'"
+              changes: "set assumeyes '0'",
             )
           else
             is_expected.to contain_augeas("dnf.conf_#{title}").with(
-              changes: "set assumeyes '0'"
+              changes: "set assumeyes '0'",
             )
           end
         end
@@ -67,11 +67,11 @@ describe 'yum::config' do
           case pkgmgr
           when 'yum'
             is_expected.to contain_augeas("yum.conf_#{title}").with(
-              changes: "set assumeyes '1, 2'"
+              changes: "set assumeyes '1, 2'",
             )
           else
             is_expected.to contain_augeas("dnf.conf_#{title}").with(
-              changes: "set assumeyes '1, 2'"
+              changes: "set assumeyes '1, 2'",
             )
           end
         end
@@ -88,12 +88,12 @@ describe 'yum::config' do
           when 'yum'
             is_expected.to contain_augeas("yum.conf_#{title}").with(
               changes: "set assumeyes 'secret'",
-              show_diff: false
+              show_diff: false,
             )
           else
             is_expected.to contain_augeas("dnf.conf_#{title}").with(
               changes: "set assumeyes 'secret'",
-              show_diff: false
+              show_diff: false,
             )
           end
         end

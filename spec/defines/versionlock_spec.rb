@@ -6,7 +6,7 @@ describe 'yum::versionlock' do
   context 'with package_provider set to yum' do
     let(:facts) do
       { os: { release: { major: 7 } },
-        package_provider: 'yum' }
+        package_provider: 'yum', }
     end
 
     context 'with a simple, well-formed title 0:bash-4.1.2-9.el6_2.x86_64' do
@@ -103,7 +103,7 @@ describe 'yum::versionlock' do
   context 'with a simple, well-formed package name title bash and a version' do
     let(:facts) do
       { os: { release: { major: 7 } },
-        package_provider: 'yum' }
+        package_provider: 'yum', }
     end
 
     let(:title) { 'bash' }
@@ -123,7 +123,7 @@ describe 'yum::versionlock' do
           version: '4.3',
           release: '3.2',
           arch: 'arm',
-          epoch: '42'
+          epoch: '42',
         }
       end
 
@@ -142,7 +142,7 @@ describe 'yum::versionlock' do
           version: 4.3,
           release: 3.2,
           arch: 'arm',
-          epoch: 42
+          epoch: 42,
         }
       end
 
@@ -159,7 +159,7 @@ describe 'yum::versionlock' do
   context 'with package_provider set to dnf' do
     let(:facts) do
       { os: { release: { major: 8 } },
-        package_provider: 'dnf' }
+        package_provider: 'dnf', }
     end
 
     context 'with a simple, well-formed title, no version set' do
@@ -205,7 +205,7 @@ describe 'yum::versionlock' do
             version: '22.5',
             release: 'alpha12',
             epoch: 8,
-            arch: 'i386'
+            arch: 'i386',
           }
         end
 

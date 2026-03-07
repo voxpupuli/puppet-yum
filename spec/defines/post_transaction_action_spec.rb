@@ -48,7 +48,7 @@ describe 'yum::post_transaction_action' do
                   target: 'puppet_actions',
                   order: '10',
                   content: %r{^openssh:any:foo bar$},
-                }
+                },
               )
             }
 

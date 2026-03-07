@@ -25,7 +25,7 @@ describe 'yum::gpgkey' do
           'path' => '/bin:/usr/bin:/sbin/:/usr/sbin',
           'command' => "rpm --import #{title}",
           'unless' => "rpm -q gpg-pubkey-$(gpg --with-colons #{title} | head -n 1 | cut -d: -f5 | cut -c9-16 | tr '[A-Z]' '[a-z]')",
-          'require' => "File[#{title}]"
+          'require' => "File[#{title}]",
         )
       }
     end
@@ -42,7 +42,7 @@ describe 'yum::gpgkey' do
           'path' => '/bin:/usr/bin:/sbin/:/usr/sbin',
           'command' => "rpm -e gpg-pubkey-$(gpg --with-colons #{title} | head -n 1 | cut -d: -f5 | cut -c9-16 | tr '[A-Z]' '[a-z]')",
           'onlyif' => ["test -f #{title}", "rpm -q gpg-pubkey-$(gpg --with-colons #{title} | head -n 1 | cut -d: -f5 | cut -c9-16 | tr '[A-Z]' '[a-z]')"],
-          'before' => "File[#{title}]"
+          'before' => "File[#{title}]",
         )
       }
     end
@@ -60,7 +60,7 @@ describe 'yum::gpgkey' do
     let(:params) do
       {
         content: 'a_non_empty_string',
-        source: 'puppet:///files/test-key'
+        source: 'puppet:///files/test-key',
       }
     end
 

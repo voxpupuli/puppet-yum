@@ -11,7 +11,7 @@ shared_examples 'a Yum class' do |value|
   it 'contains Exec[package-cleanup_oldkernels' do
     is_expected.to contain_exec('package-cleanup_oldkernels').with(
       command: %r{/usr/bin/dnf -y remove \$\(/usr/bin/dnf repoquery --installonly --latest-limit=-\$\{value\} | /usr/bin/grep -v \S+\)},
-      refreshonly: true
+      refreshonly: true,
     ).that_subscribes_to('Yum::Config[installonly_limit]')
   end
 end
@@ -57,7 +57,7 @@ describe 'yum' do
 
         it {
           is_expected.to contain_exec('package-cleanup_oldkernels').with(
-            command: '/usr/bin/package-cleanup --oldkernels --count=3 -y'
+            command: '/usr/bin/package-cleanup --oldkernels --count=3 -y',
           )
         }
       end
@@ -649,7 +649,7 @@ describe 'yum' do
 
           it 'raises a useful error' do
             is_expected.to compile.and_raise_error(
-              %r{The value or ensure for `\$yum::config_options\[installonly_limit\]` must be an Integer, but it is not\.}
+              %r{The value or ensure for `\$yum::config_options\[installonly_limit\]` must be an Integer, but it is not\.},
             )
           end
         end
@@ -763,14 +763,14 @@ describe 'yum' do
             repos: {
               example: {
                 baseurl: 'https://example.com',
-                gpgkey: 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-example'
-              }
+                gpgkey: 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-example',
+              },
             },
             gpgkeys: {
               '/etc/pki/rpm-gpg/RPM-GPG-KEY-example' => {
-                'source' => 'http://example.com/gpg'
-              }
-            }
+                'source' => 'http://example.com/gpg',
+              },
+            },
           }
         end
 
@@ -788,16 +788,16 @@ describe 'yum' do
               example: {
                 baseurl: 'https://example.com',
                 gpgkey: 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-example file:///etc/pki/rpm-gpg/RPM-GPG-KEY-example2',
-              }
+              },
             },
             gpgkeys: {
               '/etc/pki/rpm-gpg/RPM-GPG-KEY-example' => {
-                'source' => 'http://example.com/gpg'
+                'source' => 'http://example.com/gpg',
               },
               '/etc/pki/rpm-gpg/RPM-GPG-KEY-example2' => {
-                'source' => 'http://example.com/gpg2'
-              }
-            }
+                'source' => 'http://example.com/gpg2',
+              },
+            },
           }
         end
 
