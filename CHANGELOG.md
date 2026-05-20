@@ -4,6 +4,26 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not affect the functionality of the module.
 
+## [v8.0.0](https://github.com/voxpupuli/puppet-yum/tree/v8.0.0) (2026-05-20)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-yum/compare/v7.3.0...v8.0.0)
+
+**Breaking changes:**
+
+- Drop puppet, update openvox minimum version to 8.19 [\#359](https://github.com/voxpupuli/puppet-yum/pull/359) ([TheMeier](https://github.com/TheMeier))
+- Drop Scientific Linux & CentOS 8 support [\#354](https://github.com/voxpupuli/puppet-yum/pull/354) ([bastelfreak](https://github.com/bastelfreak))
+- Drop EL 7 support [\#353](https://github.com/voxpupuli/puppet-yum/pull/353) ([bastelfreak](https://github.com/bastelfreak))
+
+**Implemented enhancements:**
+
+- puppetlabs/concat: Allow 10.x [\#381](https://github.com/voxpupuli/puppet-yum/pull/381) ([bastelfreak](https://github.com/bastelfreak))
+- Sometimes version or release is a simple number [\#364](https://github.com/voxpupuli/puppet-yum/pull/364) ([jcpunk](https://github.com/jcpunk))
+- Add place to seed post\_transaction\_actions and versionlocks [\#329](https://github.com/voxpupuli/puppet-yum/pull/329) ([jcpunk](https://github.com/jcpunk))
+
+**Fixed bugs:**
+
+- Handle changes in package group definitions. [\#371](https://github.com/voxpupuli/puppet-yum/pull/371) ([jbagleyjr](https://github.com/jbagleyjr))
+
 ## [v7.3.0](https://github.com/voxpupuli/puppet-yum/tree/v7.3.0) (2025-04-15)
 
 [Full Changelog](https://github.com/voxpupuli/puppet-yum/compare/v7.2.0...v7.3.0)
