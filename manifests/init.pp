@@ -239,10 +239,16 @@ class yum (
     default => "/usr/bin/dnf -y remove $(/usr/bin/dnf repoquery --installonly --latest-limit=-${_real_installonly_limit}${_keep_kernel_devel} | /usr/bin/grep -v ${facts['kernelrelease']})"
   }
 
+  $_pc_onlyif = $facts['package_provider'] ? {
+    'yum'   => undef,
+    default => "/usr/bin/dnf repoquery --installonly --latest-limit=-${_real_installonly_limit}${_keep_kernel_devel} | /usr/bin/grep -v ${facts['kernelrelease']}",
+  }
+
   exec { 'package-cleanup_oldkernels':
     command     => $_pc_cmd,
     refreshonly => true,
     require     => Package[$utils_package_name],
+    onlyif      => $_pc_onlyif,
     subscribe   => $_clean_old_kernels_subscribe,
   }
 
