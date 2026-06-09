@@ -591,7 +591,9 @@ Default value: `[]`
 
 Installs/removes rpms from local file/URL via yum install command.
 
-* **Note** This can be better than using just the rpm provider because it will pull all the dependencies.
+* **Note** This type is deprecated as the core `yum` provider now handles the `source`
+parameter properly; see https://github.com/puppetlabs/puppet/pull/6296.
+The only use for this type now is the `require_verify` functionality.
 
 #### Examples
 
