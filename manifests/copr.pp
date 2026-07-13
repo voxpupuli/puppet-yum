@@ -32,21 +32,21 @@ define yum::copr (
       'enabled': {
         exec { "dnf -y copr enable ${copr_repo}":
           path    => '/bin:/usr/bin:/sbin/:/usr/sbin',
-          unless  => "dnf copr list | egrep -q '${copr_name}\$'",
+          unless  => "dnf copr list | grep -Eq '${copr_name}\$'",
           require => Package[$prereq_plugin],
         }
       }
       'disabled': {
         exec { "dnf -y copr disable ${copr_repo}":
           path    => '/bin:/usr/bin:/sbin/:/usr/sbin',
-          unless  => "dnf copr list | egrep -q '${copr_name} \\(disabled\\)\$'",
+          unless  => "dnf copr list | grep -Eq '${copr_name} \\(disabled\\)\$'",
           require => Package[$prereq_plugin],
         }
       }
       'removed': {
         exec { "dnf -y copr remove ${copr_repo}":
           path    => '/bin:/usr/bin:/sbin/:/usr/sbin',
-          onlyif  => "dnf copr list | egrep -q '${copr_name}'",
+          onlyif  => "dnf copr list | grep -Eq '${copr_name}'",
           require => Package[$prereq_plugin],
         }
       }

@@ -24,7 +24,7 @@ define yum::group (
     'present', default: { # just install the yum group and ensure the group is present.
       exec { "yum-groupinstall-${name}":
         command => join(concat(["yum -y group install '${name}'"], $install_options), ' '),
-        unless  => "yum grouplist hidden '${name}' | egrep -i '^Installed.+Groups:$'",
+        unless  => "yum grouplist hidden '${name}' | grep -Ei '^Installed.+Groups:$'",
         timeout => $timeout,
       }
     }
@@ -45,7 +45,7 @@ define yum::group (
     'absent', 'purged': {
       exec { "yum-groupremove-${name}":
         command => "yum -y group remove '${name}'",
-        onlyif  => "yum grouplist hidden '${name}' | egrep -i '^Installed.+Groups:$'",
+        onlyif  => "yum grouplist hidden '${name}' | grep -Ei '^Installed.+Groups:$'",
         timeout => $timeout,
       }
     }
