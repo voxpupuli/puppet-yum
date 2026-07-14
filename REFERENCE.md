@@ -26,6 +26,7 @@
 ### Resource types
 
 * [`dnf_module_stream`](#dnf_module_stream): Manage DNF module streams
+* [`yumrepo_metadata_key`](#yumrepo_metadata_key): Manage a GPG key in a repository's metadata keystore (repo_gpgcheck=1).
 
 ### Functions
 
@@ -921,6 +922,71 @@ usually discover the appropriate provider for your platform.
 Valid values: `%r{.+}`
 
 Resource title
+
+### <a name="yumrepo_metadata_key"></a>`yumrepo_metadata_key`
+
+Manage a GPG key in a repository's metadata keystore (repo_gpgcheck=1).
+Title must be "<repo>:<fingerprint>", identified by the PRIMARY fingerprint.
+
+`repo` and `fingerprint` are derived from the title and should not be set
+independently.
+
+#### Examples
+
+##### Add a key for the `updates` repository
+
+```puppet
+yumrepo_metadata_key { 'updates:3B49DF2A0F5E6E4F7A1B2C3D4E5F60718293A4B5':
+  ensure  => present,
+  content => file('profile/gpg_metadata_keys/updates.key'),
+}
+```
+
+#### Properties
+
+The following properties are available in the `yumrepo_metadata_key` type.
+
+##### `content`
+
+ASCII-armored public key.
+
+##### `ensure`
+
+Valid values: `present`, `absent`
+
+The basic property that the resource should be in.
+
+Default value: `present`
+
+#### Parameters
+
+The following parameters are available in the `yumrepo_metadata_key` type.
+
+* [`fingerprint`](#-yumrepo_metadata_key--fingerprint)
+* [`name`](#-yumrepo_metadata_key--name)
+* [`provider`](#-yumrepo_metadata_key--provider)
+* [`repo`](#-yumrepo_metadata_key--repo)
+
+##### <a name="-yumrepo_metadata_key--fingerprint"></a>`fingerprint`
+
+Primary fingerprint (derived from the title).
+
+##### <a name="-yumrepo_metadata_key--name"></a>`name`
+
+namevar
+
+Composed as "<repo>:<fingerprint>".
+
+Default value: `''`
+
+##### <a name="-yumrepo_metadata_key--provider"></a>`provider`
+
+The specific backend to use for this `yumrepo_metadata_key` resource. You will seldom need to specify this --- Puppet
+will usually discover the appropriate provider for your platform.
+
+##### <a name="-yumrepo_metadata_key--repo"></a>`repo`
+
+Repository id (derived from the title).
 
 ## Functions
 
