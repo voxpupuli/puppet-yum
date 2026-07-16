@@ -55,7 +55,7 @@ describe 'yumrepo_metadata_key' do
           package: 'zip',
         },
       },
-      # Oracle Linux does not sign its base metadata, so test against a signed third-party repo (Docker CE) instead.
+      # Oracle Linux and Fedora do not sign their metadata, so test against a signed third-party repo (Docker CE) instead.
       'OracleLinux' => {
         '8' => {
           repo: 'docker',
@@ -67,6 +67,22 @@ describe 'yumrepo_metadata_key' do
         '9' => {
           repo: 'docker',
           baseurl: 'https://download.docker.com/linux/centos/9/x86_64/stable/',
+          key_url: 'https://download.docker.com/linux/centos/gpg',
+          fingerprint: '060A61C51B558A7F742B77AAC52FEB6B621E9F35',
+          package: 'docker-compose-plugin',
+        },
+      },
+      'Fedora' => {
+        '43' => {
+          repo: 'docker',
+          baseurl: 'https://download.docker.com/linux/fedora/43/x86_64/stable',
+          key_url: 'https://download.docker.com/linux/fedora/gpg',
+          fingerprint: '060A61C51B558A7F742B77AAC52FEB6B621E9F35',
+          package: 'docker-compose-plugin',
+        },
+        '44' => {
+          repo: 'docker',
+          baseurl: 'https://download.docker.com/linux/fedora/44/x86_64/stable',
           key_url: 'https://download.docker.com/linux/centos/gpg',
           fingerprint: '060A61C51B558A7F742B77AAC52FEB6B621E9F35',
           package: 'docker-compose-plugin',
@@ -99,6 +115,16 @@ describe 'yumrepo_metadata_key' do
         before => Package[#{repo[:package]}],
       }
 
+      # dnf5 needs the libdnf5 python binding for keystore path resolution; the
+      # type autorequires it. Install it before the purge takes away the stock
+      # repos it ships in.
+      if $facts['dnf_version']['major'] == '5' {
+        package { 'python3-libdnf5':
+          ensure => installed,
+          before => Resources['yumrepo'],
+        }
+      }
+
       # Some keyfiles bundle several keys; keep only the block we manage.
       $blocks = split(file('#{keyfile}'), /(?=-----BEGIN PGP PUBLIC KEY BLOCK-----)/).filter |$b| { $b =~ /BEGIN PGP/ }
 
@@ -125,7 +151,11 @@ describe 'yumrepo_metadata_key' do
     apply_manifest(pp, catch_failures: true)
     apply_manifest(pp, catch_changes: true)
 
-    keys = shell(%(for h in /var/cache/dnf/#{repo[:repo]}-*/pubring; do gpg --homedir "$h" --list-keys --with-colons; done)).stdout
+    keys = shell(<<~SH).stdout
+      shopt -s nullglob
+      for h in /var/cache/dnf/#{repo[:repo]}-*/pubring; do gpg --homedir "$h" --list-keys --with-colons; done
+      for f in /var/cache/libdnf5/#{repo[:repo]}-*/pubring/*.pub; do gpg --show-keys --with-colons "$f"; done
+    SH
     expect(keys).to match(repo[:fingerprint])
     expect(shell("rpm -q #{repo[:package]}", acceptable_exit_codes: [0, 1]).exit_code).to eq(0)
   end
