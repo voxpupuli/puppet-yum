@@ -928,6 +928,9 @@ Resource title
 Manage a GPG key in a repository's metadata keystore (repo_gpgcheck=1).
 Title must be "<repo>:<fingerprint>", identified by the PRIMARY fingerprint.
 
+On systems running `dnf` version `5`, `python3-libdnf5` must be installed before
+this type can be used.
+
 `repo` and `fingerprint` are derived from the title and should not be set
 independently.
 
