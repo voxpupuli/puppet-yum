@@ -7,22 +7,46 @@ require 'tmpdir'
 
 class Puppet::Provider::YumrepoMetadataKey < Puppet::Provider
   class << self
-    # Concrete providers must implement these to locate a repo's keystore(s):
-    #   live_homes       -> [[repo, home], ...] for the current 'live' keystores
-    #   all_homes_for    -> [home, ...] every keystore for repo (destroy sweep)
+    # @return [Array<Array(String, String)>] `[repo, home]` per configured repo. A
+    #   home may not exist yet; dnf only creates it on first fetch.
     def live_homes
       raise NotImplementedError, "#{self} must implement .live_homes"
     end
 
+    # Includes stale homes from a repo's previous source URL, which `destroy` sweeps too.
+    # @return [Array<String>] every home a repo's keys could be in
     def all_homes_for(_repo)
       raise NotImplementedError, "#{self} must implement .all_homes_for"
+    end
+
+    # @return [Array<String>] fingerprint of each primary key in `home`, ignoring subkeys
+    def fingerprints_in(_home)
+      raise NotImplementedError, "#{self} must implement .fingerprints_in"
+    end
+
+    # @return [String, nil] the stored key, or nil if absent
+    def export_key(_home, _fingerprint)
+      raise NotImplementedError, "#{self} must implement .export_key"
+    end
+
+    def store_key(_home, _fingerprint, _text)
+      raise NotImplementedError, "#{self} must implement .store_key"
+    end
+
+    def remove_key(_home, _fingerprint)
+      raise NotImplementedError, "#{self} must implement .remove_key"
+    end
+
+    # @return [Boolean] whether the key is present and trusted to verify metadata
+    def trusted?(_home, _fingerprint)
+      raise NotImplementedError, "#{self} must implement .trusted?"
     end
 
     def instances
       ret = live_homes.flat_map do |repo, home|
         next [] unless File.directory?(home) # home may not exist yet if dnf hasn't populated the cache for this repo
 
-        primary_fingerprints_in(home).map do |fpr|
+        fingerprints_in(home).map do |fpr|
           new(ensure: :present, name: "#{repo}:#{fpr}", repo: repo, fingerprint: fpr,
               home: home, content: export_key(home, fpr))
         end
@@ -36,15 +60,6 @@ class Puppet::Provider::YumrepoMetadataKey < Puppet::Provider
         res = resources[prov.name]
         res.provider = prov if res
       end
-    end
-
-    def primary_fingerprints_in(home)
-      ret = parse_primary_fprs(gpg_at(home, '--with-colons', '--fingerprint', '--list-keys')).uniq
-      debug("primary_fingerprints_in(#{home.inspect}) -> #{ret.inspect}")
-      ret
-    rescue Puppet::ExecutionFailure => e
-      debug("primary_fingerprints_in(#{home.inspect}) failed: #{e.message.lines.first.to_s.strip}")
-      []
     end
 
     # gpg --with-colons emits a `pub:` record for each primary key immediately
@@ -68,20 +83,6 @@ class Puppet::Provider::YumrepoMetadataKey < Puppet::Provider
       "#{match[0]}\n"
     end
 
-    # Armored public key for `fingerprint` from the keystore at `home`, or
-    # nil if the home is missing or the key can't be exported.
-    def export_key(home, fingerprint)
-      return unless home && File.directory?(home)
-
-      out =
-        begin
-          gpg_at(home, '--export', '--armor', fingerprint)
-        rescue Puppet::ExecutionFailure
-          ''
-        end
-      extract_armored_key(out, "gpg export for #{fingerprint}")
-    end
-
     # Canonicalise a key so semantically-equal keys hash equally: import `text`
     # into a throwaway keyring, re-export it --armor, and SHA256 the result.
     # This normalises armor formatting/packet ordering and captures expiry and
@@ -92,7 +93,7 @@ class Puppet::Provider::YumrepoMetadataKey < Puppet::Provider
         File.write(keyfile, text)
         gpg_at(tmp, '--import', keyfile)
         primary = parse_primary_fprs(gpg_at(tmp, '--with-colons', '--fingerprint', '--list-keys')).first
-        exported = primary && export_key(tmp, primary)
+        exported = primary && gpg_export_armored(tmp, primary)
         exported ? Digest::SHA256.hexdigest(exported) : nil
       rescue Puppet::ExecutionFailure => e
         debug("canonical_key_digest failed: #{e.message.lines.first.to_s.strip}")
@@ -112,28 +113,18 @@ class Puppet::Provider::YumrepoMetadataKey < Puppet::Provider
       ret
     end
 
-    def ultimate_trust?(home, fingerprint)
-      ret = gpg_at(home, '--export-ownertrust').each_line.any? do |line|
-        fields = line.chomp.split(':')
-        fields[0].to_s.upcase == fingerprint.to_s.upcase && fields[1] == '6'
-      end
-      debug("ultimate_trust?(#{home.inspect}, #{fingerprint.inspect}) -> #{ret.inspect}")
-      ret
-    rescue Puppet::ExecutionFailure => e
-      debug("ultimate_trust?(#{home.inspect}, #{fingerprint.inspect}) failed: #{e.message.lines.first.to_s.strip}")
-      false
-    end
-
-    def set_ultimate_trust(home, fingerprint)
-      Tempfile.create(['metakey-ownertrust', '.txt']) do |f|
-        f.write("#{fingerprint}:6:\n")
-        f.flush
-        gpg_at(home, '--import-ownertrust', f.path)
-      end
-    end
-
     def url_hash(source)
       Digest::SHA256.digest(source)[0, 8].unpack1('H*')
+    end
+
+    def gpg_export_armored(home, fingerprint)
+      out =
+        begin
+          gpg_at(home, '--export', '--armor', fingerprint)
+        rescue Puppet::ExecutionFailure
+          ''
+        end
+      extract_armored_key(out, "gpg export for #{fingerprint}")
     end
 
     def gpg_at(home, *args)
@@ -166,10 +157,7 @@ class Puppet::Provider::YumrepoMetadataKey < Puppet::Provider
       next unless File.directory?(home)
 
       begin
-        # --expert bypasses gpg's pre-delete check for a matching secret key.
-        # That check needs gpg-agent, but --no-autostart forbids starting one,
-        # so without --expert, --delete-keys fails with "no gpg-agent running".
-        self.class.gpg_at(home, '--expert', '--yes', '--delete-keys', resource[:fingerprint])
+        self.class.remove_key(home, resource[:fingerprint])
         debug("destroy removed #{resource[:fingerprint]} from #{home.inspect}")
       rescue Puppet::ExecutionFailure => e
         debug("destroy skipped #{home.inspect}: #{e.message.lines.first.to_s.strip}")
@@ -187,9 +175,9 @@ class Puppet::Provider::YumrepoMetadataKey < Puppet::Provider
     import_key(value)
   end
 
-  def ultimate_trust?
+  def trusted?
     home = live_home
-    home && self.class.ultimate_trust?(home, resource[:fingerprint])
+    home && self.class.trusted?(home, resource[:fingerprint])
   end
 
   # NOTE: mk_resource_methods can't be used here. It needs a type-bound
@@ -213,18 +201,12 @@ class Puppet::Provider::YumrepoMetadataKey < Puppet::Provider
     dir = live_home
     raise Puppet::Error, "cannot locate live keystore for repo '#{resource[:repo]}'" unless dir
 
-    Tempfile.create(['metakey', '.asc']) do |f|
-      f.write(text)
-      f.flush
+    primary = self.class.primary_fpr_of_content(text)
+    raise Puppet::Error, "fingerprint #{resource[:fingerprint]} is not the primary of the supplied key (primary is #{primary})" if primary && primary != resource[:fingerprint]
 
-      primary = self.class.primary_fpr_of_content(text)
-      raise Puppet::Error, "fingerprint #{resource[:fingerprint]} is not the primary of the supplied key (primary is #{primary})" if primary && primary != resource[:fingerprint]
-
-      FileUtils.mkdir_p(dir, mode: 0o700)
-      debug("import_key #{resource[:fingerprint]} -> #{dir.inspect}")
-      self.class.gpg_at(dir, '--import', f.path)
-      self.class.set_ultimate_trust(dir, resource[:fingerprint])
-    end
+    FileUtils.mkdir_p(dir, mode: 0o700)
+    debug("import_key #{resource[:fingerprint]} -> #{dir.inspect}")
+    self.class.store_key(dir, resource[:fingerprint], text)
   end
 
   def live_home
