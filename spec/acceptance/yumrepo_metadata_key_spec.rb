@@ -21,6 +21,13 @@ describe 'yumrepo_metadata_key' do
           fingerprint: '21CB256AE16FC54C6E652949702D426D350D275D',
           package: 'zip',
         },
+        '10' => {
+          repo: 'baseos',
+          baseurl: 'https://download.rockylinux.org/pub/rocky/10/BaseOS/x86_64/os/',
+          keyfile: '/etc/pki/rpm-gpg/RPM-GPG-KEY-Rocky-10',
+          fingerprint: 'FC226859C0860BF0DDB95B085B106C736FEDFC85',
+          package: 'zip',
+        },
       },
       'AlmaLinux' => {
         '8' => {

@@ -6,8 +6,9 @@ Puppet::Type.type(:yumrepo_metadata_key).provide(:dnf4, parent: Puppet::Provider
   desc 'dnf4/libdnf metadata keystore under /var/cache/dnf (EL8/EL9).'
 
   commands gpg: 'gpg', dnf: 'dnf'
-  confine    'os.family': 'RedHat'
-  defaultfor 'os.family': 'RedHat', 'os.release.major': %w[8 9]
+  confine    package_provider: 'dnf'
+  confine    'dnf_version.major': '4'
+  defaultfor package_provider: 'dnf'
 
   class << self
     def live_homes
