@@ -71,9 +71,9 @@ Puppet::Type.newtype(:yumrepo_metadata_key) do
     def insync?(is)
       return false if is.nil? || is == :absent
 
-      # Force updating of key if ownertrust isn't set correctly
-      unless provider.ultimate_trust?
-        debug('content insync? -> false (ownertrust is not ultimate)')
+      # Force re-import if the stored key isn't trusted.
+      unless provider.trusted?
+        debug('content insync? -> false (key not trusted)')
         return false
       end
 
