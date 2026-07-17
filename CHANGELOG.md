@@ -4,6 +4,17 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not affect the functionality of the module.
 
+## [v8.1.0](https://github.com/voxpupuli/puppet-yum/tree/v8.1.0) (2026-07-17)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-yum/compare/v8.0.0...v8.1.0)
+
+**Implemented enhancements:**
+
+- Support managing of repo metadata gpg keys [\#385](https://github.com/voxpupuli/puppet-yum/issues/385)
+- Add `dnf5` support to `yumrepo_metadata_key` [\#388](https://github.com/voxpupuli/puppet-yum/pull/388) ([alexjfisher](https://github.com/alexjfisher))
+- Add new `yumrepo_metadata_key` type [\#386](https://github.com/voxpupuli/puppet-yum/pull/386) ([alexjfisher](https://github.com/alexjfisher))
+- Replace deprecated `egrep` with `grep -E` [\#376](https://github.com/voxpupuli/puppet-yum/pull/376) ([Stricken1670](https://github.com/Stricken1670))
+
 ## [v8.0.0](https://github.com/voxpupuli/puppet-yum/tree/v8.0.0) (2026-05-20)
 
 [Full Changelog](https://github.com/voxpupuli/puppet-yum/compare/v7.3.0...v8.0.0)
