@@ -7,6 +7,9 @@ Puppet::Type.newtype(:yumrepo_metadata_key) do
     Manage a GPG key in a repository's metadata keystore (repo_gpgcheck=1).
     Title must be "<repo>:<fingerprint>", identified by the PRIMARY fingerprint.
 
+    On systems running `dnf` version `5`, `python3-libdnf5` must be installed before
+    this type can be used.
+
     @example Add a key for the `updates` repository
       yumrepo_metadata_key { 'updates:3B49DF2A0F5E6E4F7A1B2C3D4E5F60718293A4B5':
         ensure  => present,
@@ -71,9 +74,9 @@ Puppet::Type.newtype(:yumrepo_metadata_key) do
     def insync?(is)
       return false if is.nil? || is == :absent
 
-      # Force updating of key if ownertrust isn't set correctly
-      unless provider.ultimate_trust?
-        debug('content insync? -> false (ownertrust is not ultimate)')
+      # Force re-import if the stored key isn't trusted.
+      unless provider.trusted?
+        debug('content insync? -> false (key not trusted)')
         return false
       end
 
@@ -96,4 +99,8 @@ Puppet::Type.newtype(:yumrepo_metadata_key) do
   end
 
   autorequire(:yumrepo) { [self[:repo]] }
+
+  # Order after the dnf5 python binding if the catalog installs it, so the dnf5
+  # provider can resolve keystore paths in the same run it is installed.
+  autorequire(:package) { ['python3-libdnf5'] }
 end

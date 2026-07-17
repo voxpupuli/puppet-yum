@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
-require_relative '../yumrepo_metadata_key'
+require_relative 'gpg_keyring'
 
-Puppet::Type.type(:yumrepo_metadata_key).provide(:yum, parent: Puppet::Provider::YumrepoMetadataKey) do
+Puppet::Type.type(:yumrepo_metadata_key).provide(:yum, parent: Puppet::Provider::YumrepoMetadataKey::GpgKeyring) do
   desc 'yum-3 per-repo gpgdir (EL7).'
 
   commands gpg: 'gpg', yum: 'yum'
-  confine    'os.family': 'RedHat'
-  defaultfor 'os.family': 'RedHat', 'os.release.major': '7'
+  confine    package_provider: 'yum'
+  defaultfor package_provider: 'yum'
 
   class << self
     def live_homes
