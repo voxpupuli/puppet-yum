@@ -4,6 +4,18 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not affect the functionality of the module.
 
+## [v8.1.1](https://github.com/voxpupuli/puppet-yum/tree/v8.1.1) (2026-07-21)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-yum/compare/v8.1.0...v8.1.1)
+
+**Fixed bugs:**
+
+- Remove procs from `yumrepo_metadata_key` title patterns [\#391](https://github.com/voxpupuli/puppet-yum/pull/391) ([alexjfisher](https://github.com/alexjfisher))
+
+**Closed issues:**
+
+- Puppet generate types throws error type/yumrepo\_metadata\_key.rb: title patterns that use procs are not supported. [\#390](https://github.com/voxpupuli/puppet-yum/issues/390)
+
 ## [v8.1.0](https://github.com/voxpupuli/puppet-yum/tree/v8.1.0) (2026-07-17)
 
 [Full Changelog](https://github.com/voxpupuli/puppet-yum/compare/v8.0.0...v8.1.0)
