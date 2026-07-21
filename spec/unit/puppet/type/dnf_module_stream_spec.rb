@@ -2,17 +2,16 @@
 
 require 'spec_helper'
 
-dnf_module_stream = Puppet::Type.type(:dnf_module_stream)
-RSpec.describe 'the dnf_module_stream type' do
+describe Puppet::Type.type(:dnf_module_stream) do
   it 'loads' do
-    expect(dnf_module_stream).not_to be_nil
+    expect(described_class).not_to be_nil
   end
 
   it 'has parameter module' do
-    expect(dnf_module_stream.parameters).to include(:module)
+    expect(described_class.parameters).to include(:module)
   end
 
   it 'has property stream' do
-    expect(dnf_module_stream.properties.map(&:name)).to include(:stream)
+    expect(described_class.properties.map(&:name)).to include(:stream)
   end
 end
