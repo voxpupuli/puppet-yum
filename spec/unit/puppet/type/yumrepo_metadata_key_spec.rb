@@ -14,6 +14,8 @@ describe Puppet::Type.type(:yumrepo_metadata_key) do
     expect(described_class).not_to be_nil
   end
 
+  it_behaves_like 'a type that works with `puppet generate types`'
+
   describe 'namevars' do
     it 'has 3 namevars' do
       expect(described_class.key_attributes.size).to eq(3)
