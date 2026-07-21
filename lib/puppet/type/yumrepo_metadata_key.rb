@@ -39,8 +39,8 @@ Puppet::Type.newtype(:yumrepo_metadata_key) do
       [
         %r{\A(.+):(\h{40})\z}i,
         [
-          [:repo, ->(x) { x }],
-          [:fingerprint, ->(x) { x.delete(' ').upcase }],
+          [:repo],
+          [:fingerprint],
         ],
       ],
     ]
