@@ -75,6 +75,12 @@
       ]
     }
   ],
+  {
+    "operatingsystem": "XCP-ng",
+    "operatingsystemrelease": [
+      "8",
+    ]
+  },
   "requirements": [
     {
       "name": "openvox",
