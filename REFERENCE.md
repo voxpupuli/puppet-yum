@@ -1213,11 +1213,10 @@ Allows you to perform yum functions
 
 Data type: `Enum[update, upgrade, 'list updates']`
 
-Action to perform 
+Action to perform
 
 ##### `quiet`
 
 Data type: `Optional[Boolean]`
 
-Run without output 
-
+Run without output

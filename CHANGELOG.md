@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not affect the functionality of the module.
 
+## [v8.3.0](https://github.com/voxpupuli/puppet-yum/tree/v8.3.0) (2026-10-08)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-yum/compare/v8.2.0...v8.3.0)
+
+**Implemented enhancements:**
+
+- Update requirements to allow OpenVox 9 [\#399](https://github.com/voxpupuli/puppet-yum/pull/399) ([sebastianrakel](https://github.com/sebastianrakel))
+- replace deprecated calls with Facter::Core::Execution [\#397](https://github.com/voxpupuli/puppet-yum/pull/397) ([corporate-gadfly](https://github.com/corporate-gadfly))
+
 ## [v8.2.0](https://github.com/voxpupuli/puppet-yum/tree/v8.2.0) (2026-09-11)
 
 [Full Changelog](https://github.com/voxpupuli/puppet-yum/compare/v8.1.1...v8.2.0)
