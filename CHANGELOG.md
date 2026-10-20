@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not affect the functionality of the module.
 
+## [v8.4.0](https://github.com/voxpupuli/puppet-yum/tree/v8.4.0) (2026-10-20)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-yum/compare/v8.3.0...v8.4.0)
+
+**Implemented enhancements:**
+
+- puppetlabs/stdlib: Allow 10.x [\#401](https://github.com/voxpupuli/puppet-yum/pull/401) ([bastelfreak](https://github.com/bastelfreak))
+
 ## [v8.3.0](https://github.com/voxpupuli/puppet-yum/tree/v8.3.0) (2026-10-08)
 
 [Full Changelog](https://github.com/voxpupuli/puppet-yum/compare/v8.2.0...v8.3.0)
