@@ -88,6 +88,34 @@ describe 'yum' do
           it { is_expected.to have_yumrepo_resource_count(15) }
         when 'CentOS'
           case facts[:os]['release']['major']
+          when '10'
+            it_behaves_like 'a catalog containing repos', %w[
+              baseos
+              baseos-debuginfo
+              baseos-source
+              appstream
+              appstream-debuginfo
+              appstream-source
+              crb
+              crb-debuginfo
+              crb-source
+              highavailability
+              highavailability-debuginfo
+              highavailability-source
+              nfv
+              nfv-debuginfo
+              nfv-source
+              rt
+              rt-debuginfo
+              rt-source
+              resilientstorage
+              resilientstorage-debuginfo
+              resilientstorage-source
+              extras-common
+              extras-common-source
+            ]
+
+            it { is_expected.to have_yumrepo_resource_count(23) }
           when '9'
             it_behaves_like 'a catalog containing repos', %w[
               appstream
@@ -729,6 +757,12 @@ describe 'yum' do
         case facts[:os]['release']['major']
         when '10'
           it { is_expected.to contain_yum__gpgkey('/etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-10') }
+
+          if facts[:os]['name'] == 'CentOS'
+            it { is_expected.to contain_yumrepo('epel').with_metalink('https://mirrors.fedoraproject.org/metalink?repo=epel-10&arch=$basearch') }
+          else
+            it { is_expected.to contain_yumrepo('epel').with_metalink("https://mirrors.fedoraproject.org/metalink?repo=epel-10.#{facts[:os]['release']['minor']}&arch=$basearch") }
+          end
         when '9'
           it { is_expected.to contain_yum__gpgkey('/etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-9') }
         when '8'
