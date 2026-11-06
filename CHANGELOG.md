@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not affect the functionality of the module.
 
+## [v8.5.0](https://github.com/voxpupuli/puppet-yum/tree/v8.5.0) (2026-11-06)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-yum/compare/v8.4.0...v8.5.0)
+
+**Implemented enhancements:**
+
+- Add EPEL 10 support [\#405](https://github.com/voxpupuli/puppet-yum/pull/405) ([vchepkov](https://github.com/vchepkov))
+- Add EPEL 10 GPG key [\#403](https://github.com/voxpupuli/puppet-yum/pull/403) ([vchepkov](https://github.com/vchepkov))
+
 ## [v8.4.0](https://github.com/voxpupuli/puppet-yum/tree/v8.4.0) (2026-10-20)
 
 [Full Changelog](https://github.com/voxpupuli/puppet-yum/compare/v8.3.0...v8.4.0)
