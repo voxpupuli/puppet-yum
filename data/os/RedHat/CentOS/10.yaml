@@ -232,21 +232,21 @@ yum::repos:
     gpgkey: "file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-SIG-Extras-SHA512"
     target: '/etc/yum.repos.d/centos-addons.repo'
 
-  # CentOS Stream has no minor release and uses the rolling EPEL 10 repositories.
+  # CentOS Stream uses the EPEL 10 Stream repositories (epel-10s, ...), as epel-release does.
   epel:
-    metalink: "https://mirrors.fedoraproject.org/metalink?repo=epel-%{facts.os.release.major}&arch=$basearch"
+    metalink: "https://mirrors.fedoraproject.org/metalink?repo=epel-%{facts.os.release.major}s&arch=$basearch"
 
   epel-debuginfo:
-    metalink: "https://mirrors.fedoraproject.org/metalink?repo=epel-debug-%{facts.os.release.major}&arch=$basearch"
+    metalink: "https://mirrors.fedoraproject.org/metalink?repo=epel-debug-%{facts.os.release.major}s&arch=$basearch"
 
   epel-source:
-    metalink: "https://mirrors.fedoraproject.org/metalink?repo=epel-source-%{facts.os.release.major}&arch=source"
+    metalink: "https://mirrors.fedoraproject.org/metalink?repo=epel-source-%{facts.os.release.major}s&arch=source"
 
   epel-testing:
-    metalink: "https://mirrors.fedoraproject.org/metalink?repo=epel-testing-%{facts.os.release.major}&arch=$basearch"
+    metalink: "https://mirrors.fedoraproject.org/metalink?repo=epel-testing-%{facts.os.release.major}s&arch=$basearch"
 
   epel-testing-debuginfo:
-    metalink: "https://mirrors.fedoraproject.org/metalink?repo=epel-testing-debug-%{facts.os.release.major}&arch=$basearch"
+    metalink: "https://mirrors.fedoraproject.org/metalink?repo=epel-testing-debug-%{facts.os.release.major}s&arch=$basearch"
 
   epel-testing-source:
-    metalink: "https://mirrors.fedoraproject.org/metalink?repo=epel-testing-source-%{facts.os.release.major}&arch=source"
+    metalink: "https://mirrors.fedoraproject.org/metalink?repo=epel-testing-source-%{facts.os.release.major}s&arch=source"

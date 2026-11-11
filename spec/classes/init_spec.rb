@@ -759,9 +759,9 @@ describe 'yum' do
           it { is_expected.to contain_yum__gpgkey('/etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-10') }
 
           if facts[:os]['name'] == 'CentOS'
-            it { is_expected.to contain_yumrepo('epel').with_metalink('https://mirrors.fedoraproject.org/metalink?repo=epel-10&arch=$basearch') }
+            it { is_expected.to contain_yumrepo('epel').with_metalink('https://mirrors.fedoraproject.org/metalink?repo=epel-10s&arch=$basearch') }
           else
-            it { is_expected.to contain_yumrepo('epel').with_metalink("https://mirrors.fedoraproject.org/metalink?repo=epel-10.#{facts[:os]['release']['minor']}&arch=$basearch") }
+            it { is_expected.to contain_yumrepo('epel').with_metalink('https://mirrors.fedoraproject.org/metalink?repo=epel-$releasever&arch=$basearch&infra=$infra&content=$contentdir') }
           end
         when '9'
           it { is_expected.to contain_yum__gpgkey('/etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-9') }
