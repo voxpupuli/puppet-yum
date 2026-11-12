@@ -1,11 +1,21 @@
 ---
-# EPEL 10 metalinks only accept epel-testing-10, not the testing-epel10 used in repos.yaml.
+# Pin EPEL to the host's minor branch: epel-10 tracks the latest RHEL minor and breaks derivatives that lag it.
+# dnf resolves $releasever_minor per transaction; Oracle Linux lacks it, so fall back to the os.release.minor fact.
 yum::repos:
+  epel:
+    metalink: "https://mirrors.fedoraproject.org/metalink?repo=epel-%{facts.os.release.major}.${releasever_minor:-%{facts.os.release.minor}}&arch=$basearch"
+
+  epel-debuginfo:
+    metalink: "https://mirrors.fedoraproject.org/metalink?repo=epel-debug-%{facts.os.release.major}.${releasever_minor:-%{facts.os.release.minor}}&arch=$basearch"
+
+  epel-source:
+    metalink: "https://mirrors.fedoraproject.org/metalink?repo=epel-source-%{facts.os.release.major}.${releasever_minor:-%{facts.os.release.minor}}&arch=source"
+
   epel-testing:
-    metalink: "https://mirrors.fedoraproject.org/metalink?repo=epel-testing-%{facts.os.release.major}&arch=$basearch"
+    metalink: "https://mirrors.fedoraproject.org/metalink?repo=epel-testing-%{facts.os.release.major}.${releasever_minor:-%{facts.os.release.minor}}&arch=$basearch"
 
   epel-testing-debuginfo:
-    metalink: "https://mirrors.fedoraproject.org/metalink?repo=epel-testing-debug-%{facts.os.release.major}&arch=$basearch"
+    metalink: "https://mirrors.fedoraproject.org/metalink?repo=epel-testing-debug-%{facts.os.release.major}.${releasever_minor:-%{facts.os.release.minor}}&arch=$basearch"
 
   epel-testing-source:
-    metalink: "https://mirrors.fedoraproject.org/metalink?repo=epel-testing-source-%{facts.os.release.major}&arch=source"
+    metalink: "https://mirrors.fedoraproject.org/metalink?repo=epel-testing-source-%{facts.os.release.major}.${releasever_minor:-%{facts.os.release.minor}}&arch=source"

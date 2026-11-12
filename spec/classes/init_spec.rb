@@ -758,10 +758,21 @@ describe 'yum' do
         when '10'
           it { is_expected.to contain_yum__gpgkey('/etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-10') }
 
-          if facts[:os]['name'] == 'CentOS'
-            it { is_expected.to contain_yumrepo('epel').with_metalink('https://mirrors.fedoraproject.org/metalink?repo=epel-10s&arch=$basearch') }
-          else
-            it { is_expected.to contain_yumrepo('epel').with_metalink('https://mirrors.fedoraproject.org/metalink?repo=epel-$releasever&arch=$basearch&infra=$infra&content=$contentdir') }
+          context 'with all EPEL repos' do
+            let(:params) { { managed_repos: %w[epel epel-debuginfo epel-source epel-testing epel-testing-debuginfo epel-testing-source] } }
+
+            let(:release) { (facts[:os]['name'] == 'CentOS') ? '10s' : "10.${releasever_minor:-#{facts[:os]['release']['minor']}}" }
+
+            {
+              'epel' => %w[epel $basearch],
+              'epel-debuginfo' => %w[epel-debug $basearch],
+              'epel-source' => %w[epel-source source],
+              'epel-testing' => %w[epel-testing $basearch],
+              'epel-testing-debuginfo' => %w[epel-testing-debug $basearch],
+              'epel-testing-source' => %w[epel-testing-source source],
+            }.each do |repo, (name, arch)|
+              it { is_expected.to contain_yumrepo(repo).with_metalink("https://mirrors.fedoraproject.org/metalink?repo=#{name}-#{release}&arch=#{arch}") }
+            end
           end
         when '9'
           it { is_expected.to contain_yum__gpgkey('/etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-9') }
